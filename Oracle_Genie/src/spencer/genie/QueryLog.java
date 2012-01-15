@@ -2,6 +2,12 @@ package spencer.genie;
 
 import java.util.Date;
 
+/**
+ * Record for query log
+ * 
+ * @author spencer.hwang
+ *
+ */
 public class QueryLog {
 	Date qryTime = new Date();	
 	String qryString;
