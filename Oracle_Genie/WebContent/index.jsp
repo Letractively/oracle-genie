@@ -94,10 +94,16 @@ $(document).ready(function(){
 			var diff = $('#outer-table').position().top - $('#outer-result1').position().top;
 			//alert(diff);
 			var newH = h - 70;
-		
+
+			var tmp = w - $('#outer-table').width() - $('#outer-result2').width() - 35; 
+
 			$('#outer-table').height(newH-diff);
 			$('#outer-result1').height(newH);
 			$('#outer-result2').height(newH);
+			
+			if (tmp < 660) tmp = 660;
+			$('#outer-result1').width(tmp);
+			
 		}
 	}
 	
