@@ -3,7 +3,7 @@
 Thanks for using Oracle Genie.<br/>
 
 Genie is a web-based tool for Oracle database (10g and higher).<br/>
-Genie will help you navigate through database objects and their relationship.<br/> 
+Genie will help you navigate through database objects and their relationships.<br/> 
 
 <br/>
 If you have any question or suggestion, please feel free to contact me.

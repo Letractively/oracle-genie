@@ -5,6 +5,12 @@ import java.io.UnsupportedEncodingException;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Utility class for Genie
+ * 
+ * @author spencer.hwang
+ *
+ */
 public class Util {
 
 	public static int countLines(String str) {

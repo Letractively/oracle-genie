@@ -1,5 +1,15 @@
 package spencer.genie;
 
+/**
+ * Connection class
+ * 
+ * This is the Singlton class for login user
+ * It will maintain database connection and provide database access methods
+ * 
+ * @author spencer.hwang
+ * 
+ */
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -44,6 +54,14 @@ public class Connect implements HttpSessionBindingListener {
 	private HashMap<String, ArrayList<String>> pkMap;
 	private Stack<String> history;
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param url jdbc url
+	 * @param userName	database user name
+	 * @param password	database password
+	 * @param ipAddress	user's local ip address
+	 */
     public Connect(String url, String userName, String password, String ipAddress)
     {
     	//pkColumn = new Hashtable<String, String>();
@@ -86,10 +104,17 @@ public class Connect implements HttpSessionBindingListener {
         }
     }
     
+    /**
+     * 
+     * @return true if connected to database, false otherwise 
+     */
     public boolean isConnected() {
     	return conn != null;
     }
     
+    /**
+     * close the connection
+     */
     public void disconnect() {
     	if (conn != null)	{
     		try {
@@ -102,10 +127,18 @@ public class Connect implements HttpSessionBindingListener {
     	conn = null;
     }
     
+    /**
+     * get message
+     * @return String message
+     */
     public String getMessage() {
     	return message;
     }
     
+    /** 
+     * get Connection object
+     * @return connection object
+     */
     public Connection getConnection() {
     	return conn;
     }

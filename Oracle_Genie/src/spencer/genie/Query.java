@@ -10,6 +10,13 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Dynamic query class
+ * This class makes database query upon creation and provides methods for data access 
+ * 
+ * @author spencer.hwang
+ *
+ */
 public class Query {
 
 	Connect cn;
