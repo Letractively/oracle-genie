@@ -17,7 +17,7 @@
 	}	
 
 	List<String> list = new ArrayList<String>();
-	list.add("Dictionary");
+	list.add("session");
 	list.add("Sequence");
 	list.add("DB link");
 	list.add("User role priv");
@@ -27,7 +27,7 @@
 	for (int i=0; i<list.size();i++) {
 		if (filter != null && !list.get(i).toUpperCase().contains(filter)) continue;
 %>
-	<li><a href="javascript:loadTool('<%=list.get(i)%>');"><%=list.get(i)%></a></li>
+	<li><a href="javascript:loadDba('<%=list.get(i)%>');"><%=list.get(i)%></a></li>
 <% 
 	} 
 %>

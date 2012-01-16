@@ -94,15 +94,22 @@ function loadTool(name) {
 		url: "ajax/detail-tool.jsp?name=" + name + "&t=" + (new Date().getTime()),
 		success: function(data){
 			$("#inner-result1").html(data);
-			$('table.striped tbody tr:odd').addClass('odd');
-			$('table.striped tbody tr:even').addClass('even');
 		}
 	});	
 	addHistory("<a href='Javascript:loadTool(\""+name+"\")'>" + name + "</a>");
-	
-
 }
 
+function loadDba(name) {
+	$("#inner-result1").html("<img src='image/loading.gif'/>");
+
+	$.ajax({
+		url: "ajax/detail-dba.jsp?name=" + name + "&t=" + (new Date().getTime()),
+		success: function(data){
+			$("#inner-result1").html(data);
+		}
+	});	
+	addHistory("<a href='Javascript:loadDba(\""+name+"\")'>" + name + "</a>");
+}
 
 function selectAll(tab) {
 	var form = "FORM_" + tab;
@@ -199,6 +206,9 @@ function runQuery(catalog,tab) {
 		} else if (mode == "tool") {
 			gotoUrl = "ajax/list-tool.jsp";
 			select = "selectTool";
+		} else if (mode == "dba") {
+			gotoUrl = "ajax/list-dba.jsp";
+			select = "selectDba";
 		}
 
 		$("#selectTable").css("font-weight", "");
@@ -207,6 +217,7 @@ function runQuery(catalog,tab) {
 //		$("#selectType").css("font-weight", "");
 		$("#selectSynonym").css("font-weight", "");
 		$("#selectTool").css("font-weight", "");
+		$("#selectDba").css("font-weight", "");
 
 		cleanPage();
 		$.ajax({
@@ -237,6 +248,8 @@ function runQuery(catalog,tab) {
 			gotoUrl = "ajax/list-synonym.jsp?filter=" + filter;
 		} else if (mode == "tool") {
 			gotoUrl = "ajax/list-tool.jsp?filter=" + filter;
+		} else if (mode == "dba") {
+			gotoUrl = "ajax/list-dba.jsp?filter=" + filter;
 		}
 
 		$.ajax({
@@ -265,8 +278,6 @@ function runQuery(catalog,tab) {
 			url: "ajax/query-history.jsp",
 			success: function(data){
 				$("#inner-result1").html(data);
-				$('table.striped tbody tr:odd').addClass('odd');
-				$('table.striped tbody tr:even').addClass('even');
 			}
 		});
 	}

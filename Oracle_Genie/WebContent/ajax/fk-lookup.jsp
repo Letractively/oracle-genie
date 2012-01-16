@@ -61,12 +61,7 @@ function selectOption(select_id, option_val) {
     $('#'+select_id+' option[value='+option_val+']').attr('selected','selected');       
 }
 
-	$(document).ready(function() {
-		$('table.striped tbody tr:odd').addClass('odd');
-		$('table.striped tbody tr:even').addClass('even');
-	});	
-
-	</script>
+</script>
 
 <form name="formQry" target="_blank" action="query.jsp">
 <input name="sql" type="hidden" value="<%= sql %>">
@@ -74,8 +69,8 @@ function selectOption(select_id, option_val) {
 
 SQL = <%= sql %> <a href="javascript:document.formQry.submit()"><img border=0 src="image/query.gif" title="Open Query"></a>
 
-<table id="inspectTable" class="striped" border=0 width=600>
-<tr>
+<table id="inspectTable" class="gridBody" border=1 width=600>
+<tr class="rowHeader">
 	<th><b>Column Name</b></th>
 	<th><b>Value</b></th>
 	<th><b>Comment</b> <a href="Javascript:hideInspectComment()">x</a></th> 
@@ -101,8 +96,11 @@ SQL = <%= sql %> <a href="javascript:document.formQry.submit()"><img border=0 sr
 			if (val==null) valDisp = "<span style='color: #999999;'>null</span>";
 			
 			if (val!=null && val.equals("Exhausted Resultset")) valDisp = "<span style='color: #999999;'>null</span>";
+
+			String rowClass = "odd";
+			if (i%2 == 0) rowClass = "even";
 %>
-	<tr>
+	<tr class="<%=rowClass%>">
 		<td><b><%=colName%></b></td>
 		<td <%= (numberCol[colIdx])?"align=right":""%>><%= valDisp %></td>
 		<td><%= cn.getComment(table, colName) %></td>

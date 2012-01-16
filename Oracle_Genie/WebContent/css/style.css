@@ -16,8 +16,45 @@ custom {
 }
 */
 
-tr.even {  background-color: #e0e0ff; }
+/*tr.even {  background-color: #e0e0ff; }
 tr.odd {  background-color: #eeeeee;}	
+*/
+tr.even {
+background-color: #F2F2ED;
+border: 1px solid #CCC;
+padding-bottom: 4px;
+padding-top: 4px;
+padding-left: 5px;
+padding-right: 5px;
+vertical-align: center;
+}
+
+tr.odd {
+background-color: #FFFFFF;
+border: 1px solid #CCC;
+padding-bottom: 4px;
+padding-top: 4px;
+padding-left: 5px;
+padding-right: 5px;
+vertical-align: center;
+}
+
+tr.rowHeader {
+background-color: #D6E7FF;
+border: 1px solid #CCC;
+padding-bottom: 4px;
+padding-top: 4px;
+padding-left: 5px;
+padding-right: 5px;
+vertical-align: center;
+}
+
+table.gridbody {
+border-collapse: collapse;
+border-left: 1px solid #B6B6B6;
+border-right: 1px solid #B6B6B6;
+background-color: white;
+}
 
 #outer-table {
     background-color: #FFFFFF;
