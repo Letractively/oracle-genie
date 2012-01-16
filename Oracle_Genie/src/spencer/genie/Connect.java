@@ -1213,4 +1213,17 @@ public class Connect implements HttpSessionBindingListener {
 		return queryOne(qry);
 	}
 
+	/**
+	 * 
+	 * @return true if connected user has DBA role
+	 */
+	public boolean hasDbaRole() {
+		
+		String qry = "SELECT GRANTED_ROLE FROM USER_ROLE_PRIVS WHERE GRANTED_ROLE='DBA'";
+		String dba = this.queryOne(qry);
+		
+		if (dba.equals("DBA")) return true;
+		
+		return false;
+	}
 }
