@@ -158,10 +158,18 @@ Keep Alive <a id="keepalivelink" href="Javascript:toggleKeepAlive()">Off</a>
 
 <a href="Javascript:setMode('table')" id="selectTable">Table</a> | 
 <a href="Javascript:setMode('view')" id="selectView">View</a> | 
-<a href="Javascript:setMode('package')" title="Package, Type, Function & Procedure" id="selectPackage">Program</a> | 
-<!--<a href="Javascript:setMode('type')" id="selectType">Type</a> |-->
 <a href="Javascript:setMode('synonym')" id="selectSynonym">Synonym</a> | 
-<a href="Javascript:setMode('tool')" id="selectTool">Tool</a>
+<a href="Javascript:setMode('package')" title="Package, Type, Function & Procedure" id="selectPackage">Program</a> 
+
+
+<!-- | <a href="Javascript:setMode('tool')" id="selectTool">Tool</a> -->
+<%-- <% if (cn.hasDbaRole()) { %> --%>
+<!-- | <a href="Javascript:setMode('dba')" id="selectDBA">DBA</a> -->
+<%-- <% }  else { %> --%>
+<!-- | not DBA -->
+<%-- <% } %> --%>
+
+
 <br/>
 
 <b>Search</b> <input id="searchFilter" style="width: 180px;"/>

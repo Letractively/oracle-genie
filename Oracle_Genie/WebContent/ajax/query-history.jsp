@@ -14,11 +14,7 @@
 %>
 <head>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$('table.striped tbody tr:odd').addClass('odd');
-		$('table.striped tbody tr:even').addClass('even');
-	});
-	
+
 	function run(divName) {
 		var qry = $("#" + divName).html();
 		$("#sql").val(qry);
@@ -35,11 +31,12 @@
 <b>Query History</b>
 <br/><br/>
 
-<table id="dataTable" class="striped" border=0 width=600>
+<table id="dataTable" class="gridBody" border=1 width=600>
+<tr class="rowHeader">
 <th>Run</th>
 <th>Query</th>
 <th>Time</th>
-</td>
+</tr>
 
 <%
 	Iterator iterator = map.values().iterator();
@@ -48,8 +45,10 @@
 		idx ++;
 		QueryLog ql = (QueryLog) iterator.next();
 		String divName ="QRY-" + idx;
+		String rowClass = "odd";
+		if (idx%2 == 0) rowClass = "even";
 %>
-	<tr>
+	<tr class="<%=rowClass%>">
 		<td><a href="Javascript:run('<%= divName %>')">run</a></td>
 		<td><div id="<%= divName %>"><%= ql.getQueryString() %></div></td>
 		<td><%= ql.getTime() %></td>

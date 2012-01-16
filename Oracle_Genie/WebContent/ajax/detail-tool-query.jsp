@@ -52,16 +52,17 @@
 
 %>
 
-SQL: <%= sql %>
 <a href="javascript:form1.submit()"><img border=0 src="image/query.gif" title="open query"></a>
 
 
 <form id="form1" name="form1" target=_blank action="query.jsp" method="post">
-<input id="sql" name="sql" type="hidden" value="<%= sql %>"/>
+<textarea id="sql" name="sql" cols=70 rows=4>
+<%= sql %>
+</textarea>
 </form>
 
-<table id="dataTable" class="striped" border=0>
-<tr>
+<table id="dataTable" class="gridBody" border=1>
+<tr class="rowHeader">
 
 <%
 	int offset = 0;
@@ -92,10 +93,13 @@ SQL: <%= sql %>
 
 
 <%
+	int rowCnt = 0;
 	while (rs != null && hasData/* && rs.next() */) {
-
+		rowCnt++;
+		String rowClass = "odd";
+		if (rowCnt%2 == 0) rowClass = "even";
 %>
-<tr>
+<tr class="<%= rowClass%>">
 
 <%
 		colIdx=0;
@@ -119,7 +123,7 @@ SQL: <%= sql %>
 %>
 </tr>
 <%		counter++;
-		if (counter >= 1000) break;
+		if (counter >= 2000) break;
 		
 		if (!rs.next()) break;
 	}
@@ -128,3 +132,5 @@ SQL: <%= sql %>
 
 %>
 </table>
+<%= counter %> rows found.<br/>
+Elapsed Time <%= q.getElapsedTime() %>ms.<br/>

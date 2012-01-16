@@ -61,12 +61,7 @@ function selectOption(select_id, option_val) {
     $('#'+select_id+' option[value='+option_val+']').attr('selected','selected');       
 }
 
-	$(document).ready(function() {
-		$('table.striped tbody tr:odd').addClass('odd');
-		$('table.striped tbody tr:even').addClass('even');
-	});	
-
-	</script>
+</script>
 
 <form name="formQry" target="_blank" action="query.jsp">
 <input name="sql" type="hidden" value="<%= sql %>">
@@ -74,8 +69,8 @@ function selectOption(select_id, option_val) {
 
 SQL = <%= sql %> <a href="javascript:document.formQry.submit()"><img border=0 src="image/query.gif" title="Open Query"></a>
 
-<table id="dataTable" class="striped" border=0>
-<tr>
+<table id="dataTable" class=gridBody border=1>
+<tr class="rowHeader">
 <%
 	boolean numberCol[] = new boolean[500];
 
@@ -99,8 +94,14 @@ SQL = <%= sql %> <a href="javascript:document.formQry.submit()"><img border=0 sr
 </tr>
 
 <%
+	int rowIdx=0;
 	while (rs != null && hasData/* && rs.next() */) {
-	
+		rowIdx++;
+		String rowClass = "odd";
+		if ((rowIdx)%2 == 0) rowClass = "even";
+%>
+	<tr class="<%=rowClass%>">
+<%	
 		colIdx=0;
 		for  (int i = 1; i <= rs.getMetaData().getColumnCount(); i++){
 

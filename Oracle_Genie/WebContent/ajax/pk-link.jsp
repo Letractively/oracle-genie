@@ -29,8 +29,8 @@
 <% if (refTabs.size() > 0) { %>
 Linked Tables: <br/>
 
-<table>
-<tr bgcolor="#e0e0ff">
+<table class="gridBody" border=1>
+<tr class="rowHeader">
 	<td>Table Name</td>
 	<td>Records</td>
 	<td>Comment</td>
@@ -53,8 +53,10 @@ Linked Tables: <br/>
 	for (int i=0; i<refTabs.size(); i++) {
 		String refTab = refTabs.get(i);
 		int recCount = cn.getPKLinkCount(refTab, pkColName, key);
+		String rowClass = "odd";
+		if ((i+1)%2 == 0) rowClass = "even";
 %>
-	<tr>
+	<tr class="<%=rowClass%>">
 		<td><%=(recCount>0?"<b>":"")%>
 			<a href="javascript:linkPk('<%= refTab %>','<%= pkColName %>','<%= Util.encodeUrl(key) %>','<%= table %>')"><%= refTab %></a>
 			<%=(recCount>0?"</b>":"")%>

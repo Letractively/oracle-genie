@@ -25,10 +25,6 @@
 	</style>
 
 <script language="Javascript">
-	$(document).ready(function() {
-		$('table.striped tbody tr:odd').addClass('odd');
-		$('table.striped tbody tr:even').addClass('even');
-	});
 	
 	function run(divName) {
 		var qry = $("#" + divName).html();
@@ -49,11 +45,12 @@
 <td><%= cn.getUrlString() %> Database: <%= cn.getSchemaName() %></td>
 </table>
 
-<table id="dataTable" class="striped" border=0 width=800>
+<table id="dataTable" class="gridBody" border=1 width=800>
+<tr class="rowHeader">
 <th>Run</th>
 <th>Query</th>
 <th>Time</th>
-</td>
+</tr>
 
 <%
 	Iterator iterator = map.values().iterator();
@@ -62,8 +59,11 @@
 		idx ++;
 		QueryLog ql = (QueryLog) iterator.next();
 		String divName ="QRY-" + idx;
+
+		String rowClass = "odd";
+		if (idx%2 == 0) rowClass = "even";
 %>
-	<tr>
+	<tr class="<%=rowClass%>">
 		<td><a href="Javascript:run('<%= divName %>')">run</a></td>
 		<td><div id="<%= divName %>"><%= ql.getQueryString() %></div></td>
 		<td><%= ql.getTime() %></td>

@@ -56,19 +56,6 @@
 	}
 	System.out.println("XXX TBL=" + tbl);
 %>
-<script language="Javascript">
-
-function selectOption(select_id, option_val) {
-    $('#'+select_id+' option:selected').removeAttr('selected');
-    $('#'+select_id+' option[value='+option_val+']').attr('selected','selected');       
-}
-
-	$(document).ready(function() {
-		$('table.striped tbody tr:odd').addClass('odd');
-		$('table.striped tbody tr:even').addClass('even');
-	});	
-
-	</script>
 
 SQL = <%= sql %>
 

@@ -138,9 +138,8 @@
     <script type="text/javascript">
 	$(document).ready(function() {
 		$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
-		$('table.striped tbody tr:odd').addClass('odd');
-		$('table.striped tbody tr:even').addClass('even');
-		//selectOption("selectTable", "<%=tbl%>");
+//		$('table.gridBody tr:odd').addClass('odd');
+//		$('table.ridBody tr:even').addClass('even');
 		showTable('<%=tbl%>');
 	});	    
     </script>
@@ -227,8 +226,8 @@ Table
 Time : <%=new Date()%>
 
 <!-- <a href="Javascript:web()">web?</a> -->
-<table id="dataTable" class="striped" border=0>
-<tr>
+<table id="dataTable" border=1 class="gridBody">
+<tr class="rowHeader">
 
 <%
 	int offset = 0;
@@ -271,10 +270,13 @@ Time : <%=new Date()%>
 
 
 <%
+	int rowCnt = 0;
 	while (rs != null && hasData/* && rs.next() */) {
-
+		rowCnt++;
+		String rowClass = "odd";
+		if (rowCnt%2 == 0) rowClass = "even";
 %>
-<tr>
+<tr class="<%= rowClass%>">
 
 <%
 	if (pkLink) {
