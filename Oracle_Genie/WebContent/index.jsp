@@ -48,21 +48,9 @@ $(document).ready(function(){
 	setMode('table');
 	checkResize();
 	CATALOG = "<%= cn.getSchemaName()%>";
-	toggleKeepAlive();
-/*	
-	$('#searchFilter').change(function(){
- 		var filter = $(this).val().toLowerCase();
-		$('#inner-table a').each(function(){
-			var val = $(this).html().toLowerCase();
-			//alert(val);
-  			if (val.indexOf(filter)>=0) {
-				$(this).parent().show();
-			} else {
-				$(this).parent().hide();
-			}
-		})
- 	})
-*/
+//	toggleKeepAlive();
+	callserver();
+
 	$('#searchFilter').change(function(){
 		var filter = $(this).val().toUpperCase();
 		searchWithFilter(filter);
@@ -109,7 +97,7 @@ $(document).ready(function(){
 	
 function callserver() {
 	var remoteURL = 'ping.jsp';
-	$.get(remoteURL, function(data) { to = setTimeout("callserver()",300000); });
+	$.get(remoteURL, function(data) { to = setTimeout("callserver()",60000); });
 }	
 </script>
 

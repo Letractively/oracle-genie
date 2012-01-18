@@ -138,8 +138,6 @@
     <script type="text/javascript">
 	$(document).ready(function() {
 		$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
-//		$('table.gridBody tr:odd').addClass('odd');
-//		$('table.ridBody tr:even').addClass('even');
 		showTable('<%=tbl%>');
 	});	    
     </script>
@@ -227,20 +225,20 @@ Time : <%=new Date()%>
 
 <!-- <a href="Javascript:web()">web?</a> -->
 <table id="dataTable" border=1 class="gridBody">
-<tr class="rowHeader">
+<tr>
 
 <%
 	int offset = 0;
 	if (pkLink) {
 		offset ++;
 %>
-	<th><b>PK</b> <a href="Javascript:hide(<%= offset %>)">x</a></th>
+	<th class="headerRow"><b>PK</b> <a href="Javascript:hide(<%= offset %>)">x</a></th>
 <%
 	}
 	if (fkLinkTab.size()>0) {
 		offset ++;
 %>
-	<th><b>FK Link</b> <a href="Javascript:hide(<%= offset %>)">x</a></th>
+	<th class="headerRow"><b>FK Link</b> <a href="Javascript:hide(<%= offset %>)">x</a></th>
 <%
 	}
 	boolean numberCol[] = new boolean[500];
@@ -262,7 +260,7 @@ Time : <%=new Date()%>
 			if (comment != null && comment.length() > 0) tooltip += " " + comment;
 			
 %>
-<th><b><a href="Javascript:copyPaste('<%=colName%>');" title="<%= tooltip %>"><%=colName%></a></b> <a href="Javascript:hide(<%=colIdx + offset%>)">x</a></th>
+<th class="headerRow"><b><a href="Javascript:copyPaste('<%=colName%>');" title="<%= tooltip %>"><%=colName%></a></b> <a href="Javascript:hide(<%=colIdx + offset%>)">x</a></th>
 <%
 	} 
 %>
@@ -273,10 +271,10 @@ Time : <%=new Date()%>
 	int rowCnt = 0;
 	while (rs != null && hasData/* && rs.next() */) {
 		rowCnt++;
-		String rowClass = "odd";
-		if (rowCnt%2 == 0) rowClass = "even";
+		String rowClass = "oddRow";
+		if (rowCnt%2 == 0) rowClass = "evenRow";
 %>
-<tr class="<%= rowClass%>">
+<tr>
 
 <%
 	if (pkLink) {
@@ -290,12 +288,12 @@ Time : <%=new Date()%>
 		
 		String linkUrl = "ajax/pk-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
 %>
-	<td><a class='inspect' href='<%= linkUrl %>'><img border=0 src="image/link.gif"></a></td>
+	<td class="<%= rowClass%>"><a class='inspect' href='<%= linkUrl %>'><img border=0 src="image/link.gif"></a></td>
 <%
 	}
 if (fkLinkTab.size()>0) {
 %>
-<td>
+<td class="<%= rowClass%>">
 <% 
 	for (int i=0;i<fkLinkTab.size();i++) { 
 		String t = fkLinkTab.get(i);
@@ -353,7 +351,7 @@ if (fkLinkTab.size()>0) {
 					linkImage = "image/link.gif";
 				}
 %>
-<td <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
+<td  class="<%= rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
 <%= (val!=null && isLinked?"<a class='inspect' href='" + linkUrl  + "'><img border=0 src='" + linkImage + "'></a>":"")%>
 </td>
 <%
