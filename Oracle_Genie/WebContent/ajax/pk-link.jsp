@@ -27,13 +27,13 @@
 <div id="pkLink">
 
 <% if (refTabs.size() > 0) { %>
-Linked Tables: <br/>
+Linked Tables: (<%= refTabs.size() %>)<br/>
 
 <table class="gridBody" border=1>
-<tr class="rowHeader">
-	<td>Table Name</td>
-	<td>Records</td>
-	<td>Comment</td>
+<tr>
+	<th class="headerRow"><b>Table Name</b></th>
+	<th class="headerRow"><b>Records</b></th>
+	<th class="headerRow"><b>Comment</b></th>
 </tr>
 <%
 	// Primary Key for PK Link
@@ -53,19 +53,20 @@ Linked Tables: <br/>
 	for (int i=0; i<refTabs.size(); i++) {
 		String refTab = refTabs.get(i);
 		int recCount = cn.getPKLinkCount(refTab, pkColName, key);
-		String rowClass = "odd";
-		if ((i+1)%2 == 0) rowClass = "even";
+		String rowClass = "oddRow";
+		if ((i+1)%2 == 0) rowClass = "evenRow";
 %>
-	<tr class="<%=rowClass%>">
-		<td><%=(recCount>0?"<b>":"")%>
+	<tr>
+		<td class="<%= rowClass%>"><%=(recCount>0?"<b>":"")%>
 			<a href="javascript:linkPk('<%= refTab %>','<%= pkColName %>','<%= Util.encodeUrl(key) %>','<%= table %>')"><%= refTab %></a>
 			<%=(recCount>0?"</b>":"")%>
 		</td>
-		<td align=right><%= recCount %></td>
-		<td><%= cn.getComment(refTab) %></td>
+		<td class="<%= rowClass%>" align=center><%=(recCount>0?"<b>":"")%><%= recCount %><%=(recCount>0?"</b>":"")%></td>
+		<td class="<%= rowClass%>"><%= cn.getComment(refTab) %></td>
 	</tr>
 <% }
 }
 %>
 </table>
+
 </div>

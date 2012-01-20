@@ -33,7 +33,7 @@
 	
 	System.out.println(request.getRemoteAddr()+": " + sql +";");
 	
-	Query q = new Query(cn, sql, request);
+	OldQuery q = new OldQuery(cn, sql, request);
 	ResultSet rs = q.getResultSet();
 	
 	// get table name

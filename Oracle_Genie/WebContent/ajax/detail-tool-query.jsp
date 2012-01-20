@@ -25,7 +25,7 @@
 	Connection conn = cn.getConnection();
 	System.out.println(request.getRemoteAddr()+": " + sql +";");
 	
-	Query q = new Query(cn, sql, request);
+	OldQuery q = new OldQuery(cn, sql, request);
 	ResultSet rs = q.getResultSet();
 	
 	// get table name
@@ -52,7 +52,7 @@
 
 %>
 
-<a href="javascript:form1.submit()"><img border=0 src="image/query.gif" title="open query"></a>
+<a href="javascript:form1.submit()"><img border=0 src="image/icon_query.png" title="open query"></a>
 
 
 <form id="form1" name="form1" target=_blank action="query.jsp" method="post">
