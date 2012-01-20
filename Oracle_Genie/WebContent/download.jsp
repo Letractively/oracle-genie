@@ -18,7 +18,7 @@
 	String q2 = sql;
 //	if (q2.toLowerCase().indexOf("limit ")<0) q2 += " LIMIT 100000";
 
-	Query q = new Query(cn, q2, request);
+	OldQuery q = new OldQuery(cn, q2, request);
 	ResultSet rs = q.getResultSet();
 	
 	out.println("database,"+ cn.getUrlString() + " catalog: " + cn.getSchemaName());

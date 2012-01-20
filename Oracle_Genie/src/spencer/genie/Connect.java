@@ -208,6 +208,7 @@ public class Connect implements HttpSessionBindingListener {
 
 	public void valueUnbound(HttpSessionBindingEvent arg0) {
 		printQueryLog();
+		QueryCache.getInstance().clearAll();
 		this.disconnect();
 	}
 	

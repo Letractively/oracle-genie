@@ -37,7 +37,7 @@
 	String typeName = cn.getObjectType(owner, name);
 %>
 
-<h2><%= typeName %>: <%= name %> &nbsp;&nbsp;<a href="<%=sourceUrl%>" target="_blank"><img border=0 src="image/query.gif" title="Source code"></a></h2>
+<h2><%= typeName %>: <%= name %> &nbsp;&nbsp;<a href="<%=sourceUrl%>" target="_blank"><img border=0 src="image/icon_query.png" title="Source code"></a></h2>
 
 
 <%

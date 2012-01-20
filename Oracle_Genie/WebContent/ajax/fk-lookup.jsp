@@ -31,7 +31,7 @@
 	if (sql.endsWith(";")) sql = sql.substring(0, sql.length()-1);
 	sql = sql.replaceAll("&gt;",">").replace("&lt;","<");
 	
-	Query q = new Query(cn, sql, request);
+	OldQuery q = new OldQuery(cn, sql, request);
 	ResultSet rs = q.getResultSet();
 	
 	// get table name
@@ -63,17 +63,17 @@ function selectOption(select_id, option_val) {
 
 </script>
 
-<form name="formQry" target="_blank" action="query.jsp">
+<form name="formQry" method="post" target="_blank" action="query.jsp">
 <input name="sql" type="hidden" value="<%= sql %>">
 </form>
 
-SQL = <%= sql %> <a href="javascript:document.formQry.submit()"><img border=0 src="image/query.gif" title="Open Query"></a>
+SQL = <%= sql %> <a href="javascript:document.formQry.submit()"><img border=0 src="image/icon_query.png" title="Open Query"></a>
 
 <table id="inspectTable" class="gridBody" border=1 width=600>
-<tr class="rowHeader">
-	<th><b>Column Name</b></th>
-	<th><b>Value</b></th>
-	<th><b>Comment</b> <a href="Javascript:hideInspectComment()">x</a></th> 
+<tr>
+	<th class="headerRow"><b>Column Name</b></th>
+	<th class="headerRow"><b>Value</b></th>
+	<th class="headerRow"><b>Comment</b> <a href="Javascript:hideInspectComment()">x</a></th> 
 </tr>
 
 <%
@@ -97,13 +97,13 @@ SQL = <%= sql %> <a href="javascript:document.formQry.submit()"><img border=0 sr
 			
 			if (val!=null && val.equals("Exhausted Resultset")) valDisp = "<span style='color: #999999;'>null</span>";
 
-			String rowClass = "odd";
-			if (i%2 == 0) rowClass = "even";
+			String rowClass = "oddRow";
+			if (i%2 == 0) rowClass = "evenRow";
 %>
-	<tr class="<%=rowClass%>">
-		<td><b><%=colName%></b></td>
-		<td <%= (numberCol[colIdx])?"align=right":""%>><%= valDisp %></td>
-		<td><%= cn.getComment(table, colName) %></td>
+	<tr>
+		<td class="<%=rowClass%>"><b><%=colName%></b></td>
+		<td class="<%=rowClass%>"<%= (numberCol[colIdx])?"align=right":""%>><%= valDisp %></td>
+		<td class="<%=rowClass%>"><%= cn.getComment(table, colName) %></td>
 	</tr>
 <%
 	}	

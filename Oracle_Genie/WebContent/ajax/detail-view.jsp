@@ -46,7 +46,7 @@
 	
 
 %>
-<h2>VIEW: <%= view %> &nbsp;&nbsp;<a href="Javascript:runQuery('<%=catalog%>','<%=view%>')"><img border=0 src="image/query.gif" title="query"></a></h2>
+<h2>VIEW: <%= view %> &nbsp;&nbsp;<a href="Javascript:runQuery('<%=catalog%>','<%=view%>')"><img border=0 src="image/icon_query.png" title="query"></a></h2>
 
 Definition: 
 <pre class='brush: sql'>

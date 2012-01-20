@@ -7,7 +7,15 @@
 %>
 
 <%
-
+	int counter = 0;
+	String sql = request.getParameter("sql");
+	if (sql==null) sql = "SELECT * FROM TABLE";
+	sql = sql.trim();
+	if (sql.endsWith(";")) sql = sql.substring(0, sql.length()-1);
+	sql = sql.replaceAll("&gt;",">").replace("&lt;","<");
+	
+	String norun = request.getParameter("norun");
+	
 	Connect cn = (Connect) session.getAttribute("CN");
 	
 	if (cn==null) {
@@ -16,26 +24,14 @@
 <%
 		return;
 	}
-
-	int counter = 0;
-	String sql = request.getParameter("sql");
-	if (sql==null) sql = "SELECT * FROM TAB";
-	sql = sql.trim();
-	if (sql.endsWith(";")) sql = sql.substring(0, sql.length()-1);
-	if (sql.endsWith("/")) sql = sql.substring(0, sql.length()-1);
-	sql = sql.replaceAll("&gt;",">").replace("&lt;","<");
-	
-	String norun = request.getParameter("norun");
-	
 	Connection conn = cn.getConnection();
 	System.out.println(request.getRemoteAddr()+": " + sql +";");
 	
 	int lineLength = Util.countLines(sql);
-	if (lineLength <3) lineLength = 3;
+	if (lineLength <5) lineLength = 5;
 	
-	QueryCache.getInstance().removeQuery(sql);
-	Query q = new Query(cn, sql);
-	QueryCache.getInstance().addQuery(sql, q);
+	OldQuery q = new OldQuery(cn, sql, request);
+	ResultSet rs = q.getResultSet();
 	
 	// get table name
 	String tbl = null;
@@ -67,7 +63,7 @@
 	List<String> fkLinkTab = new ArrayList<String>();
 	List<String> fkLinkCol = new ArrayList<String>();
 	
-	for (int i=0; q.hasData() && i<fks.size(); i++) {
+	for (int i=0; i<fks.size(); i++) {
 		ForeignKey rec = fks.get(i);
 		String linkCol = cn.getConstraintCols(rec.constraintName);
 		String rTable = cn.getTableNameByPrimaryKey(rec.rConstraintName);
@@ -85,7 +81,7 @@
 			String[] t = linkCol.split("\\,");
 			for (int j=0;j<t.length;j++) {
 				String colName = t[j].trim();
-				for  (int k = 0; k< q.getColumnCount(); k++){
+				for  (int k = 1; rs != null && k<= rs.getMetaData().getColumnCount(); k++){
 					String col = q.getColumnLabel(k);
 					if (col.equalsIgnoreCase(colName)) {
 						matchCount++;
@@ -114,7 +110,7 @@
 		int matchCount = 0;
 		for (int j=0;j<pkColList.size();j++) {
 			String colName = pkColList.get(j);
-			for  (int i = 0; i< q.getColumnCount(); i++){
+			for  (int i = 1; rs != null && i<= rs.getMetaData().getColumnCount(); i++){
 				String col = q.getColumnLabel(i);
 				if (col.equalsIgnoreCase(colName)) {
 					matchCount++;
@@ -141,19 +137,16 @@
     
     <script type="text/javascript">
 	$(document).ready(function() {
-		showTable('<%=tbl%>');
-//		var sql = $("#sql").val();
-//		loadDataDiv(sql);
-		setDoMode('copy');
 		$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
+		showTable('<%=tbl%>');
 	});	    
     </script>
 </head> 
 
 <body>
 <table>
-<td><br><img src="image/icon_query.png"/></td>
-<td><%= cn.getUrlString() %></td>
+<td><br><img src="image/small-genie.gif"/></td>
+<td><%= cn.getUrlString() %> Database: <%= cn.getSchemaName() %></td>
 </table>
 
 Table
@@ -166,6 +159,23 @@ Table
 
 <input id="input-table" size=30 value="" onChange="showTable(this.value)"/>
 <br/>
+
+
+<!-- <div id="table-lookup"> -->
+<!-- <form> -->
+<!-- <table border=0> -->
+<!-- <td valign=top> -->
+<!-- <select size=10 id="selectTable" name="selectTable2" onChange="showTableCols(this.options[this.selectedIndex].value);"> -->
+<%-- <% for (int i=0; i<cn.getTables().size();i++) { %> --%>
+<%-- 	<option value="<%=cn.getTable(i)%>"><%=cn.getTable(i)%></option> --%>
+<%-- <% } %> --%>
+<!-- </select> -->
+<!-- </td> -->
+<!-- <td valign=top><div id="tableColumns"></div></td> -->
+<!-- </table> -->
+<!-- </form> -->
+<!-- </div>  -->
+
 
 <div id="table-detail"></div>
 
@@ -188,14 +198,7 @@ Table
 <a href="Javascript:copyPaste('ORDER BY');">ORDER-BY</a>&nbsp;
 <a href="Javascript:copyPaste('DESC');">DESC</a>&nbsp;
 
-<form name="form1" id="form1" method="post" action="query.jsp">
-<input type="hidden" id="sortColumn" name="sortColumn" value="">
-<input type="hidden" id="sortDirection" name="sortDirection" value="0">
-<input type="hidden" id="hideColumn" name="hideColumn" value="">
-<input type="hidden" id="filterColumn" name="filterColumn" value="">
-<input type="hidden" id="filterValue" name="filterValue" value="">
-<input type="hidden" id="pageNo" name="pageNo" value="1">
-<input type="hidden" id="rowsPerPage" name="rowsPerPage" value="20">
+<form name="form1" id="form1" method="post" action="query_backup.jsp">
 <textarea id="sql" name="sql" cols=100 rows=<%= lineLength %>><%= sql %></textarea><br/>
 <input type="submit" value="Submit"/>
 &nbsp;
@@ -205,7 +208,7 @@ Table
 <%= q.getMessage() %>
 
 <%
-	if (norun!=null || !q.hasMetaData()) {
+	if (norun!=null || q.getResultSet() == null) {
 %>
 <br/><br/>
 <a href="Javascript:window.close()">Close</a>
@@ -218,24 +221,155 @@ Table
 	}
 %>
 
-<a id="modeCopy" href="Javascript:setDoMode('copy')">Copy&amp;Paste</a>&nbsp;
-<a id="modeHide" href="Javascript:setDoMode('hide')">Hide</a>&nbsp;
-<span id="showAllCol" style="display: none;"><a id="modeHide" href="Javascript:showAllColumn()">Show All Column</a>&nbsp;</span>
-<a id="modeSort" href="Javascript:setDoMode('sort')">Sort</a>&nbsp;
-<a id="modeFilter" href="Javascript:setDoMode('filter')">Filter</a>&nbsp;
-<span id="filter-div"></span>
-<div id="data-div">
-<jsp:include page="ajax/qry.jsp">
-	<jsp:param value="<%= sql%>" name="sql"/>
-	<jsp:param value="1" name="pageNo"/>
-	<jsp:param value="" name="sortColumn"/>
-	<jsp:param value="0" name="sortDirection"/>
-	<jsp:param value="" name="hideColumn"/>
-	<jsp:param value="" name="filterColumn"/>
-	<jsp:param value="" name="filterValue"/>
-	<jsp:param value="" name="hideColumn"/>
-</jsp:include>
-</div>
+Time : <%=new Date()%>
+
+<!-- <a href="Javascript:web()">web?</a> -->
+<table id="dataTable" border=1 class="gridBody">
+<tr>
+
+<%
+	int offset = 0;
+	if (pkLink) {
+		offset ++;
+%>
+	<th class="headerRow"><b>PK</b> <a href="Javascript:hide(<%= offset %>)">x</a></th>
+<%
+	}
+	if (fkLinkTab.size()>0) {
+		offset ++;
+%>
+	<th class="headerRow"><b>FK Link</b> <a href="Javascript:hide(<%= offset %>)">x</a></th>
+<%
+	}
+	boolean numberCol[] = new boolean[500];
+
+	boolean hasData = false;
+	if (rs != null) hasData = rs.next();
+	int colIdx = 0;
+	for  (int i = 1; rs != null && i<= rs.getMetaData().getColumnCount(); i++){
+	
+		String colName = q.getColumnLabel(i);
+
+			//System.out.println(i + " column type=" +rs.getMetaData().getColumnType(i));
+			colIdx++;
+			int colType = q.getColumnType(i);
+			if (colType == 2 || colType == 4 || colType == 8) numberCol[colIdx] = true;
+			
+			String tooltip = ""; //q.getColumnTypeName(i);
+			String comment =  cn.getComment(tname, colName);
+			if (comment != null && comment.length() > 0) tooltip += " " + comment;
+			
+%>
+<th class="headerRow"><b><a href="Javascript:copyPaste('<%=colName%>');" title="<%= tooltip %>"><%=colName%></a></b> <a href="Javascript:hide(<%=colIdx + offset%>)">x</a></th>
+<%
+	} 
+%>
+</tr>
+
+
+<%
+	int rowCnt = 0;
+	while (rs != null && hasData/* && rs.next() */) {
+		rowCnt++;
+		String rowClass = "oddRow";
+		if (rowCnt%2 == 0) rowClass = "evenRow";
+%>
+<tr>
+
+<%
+	if (pkLink) {
+		String keyValue = null;
+		
+		for (int i=0;i<pkColList.size(); i++) {
+			String v = q.getValue(pkColList.get(i));
+			if (i==0) keyValue = v;
+			else keyValue = keyValue + "^" + v; 
+		}
+		
+		String linkUrl = "ajax/pk-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
+%>
+	<td class="<%= rowClass%>"><a class='inspect' href='<%= linkUrl %>'><img border=0 src="image/link.gif"></a></td>
+<%
+	}
+if (fkLinkTab.size()>0) {
+%>
+<td class="<%= rowClass%>">
+<% 
+	for (int i=0;i<fkLinkTab.size();i++) { 
+		String t = fkLinkTab.get(i);
+		String c = fkLinkCol.get(i);
+		
+		String keyValue = null;
+		String[] colnames = c.split("\\,");
+		for (int j=0; j<colnames.length; j++) {
+			String x = colnames[j].trim();
+			String v = q.getValue(x);
+//			System.out.println("x,v=" +x +"," + v);
+			if (keyValue==null)
+				keyValue = v;
+			else
+				keyValue += "^" + v;
+		}
+		
+		String url = "ajax/fk-lookup.jsp?table=" + t + "&key=" + Util.encodeUrl(keyValue);
+%>
+<a class="inspect" href="<%= url%>"><%=t%><img border=0 src="image/view.png"></a>&nbsp;
+
+<%			} %>
+</td>
+<%		}
+		colIdx=0;
+		for  (int i = 1; i <= rs.getMetaData().getColumnCount(); i++){
+
+				colIdx++;
+				String val = q.getValue(i);
+				String valDisp = Util.escapeHtml(val);
+				if (val != null && val.endsWith(" 00:00:00")) valDisp = val.substring(0, val.length()-9);
+				if (val==null) valDisp = "<span style='color: #999999;'>null</span>";
+
+				String colName = q.getColumnLabel(i);
+				String lTable = linkTable.get(colName);
+				String keyValue = val;
+				boolean isLinked = false;
+				String linkUrl = "";
+				String linkImage = "image/view.png";
+				if (lTable != null) {
+					isLinked = true;
+					linkUrl = "ajax/fk-lookup.jsp?table=" + lTable + "&key=" + Util.encodeUrl(keyValue);
+				} else if (val != null && val.startsWith("BLOB ")) {
+					isLinked = true;
+					String tpkName = cn.getPrimaryKeyName(tbl);
+					String tpkCol = cn.getConstraintCols(tpkName);
+					String tpkValue = q.getValue(tpkCol);
+					
+					linkUrl ="ajax/blob.jsp?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue);
+				}
+				
+				if (pkColIndex >0 && i == pkColIndex) {
+					isLinked = true;
+					linkUrl = "ajax/pk-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
+					linkImage = "image/link.gif";
+				}
+%>
+<td  class="<%= rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
+<%= (val!=null && isLinked?"<a class='inspect' href='" + linkUrl  + "'><img border=0 src='" + linkImage + "'></a>":"")%>
+</td>
+<%
+		}
+%>
+</tr>
+<%		counter++;
+		if (counter >= 1000) break;
+		
+		if (!rs.next()) break;
+	}
+	
+	q.close();
+
+%>
+</table>
+<%= counter %> rows found.<br/>
+Elapsed Time <%= q.getElapsedTime() %>ms.<br/>
 
 <br/><br/>
 <a href="Javascript:window.close()">Close</a>

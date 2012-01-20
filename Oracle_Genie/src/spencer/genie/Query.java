@@ -5,7 +5,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,16 +28,19 @@ public class Query {
 	ResultSet rs;
 	String originalQry;
 	String targetQry;
-	HttpServletRequest request;
+	QueryData qData;
 
 	Date start = new Date();
 	int elapsedTime;
 	String message="";
+	int currentRow = 0;
+
+	int sortOrder[] = new int[1000];
+	boolean hideRow[] = new boolean[1000];
 	
-	public Query(Connect cn, String qry, HttpServletRequest request) {
+	public Query(Connect cn, String qry) {
 		this.cn = cn;
 		originalQry = qry;
-		this.request = request;
 		
 	    Date start = new Date();
 	    Connection conn = cn.getConnection();
@@ -45,8 +52,23 @@ public class Query {
 //			if (q2.toLowerCase().indexOf("limit ")<0) q2 += " LIMIT 200";
 			
 			String targetQry = processQuery(q2);
-			//System.out.println(targetQry);	
-			rs = stmt.executeQuery(targetQry);	
+			System.out.println("NEW QUERY: " + targetQry);	
+			rs = stmt.executeQuery(targetQry);
+			
+			qData = new QueryData();
+			qData.setColumns(rs);
+			qData.setData(rs);
+
+			for (int i=0; i<1000; i++) {
+				sortOrder[i] = i;
+				hideRow[i] = false;
+			}
+
+			rs.close();
+			stmt.close();
+
+		    cn.addQueryHistory(originalQry);
+
 		} catch (SQLException e) {
 			message = e.getMessage();
 			System.out.println(e.toString());
@@ -94,134 +116,187 @@ public class Query {
 		System.out.println("newQry=" + newQry);
 		return newQry;
 	}
-	
-	public ResultSet getResultSet() {
-		return rs;
-	}
-	
-	public String getColumnLabel(int idx) {
-		String colName;
-		
-		try{
-			colName = rs.getMetaData().getColumnLabel(idx);
-		} catch (SQLException e) {
-			colName = e.getMessage(); 
-		}
-
-		return colName;
-	}
-	
-	public String getValue(int idx) {
-		String val="";
-		try {
-			int cType = getColumnType(idx);
-			
-			if (cType==2004) {	// BLOB
-				val="BLOB";
-				
-				Blob blob = rs.getBlob(idx);
-				if (blob==null) {
-					val = null;
-				} else {
-					val = "BLOB size=" + blob.length();
-				}
-
-			} else
-				val = rs.getString(idx);
-		} catch (SQLException e) {
-			val = e.getMessage();
-			int cType = getColumnType(idx);
-			System.err.print("Column type: " + cType);
-		}
-		
-		if (val != null && val.endsWith(" 00:00:00.0")) val = val.substring(0, val.length()-11);
-		
-		return val;
-	}
-
-	public String getBlob(int idx) {
-		String val="";
-		try {
-			int cType = getColumnType(idx);
-			
-			if (cType==2004) {	// BLOB
-				val="BLOB";
-				
-				Blob blob = rs.getBlob(idx);
-				if (blob==null) {
-					val = null;
-				} else {
-					byte[] bdata = blob.getBytes(1, (int)blob.length());
-					val = new String(bdata);
-				}
-
-			} else
-				val = rs.getString(idx);
-		} catch (SQLException e) {
-			val = e.getMessage();
-			int cType = getColumnType(idx);
-			System.err.print("Column type: " + cType);
-		}
-		
-//		if (val != null && val.endsWith(" 00:00:00.0")) val = val.substring(0, val.length()-11);
-		System.out.print("BLOB=" + val);
-		return val;
-	}
-
-	// get value by column name
-	public String getValue(String colName) throws SQLException {
-		int idx = 1;
-		
-		for (int i=1; i <= rs.getMetaData().getColumnCount();i++) {
-			String cname = getColumnLabel(i);
-			if (colName.equalsIgnoreCase(cname)) {
-				idx = i;
-				break;
-			}
-		}
-		
-		return getValue(idx);
-	}
-
-	public void close() {
-		try {
-			if (rs!=null) rs.close();
-			if (stmt!=null) stmt.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		}
-
-		Date end = new Date();
-	    elapsedTime = (int) (end.getTime() - start.getTime());
-//	    if (!this.originalQry.endsWith("LIMIT 100000"))
-
-	    cn.addQueryHistory(originalQry);
-	}
 
 	public int getElapsedTime() {
 		return this.elapsedTime;
 	}
 	
-	public int getColumnType(int idx) {
-		int colType = 0;
-		try {
-			colType = rs.getMetaData().getColumnType(idx);
-		} catch (SQLException e) {
+	public int getColumnCount() {
+		return qData.columns.size();
+	}
+	
+	public String getColumnLabel(int idx) {
+		if (idx <0 || idx > qData.columns.size()-1) {
+			return "Out of Index " + idx + " : " + qData.columns.size();
 		}
-		
-		//System.out.println("getColumnType(" + idx + ")=" + colType);
-		return colType;
+
+		return qData.columns.get(idx).columnLabel;
+	}
+	
+	public int getColumnType(int idx) {
+		if (idx <0 || idx > qData.columns.size()-1) {
+			return -1;
+		}
+		return qData.columns.get(idx).columnType;
 	}
 
-	public String getColumnTypeName(int idx) {
-		String colTypeName = "";
-		try {
-			colTypeName = rs.getMetaData().getColumnTypeName(idx);
-		} catch (SQLException e) {
+	public boolean hasData() {
+		return (qData != null && qData.columns != null && qData.rows.size() > 0);
+	}
+	
+	public boolean hasMetaData() {
+		return (qData != null && qData.columns != null && qData.columns.size() > 0);
+	}
+	
+	public String getValue(int idx) {
+		
+		if (qData.rows.size() <= 0) return null;
+		
+		if (idx <0 || idx > qData.columns.size()-1) {
+			return "Out of Index " + idx + " : " + qData.columns.size();
 		}
 		
-		//System.out.println("getColumnType(" + idx + ")=" + colType);
-		return colTypeName;
+		int rowId = sortOrder[currentRow];
+		return qData.rows.get(rowId).row.get(idx).value;
+	}
+	
+	public String getValue(String colName) {
+		int colIndex = qData.getColumnIndex(colName);
+		
+		return getValue(colIndex);
+	}
+
+	public void rewind(int linePerPage, int pageNo) {
+		if (pageNo == 1)
+			currentRow = -1;
+		else
+			currentRow = linePerPage * (pageNo-1) -1;
+	}
+	
+	public boolean next() {
+		if (currentRow+1 >= qData.rows.size()) {
+			currentRow = 0;
+			return false;
+		}
+
+		currentRow ++;
+		if (hideRow[sortOrder[currentRow]]) return next();
+		return true;
+	}
+	
+	public void sort(String col, String direction) {
+		int newOrder[] = new int[1000];
+
+		boolean isReverse = direction.equals("1");
+		
+		for (int i=0; i<1000; i++) newOrder[i] = 0;
+		
+		if (qData==null) {
+			System.err.println("qData is null");
+			return;
+		}
+		int colIdx = qData.getColumnIndex(col);
+
+		if (colIdx < 0) {
+			System.err.println("column " + col + " not found");
+			return;
+		}
+		
+		int size = qData.rows.size();
+		for (int i=0;i<size-1;i++) {
+			for (int j=i+1;j<size;j++) {
+
+				DataDef v1 = qData.rows.get(i).row.get(colIdx);
+				DataDef v2 = qData.rows.get(j).row.get(colIdx);
+			
+				String typeName = qData.columns.get(colIdx).columnTypeName;
+				
+				int t;
+				if (v1.isNull) {
+					t = i;
+				} else if (v2.isNull) {
+					t = j;
+				} else if (v1.compareTo(v2, typeName) > 0) {
+					t = i;
+				} else {
+					t = j;
+				}
+				
+				if (isReverse) {
+					t = (t==i)?j:i;
+				}
+				
+				newOrder[t] ++;
+				
+				//System.out.println("v1=" + v1.value + " v2=" + v2.value);
+			}
+			//System.out.println(i + " -> " + (size - i -1));
+		}
+
+		// copy new Order to sortOrder
+		for (int i=0;i<size;i++)
+			sortOrder[newOrder[i]] = i;
+
+		//System.out.println("new order=");
+		for (int i=0;i<size;i++)
+			System.out.println(sortOrder[i]);
+		
+	}
+	
+	public List<String> getFilterList(String col) {
+
+		int colIdx = qData.getColumnIndex(col);
+		
+		HashSet<String> set = new HashSet<String>();
+		int size = qData.rows.size();
+		for (int i=0;i<size;i++) {
+			String value = qData.rows.get(i).row.get(colIdx).value;
+			if (value != null)
+			set.add(value);
+		}
+
+		List<String> list = new ArrayList<String>(set);
+		Collections.sort(list);
+		return list;
+	}
+	
+	public void filter(String col, String val) {
+		int colIdx = qData.getColumnIndex(col);
+		int size = qData.rows.size();
+		for (int i=0;i<size;i++) {
+			DataDef v = qData.rows.get(i).row.get(colIdx);
+
+			if (val.equals(v.value) || val.equals("")) 
+				hideRow[i] = false;
+			else
+				hideRow[i] = true;
+		}
+	}
+
+	public void removeFilter() {
+		for (int i=0; i<1000; i++) {
+//			sortOrder[i] = i;
+			hideRow[i] = false;
+		}
+	}
+
+	public int getRecordCount() {
+		return qData.rows.size();
+	}
+
+	public int getFilteredCount() {
+		int cnt = 0;
+		
+		for (int i=0; i<qData.rows.size();i++) {
+			if (!hideRow[i]) cnt++;
+		}
+		
+		return cnt;
+	}
+	
+	public int getTotalPage(int linesPerPage) {
+		int res = (int) ((this.getFilteredCount()-1) / linesPerPage);
+		
+		return res + 1;
 	}
 }

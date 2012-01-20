@@ -1,3 +1,5 @@
+var doMode = 'copy';
+
 	function download() {
 		$("#form1").attr("action", "download.jsp");
 		$("#form1").submit();
@@ -42,8 +44,19 @@
 	    return this;
 	};	
 	
+	$.fn.showCol = function(col){
+	    // Make sure col has value
+	    if(!col){ col = 1; }
+	    $('tr td:nth-child('+col+'), tr th:nth-child('+col+')', this).show();
+	    return this;
+	};	
+	
 	function hide(col) {
 		$('table#dataTable').hideCol(col);
+	}
+	
+	function show(col) {
+		$('table#dataTable').showCol(col);
 	}
 	
 	function hideInspectComment() {
@@ -62,6 +75,37 @@
 		});	
 	}
 
+	function loadDataDiv(sql) {
+		$("#data-div").append("<div id='wait'><img src='image/loading.gif'/></div>");
+		$.ajax({
+			type: 'POST',
+			url: "ajax/qry.jsp?",
+			data: $("#form1").serialize(),
+			success: function(data){
+				$("#data-div").append(data);
+				$("#wait").remove();
+				$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
+			}
+		});	
+	}
+	
+	function gotoPage(pageNo) {
+		$("#pageNo").val(pageNo);
+		$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+		
+		$.ajax({
+			type: 'POST',
+			url: "ajax/qry.jsp",
+			data: $("#form1").serialize(),
+			success: function(data){
+				$("#data-div").append(data);
+				$("#wait").remove();
+				$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
+				hideIfAny();
+			}
+		});	
+	}
+	
 	function showTableCols(tbl) {
 		$("#tableColumns").html("<div id='wait'><img src='image/loading.gif'/></div>");
 		
@@ -74,6 +118,170 @@
 		});	
 	}
 
+	function setDoMode(mode) {
+		var select = "";
+
+		doMode = mode;
+
+		$("#modeCopy").css("font-weight", "");
+		$("#modeHide").css("font-weight", "");
+		$("#modeSort").css("font-weight", "");
+		$("#modeFilter").css("font-weight", "");
+
+		if (mode == "copy") {
+			select = "modeCopy";
+		} else if (mode == "hide") {
+			select = "modeHide";
+		} else if (mode == "sort") {
+			select = "modeSort";
+		} else if (mode == "filter") {
+			select = "modeFilter";
+			filter('0');
+		}
+		
+		$("#" + select).css("font-weight", "bold");
+	}
+	
+	function doAction(val, idx) {
+		if (doMode=='copy') {
+			copyPaste(val);
+		} else if (doMode=='hide') {
+			var cols = $("#hideColumn").val();
+			if (cols == "") cols = idx;
+			else cols += "," + idx;
+			
+			$("#hideColumn").val(cols);
+			hide(idx);
+			$("#showAllCol").show();
+		} else if (doMode=='sort') {
+			sort(val);
+		} else if (doMode=='filter') {
+			filter(val);
+		} else {
+			alert("mode=" + doMode);
+		}
+	}
+
+	function showAllColumn() {
+		var hiddenCols = $("#hideColumn").val();
+		if (hiddenCols != '') {
+			var cols = hiddenCols.split(",");
+			for(var i = 0;i<cols.length;i++){
+				show(cols[i]);
+			}
+		}
+
+		$("#showAllCol").hide();
+		$("#hideColumn").val('');
+	}
+	
+	function sort(col) {
+		$("#pageNo").val(1);
+		$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+		var prevSortColumn = $("#sortColumn").val();
+		var prevSortDirection = $("#sortDirection").val();
+		var newSortDirection = "0";
+		
+		if (prevSortColumn==col && prevSortDirection=="0") { 
+			newSortDirection = "1";  
+		}
+		$("#sortColumn").val(col);
+		$("#sortDirection").val(newSortDirection);
+		
+		$.ajax({
+			type: 'POST',
+			url: "ajax/qry.jsp",
+			data: $("#form1").serialize(),
+			success: function(data){
+				$("#data-div").append(data);
+				$("#wait").remove();
+				$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
+				hideIfAny();
+			}
+		});	
+	}
+
+	function filter(col) {
+		$("#filter-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+		$("#filterColumn").val(col);
+		
+		$.ajax({
+			type: 'POST',
+			url: "ajax/filter.jsp",
+			data: $("#form1").serialize(),
+			success: function(data){
+				$("#filter-div").append(data);
+				$("#wait").remove();
+			}
+		});	
+	}	
+	
+	function applyFilter(value) {
+		$("#pageNo").val(1);
+		$("#filterValue").val(value);
+		$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+		
+		$.ajax({
+			type: 'POST',
+			url: "ajax/qry.jsp",
+			data: $("#form1").serialize(),
+			success: function(data){
+				$("#data-div").append(data);
+				$("#wait").remove();
+				$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
+				hideIfAny();
+			}
+		});	
+	}
+
+	function hideIfAny() {
+		var hiddenCols = $("#hideColumn").val();
+		if (hiddenCols != '') {
+			var cols = hiddenCols.split(",");
+			for(var i = 0;i<cols.length;i++){
+//				alert('before ' + cols[i]);
+				hide(cols[i]);
+//				alert('after ' + cols[i]);
+			}
+		}
+	}
+
+	function rowsPerPage(rows) {
+		$("#rowsPerPage").val(rows);
+		$("#pageNo").val(1);
+		$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+		
+		$.ajax({
+			type: 'POST',
+			url: "ajax/qry.jsp",
+			data: $("#form1").serialize(),
+			success: function(data){
+				$("#data-div").append(data);
+				$("#wait").remove();
+				$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
+				hideIfAny();
+			}
+		});	
+	}
+
+	function removeFilter() {
+		$("#pageNo").val(1);
+		$("#filter-div").html('');
+		$("#filterValue").val('');
+		$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+		
+		$.ajax({
+			type: 'POST',
+			url: "ajax/qry.jsp",
+			data: $("#form1").serialize(),
+			success: function(data){
+				$("#data-div").append(data);
+				$("#wait").remove();
+				$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
+			}
+		});	
+	}
+	
 	function copyPaste(val) {
 		$("#sql").insertAtCaret(" " + val);
 	}

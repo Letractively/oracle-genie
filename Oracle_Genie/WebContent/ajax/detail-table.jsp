@@ -51,7 +51,7 @@ Please select a Table to see the detail.
 	
 %>
 
-<h2>TABLE: <%= table %> &nbsp;&nbsp;<a href="Javascript:runQuery('','<%=tname%>')"><img border=0 src="image/query.gif" title="query"></a>
+<h2>TABLE: <%= table %> &nbsp;&nbsp;<a href="Javascript:runQuery('','<%=tname%>')"><img border=0 src="image/icon_query.png" title="query"></a>
 </h2>
 
 <%= owner==null?cn.getComment(tname):cn.getSynTableComment(owner, tname) %><br/>

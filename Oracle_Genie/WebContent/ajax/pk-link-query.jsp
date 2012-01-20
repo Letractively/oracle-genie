@@ -31,7 +31,7 @@
 	sql = sql.replaceAll("&gt;",">").replace("&lt;","<");
 	System.out.println("PK-LINK:" + sql);
 	
-	Query q = new Query(cn, sql, request);
+	OldQuery q = new OldQuery(cn, sql, request);
 	ResultSet rs = q.getResultSet();
 	
 	// get table name
@@ -63,14 +63,14 @@ function selectOption(select_id, option_val) {
 
 </script>
 
-<form name="formQry" target="_blank" action="query.jsp">
+<form name="formQry" method="post" target="_blank" action="query.jsp">
 <input name="sql" type="hidden" value="<%= sql %>">
 </form>
 
-SQL = <%= sql %> <a href="javascript:document.formQry.submit()"><img border=0 src="image/query.gif" title="Open Query"></a>
+SQL = <%= sql %> <a href="javascript:document.formQry.submit()"><img border=0 src="image/icon_query.png" title="Open Query"></a>
 
 <table id="dataTable" class=gridBody border=1>
-<tr class="rowHeader">
+<tr>
 <%
 	boolean numberCol[] = new boolean[500];
 
@@ -87,7 +87,7 @@ SQL = <%= sql %> <a href="javascript:document.formQry.submit()"><img border=0 sr
 			if (colType == 2 || colType == 4 || colType == 8) numberCol[colIdx] = true;
 			
 %>
-<th><b><%=colName%></a></b></th>
+<th class="headerRow"><b><%=colName%></a></b></th>
 <%
 	}	
 %>
@@ -97,10 +97,10 @@ SQL = <%= sql %> <a href="javascript:document.formQry.submit()"><img border=0 sr
 	int rowIdx=0;
 	while (rs != null && hasData/* && rs.next() */) {
 		rowIdx++;
-		String rowClass = "odd";
-		if ((rowIdx)%2 == 0) rowClass = "even";
+		String rowClass = "oddRow";
+		if ((rowIdx)%2 == 0) rowClass = "evenRow";
 %>
-	<tr class="<%=rowClass%>">
+	<tr>
 <%	
 		colIdx=0;
 		for  (int i = 1; i <= rs.getMetaData().getColumnCount(); i++){
@@ -114,7 +114,7 @@ SQL = <%= sql %> <a href="javascript:document.formQry.submit()"><img border=0 sr
 				String colName = q.getColumnLabel(i);
 				String keyValue = val;
 %>
-<td <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
+<td  class="<%=rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
 </td>
 <%
 		}
