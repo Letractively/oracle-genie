@@ -4,9 +4,6 @@ var doMode = 'copy';
 		$("#form1").attr("action", "download.jsp");
 		$("#form1").submit();
 		$("#form1").attr("action", "query.jsp");
-		//document.forms["form1"].action="download.jsp";
-		//document.forms["form1"].submit();
-		//document.forms["form1"].action="query.jsp";
 	}
 	
 	function endsWith(str, suffix) {
@@ -80,7 +77,7 @@ var doMode = 'copy';
 		$.ajax({
 			type: 'POST',
 			url: "ajax/qry.jsp?",
-			data: $("#form1").serialize(),
+			data: $("#form0").serialize(),
 			success: function(data){
 				$("#data-div").append(data);
 				$("#wait").remove();
@@ -96,7 +93,7 @@ var doMode = 'copy';
 		$.ajax({
 			type: 'POST',
 			url: "ajax/qry.jsp",
-			data: $("#form1").serialize(),
+			data: $("#form0").serialize(),
 			success: function(data){
 				$("#data-div").append(data);
 				$("#wait").remove();
@@ -191,7 +188,7 @@ var doMode = 'copy';
 		$.ajax({
 			type: 'POST',
 			url: "ajax/qry.jsp",
-			data: $("#form1").serialize(),
+			data: $("#form0").serialize(),
 			success: function(data){
 				$("#data-div").append(data);
 				$("#wait").remove();
@@ -208,7 +205,7 @@ var doMode = 'copy';
 		$.ajax({
 			type: 'POST',
 			url: "ajax/filter.jsp",
-			data: $("#form1").serialize(),
+			data: $("#form0").serialize(),
 			success: function(data){
 				$("#filter-div").append(data);
 				$("#wait").remove();
@@ -224,7 +221,7 @@ var doMode = 'copy';
 		$.ajax({
 			type: 'POST',
 			url: "ajax/qry.jsp",
-			data: $("#form1").serialize(),
+			data: $("#form0").serialize(),
 			success: function(data){
 				$("#data-div").append(data);
 				$("#wait").remove();
@@ -254,7 +251,7 @@ var doMode = 'copy';
 		$.ajax({
 			type: 'POST',
 			url: "ajax/qry.jsp",
-			data: $("#form1").serialize(),
+			data: $("#form0").serialize(),
 			success: function(data){
 				$("#data-div").append(data);
 				$("#wait").remove();
@@ -273,11 +270,12 @@ var doMode = 'copy';
 		$.ajax({
 			type: 'POST',
 			url: "ajax/qry.jsp",
-			data: $("#form1").serialize(),
+			data: $("#form0").serialize(),
 			success: function(data){
 				$("#data-div").append(data);
 				$("#wait").remove();
 				$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
+				hideIfAny();
 			}
 		});	
 	}
@@ -341,3 +339,51 @@ function backTolinkPk(tname, value) {
 	});		
 }
 
+function showTables() {
+	$("#tableList1").html("<div id='wait'><img src='image/loading.gif'/></div>");
+	
+	$.ajax({
+		url: "ajax/show-tables.jsp?t=" + (new Date().getTime()),
+		success: function(data){
+			$("#tableList1").html(data);
+			$("#wait").remove();
+		}
+	});
+}
+
+function showTableLink() {
+	$("#hideTableLink").show();
+	$("#showTableLink").hide();
+}
+
+
+function hideTableLink() {
+	$("#hideTableLink").hide();
+	$("#showTableLink").show();
+}
+
+function searchRecords(filter) {
+	
+	$("#search").attr("onchange" , "");
+	
+	$("#pageNo").val(1);
+	$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+	$("#searchValue").val(filter);
+	
+	$.ajax({
+		type: 'POST',
+		url: "ajax/qry.jsp",
+		data: $("#form0").serialize(),
+		success: function(data){
+			$("#data-div").append(data);
+			$("#wait").remove();
+			$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
+			hideIfAny();
+		}
+	});	
+}
+
+function clearSearch() {
+	$("#search").val("");
+	searchRecords('');
+}

@@ -21,6 +21,8 @@
 	
 	String filterColumn = request.getParameter("filterColumn");
 	String filterValue = request.getParameter("filterValue");
+	String searchValue = request.getParameter("searchValue");
+	if (searchValue==null) searchValue = "";
 
 	String hideColumn = request.getParameter("hideColumn");
 	if (hideColumn == null) hideColumn = "";
@@ -59,12 +61,25 @@ System.out.println("filterValue=" + filterValue);
 		System.out.println("*** REUSE Query");
 	}
 
+	if (q.isError()) {
+%>
+		<%= q.getMessage() %>
+<%		
+		return;
+	}
+	
+	q.removeFilter();
+
 	if (sortColumn != null && !sortColumn.equals("")) q.sort(sortColumn, sortDirection);
 	if (filterColumn != null && !filterColumn.equals("")) {
 		if (filterColumn.equals("0")) {
 			filterColumn = q.getColumnLabel(0);
 		}
 		q.filter(filterColumn, filterValue);
+	}
+	
+	if (searchValue !=null && !searchValue.equals("")) {
+		q.search(searchValue);
 	}
 	
 	// get table name
@@ -171,7 +186,6 @@ System.out.println("filterValue=" + filterValue);
 
 <% if (totalPage > 1) { %>
 Page: <b><%= pgNo %></b> of <%= totalPage %>
-&nbsp;&nbsp;&nbsp;&nbsp;
 <% } %>
 
 <% if (q.getTotalPage(linesPerPage) > pgNo) { %>
@@ -192,8 +206,14 @@ Shows
 <option value="50" <%= (linesPerPage==50?"SELECTED":"") %>>50</option>
 <option value="100" <%= (linesPerPage==100?"SELECTED":"") %>>100</option>
 <option value="200" <%= (linesPerPage==200?"SELECTED":"") %>>200</option>
+<option value="500" <%= (linesPerPage==500?"SELECTED":"") %>>500</option>
+<option value="1000" <%= (linesPerPage==1000?"SELECTED":"") %>>1000</option>
 </select>
+
 <% } %>
+
+&nbsp;&nbsp;Search<input id="search" name="search" value="<%= searchValue %>" size=20 onChange="searchRecords($(this).val())">
+<a href="Javascript:clearSearch()"><img border="0" src="image/clear.gif"></a>
 
 <table id="dataTable" border=1 class="gridBody">
 <tr>

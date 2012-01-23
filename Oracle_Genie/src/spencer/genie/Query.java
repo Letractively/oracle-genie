@@ -37,6 +37,7 @@ public class Query {
 
 	int sortOrder[] = new int[1000];
 	boolean hideRow[] = new boolean[1000];
+	boolean isError = false;
 	
 	public Query(Connect cn, String qry) {
 		this.cn = cn;
@@ -71,6 +72,7 @@ public class Query {
 
 		} catch (SQLException e) {
 			message = e.getMessage();
+			isError = true;
 			System.out.println(e.toString());
 		}
 	}
@@ -273,6 +275,23 @@ public class Query {
 		}
 	}
 
+	public void search(String value) {
+		
+		int rowSize = qData.rows.size();
+		int colSize = qData.columns.size();
+		for (int i=0;i<rowSize;i++) {
+			if (hideRow[i]) continue;
+
+			hideRow[i] = true;
+			for (int j=0;j<colSize;j++) {
+				DataDef v = qData.rows.get(i).row.get(j);
+				if (v.value != null && v.value.toLowerCase().contains(value.toLowerCase())) { 
+					hideRow[i] = false;	// match found
+				}
+			}
+		}
+	}
+	
 	public void removeFilter() {
 		for (int i=0; i<1000; i++) {
 //			sortOrder[i] = i;
@@ -298,5 +317,9 @@ public class Query {
 		int res = (int) ((this.getFilteredCount()-1) / linesPerPage);
 		
 		return res + 1;
+	}
+	
+	public boolean isError() {
+		return this.isError;
 	}
 }
