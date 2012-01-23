@@ -61,6 +61,9 @@ var doMode = 'copy';
 	}	
 	
 	function showTable(tbl) {
+		
+		if (tbl == "") return;
+		
 		$("#table-detail").append("<div id='wait'><img src='image/loading.gif'/></div>");
 		
 		$.ajax({
@@ -344,6 +347,18 @@ function showTables() {
 	
 	$.ajax({
 		url: "ajax/show-tables.jsp?t=" + (new Date().getTime()),
+		success: function(data){
+			$("#tableList1").html(data);
+			$("#wait").remove();
+		}
+	});
+}
+
+function showRelatedTables(tname) {
+	$("#tableList1").html("<div id='wait'><img src='image/loading.gif'/></div>");
+	
+	$.ajax({
+		url: "ajax/show-rel-tables.jsp?tname=" + tname + "&t=" + (new Date().getTime()),
 		success: function(data){
 			$("#tableList1").html(data);
 			$("#wait").remove();

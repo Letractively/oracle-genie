@@ -48,12 +48,13 @@
 %>
 <h2>VIEW: <%= view %> &nbsp;&nbsp;<a href="Javascript:runQuery('<%=catalog%>','<%=view%>')"><img border=0 src="image/icon_query.png" title="query"></a></h2>
 
-Definition: 
+<b>Definition</b> 
 <pre class='brush: sql'>
 <%= text %>
 </pre>
+<hr>
 
-Related Table: <br/>
+<b>Related Table</b><br/>
 
 <%
 	stmt = conn.createStatement();
@@ -82,7 +83,7 @@ Related Table: <br/>
 
 
 <br/>
-Related Package: <br/>
+<b>Related Program</b><br/>
 <%
 	stmt = conn.createStatement();
 	qry = "SELECT * FROM USER_DEPENDENCIES WHERE NAME='" + view +"' AND REFERENCED_TYPE='PACKAGE' ORDER BY REFERENCED_NAME";

@@ -42,14 +42,20 @@ System.out.println("filterColumn=" + filterColumn);
 		filterColumn = q.getColumnLabel(0);
 	}
 
-	List<String> list = q.getFilterList(filterColumn);
+//	List<String> list = q.getFilterList(filterColumn);
+	List<FilterRecord> list = q.getFilterListWithCount(filterColumn);
 %>
 
-Filter for <%= filterColumn %>
+Filter for <B><%= filterColumn %></B>
 <select id="filterSelect" onchange="applyFilter(this.options[this.selectedIndex].value);">
 <option value="">All</option>
-<% for (int i=0; i<list.size(); i++) { %>
-	<option value="<%= list.get(i) %>"><%= list.get(i) %></option>
+<% for (int i=0; i<list.size(); i++) { 
+		FilterRecord rec = list.get(i);
+		String value = rec.getValue();
+		String dispValue = value;
+		if (rec.getCount() > 1) dispValue += "\t[" + rec.getCount() + "]";
+%>
+	<option value="<%= value %>"><%= dispValue %></option>
 <% } %>
 </select>
 

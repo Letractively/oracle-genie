@@ -84,7 +84,7 @@
 </table>
 
 <div id="tableList1">
-<a href="Javascript:showTables()">Show Tables</a>
+<a href="Javascript:showRelatedTables('<%=tbl%>')">Show Related Tables</a>
 </div>
 
 <div id="table-detail"></div>
@@ -143,17 +143,18 @@
 	}
 %>
 
-<a id="modeCopy" href="Javascript:setDoMode('copy')">Copy&amp;Paste</a>&nbsp;
-<a id="modeHide" href="Javascript:setDoMode('hide')">Hide Column</a>&nbsp;
-<span id="showAllCol" style="display: none;"><a id="modeHide" href="Javascript:showAllColumn()">Show All Column</a>&nbsp;</span>
-<a id="modeSort" href="Javascript:setDoMode('sort')">Sort</a>&nbsp;
-<a id="modeFilter" href="Javascript:setDoMode('filter')">Filter</a>&nbsp;
-<span id="filter-div"></span>
+<BR/>
+<TABLE>
+<TD><a class="qryBtn" id="modeCopy" href="Javascript:setDoMode('copy')">Copy&amp;Paste</a></TD>
+<TD><a class="qryBtn" id="modeHide" href="Javascript:setDoMode('hide')">Hide Column</a>
+	<span id="showAllCol" style="display: none;"><a id="modeHide" href="Javascript:showAllColumn()">Show All Column</a>&nbsp;</span>
+</TD>
+<TD><a class="qryBtn" id="modeSort" href="Javascript:setDoMode('sort')">Sort</a></TD>
+<TD><a class="qryBtn" id="modeFilter" href="Javascript:setDoMode('filter')">Filter</a></TD>
+<TD><span id="filter-div"></span></TD>
+</TABLE>
 
-<%--
-<a id="showTableLink" style="display: none;" href="Javascript:showTableLink()">Show Table Link</a>
-<a id="hideTableLink" href="Javascript:hideTableLink()">Hide Table Link</a>
---%>
+<BR/>
 
 <div id="data-div">
 <jsp:include page="ajax/qry.jsp">
@@ -168,7 +169,7 @@
 </jsp:include>
 </div>
 
-<br/><br/>
+<br/>
 <a href="Javascript:window.close()">Close</a>
 <br/><br/>
 

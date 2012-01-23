@@ -51,7 +51,7 @@
 		String proc = rs2.getString("PROCEDURE_NAME");
 		cnt ++;
 %>
-<% if (cnt==1) { %>Procedures:<br/><% } %>
+<% if (cnt==1) { %><b>Procedures</b><br/><% } %>
 	&nbsp;&nbsp;&nbsp;&nbsp;<%= proc.toLowerCase() %><br/>
 <%	
 	}
@@ -63,7 +63,7 @@
 %>
 <br/>
 
-Dependencies:
+<b>Dependencies</b>
 
 <table>
 <tr>
