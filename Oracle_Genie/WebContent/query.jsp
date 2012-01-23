@@ -35,7 +35,9 @@
 	
 	QueryCache.getInstance().removeQuery(sql);
 	Query q = new Query(cn, sql);
-	QueryCache.getInstance().addQuery(sql, q);
+
+	if (!q.isError())
+		QueryCache.getInstance().addQuery(sql, q);
 	
 	// get table name
 	String tbl = null;
@@ -56,79 +58,6 @@
 	}
 	System.out.println("XXX TBL=" + tbl);
 	
-	String tname = tbl;
-	if (tname.indexOf(".") > 0) tname = tname.substring(tname.indexOf(".")+1);
-
-	// Foreign keys - For FK lookup
-	List<ForeignKey> fks = cn.getForeignKeys(tname);
-	Hashtable<String, String>  linkTable = new Hashtable<String, String>();
-//	Hashtable<String, String>  linkTable2 = new Hashtable<String, String>();
-	
-	List<String> fkLinkTab = new ArrayList<String>();
-	List<String> fkLinkCol = new ArrayList<String>();
-	
-	for (int i=0; q.hasData() && i<fks.size(); i++) {
-		ForeignKey rec = fks.get(i);
-		String linkCol = cn.getConstraintCols(rec.constraintName);
-		String rTable = cn.getTableNameByPrimaryKey(rec.rConstraintName);
-		
-		System.out.println("linkCol=" + linkCol);
-		System.out.println("rTable=" + rTable);
-		
-		int colCount = Util.countMatches(linkCol, ",") + 1;
-		if (colCount == 1) {
-			if (rTable != null) linkTable.put(linkCol, rTable);
-			System.out.println("linkTable");
-		} else {
-			// check if columns are part of result set
-			int matchCount = 0;
-			String[] t = linkCol.split("\\,");
-			for (int j=0;j<t.length;j++) {
-				String colName = t[j].trim();
-				for  (int k = 0; k< q.getColumnCount(); k++){
-					String col = q.getColumnLabel(k);
-					if (col.equalsIgnoreCase(colName)) {
-						matchCount++;
-						continue;
-					}
-				}
-			}
-			if (rTable != null && matchCount==colCount) {
-				fkLinkTab.add(rTable);
-				fkLinkCol.add(linkCol);
-			}
-			System.out.println("linkTable2");
-		}
-	}
-	
-	// Primary Key for PK Link
-	String pkName = cn.getPrimaryKeyName(tname);
-	boolean pkLink = false;
-	int pkColIndex = -1;
-	
-	List<String> pkColList = null;
-	if (pkName != null) {
-		pkColList = cn.getConstraintColList(pkName);
-		
-		// check if PK columns are in the result set
-		int matchCount = 0;
-		for (int j=0;j<pkColList.size();j++) {
-			String colName = pkColList.get(j);
-			for  (int i = 0; i< q.getColumnCount(); i++){
-				String col = q.getColumnLabel(i);
-				if (col.equalsIgnoreCase(colName)) {
-					matchCount++;
-					continue;
-				}
-			}
-		}
-
-		// there should be other tables that has FK to this
-		List<String> refTabs = cn.getReferencedTables(tname);
-		if (matchCount == pkColList.size() && refTabs.size()>0) {
-			pkLink = true;
-		}
-	}
 %>
 <html>
 <head> 
@@ -142,8 +71,6 @@
     <script type="text/javascript">
 	$(document).ready(function() {
 		showTable('<%=tbl%>');
-//		var sql = $("#sql").val();
-//		loadDataDiv(sql);
 		setDoMode('copy');
 		$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
 	});	    
@@ -156,16 +83,9 @@
 <td><%= cn.getUrlString() %></td>
 </table>
 
-Table
-<select size=1 id="selectTable" name=""selectTable"" onChange="showTable(this.options[this.selectedIndex].value);"">
-	<option></option>
-<% for (int i=0; i<cn.getTables().size();i++) { %>
-	<option value="<%=cn.getTable(i)%>"><%=cn.getTable(i)%></option>
-<% } %>
-</select>
-
-<input id="input-table" size=30 value="" onChange="showTable(this.value)"/>
-<br/>
+<div id="tableList1">
+<a href="Javascript:showTables()">Show Tables</a>
+</div>
 
 <div id="table-detail"></div>
 
@@ -189,17 +109,22 @@ Table
 <a href="Javascript:copyPaste('DESC');">DESC</a>&nbsp;
 
 <form name="form1" id="form1" method="post" action="query.jsp">
+<textarea id="sql" name="sql" cols=100 rows=<%= lineLength %>><%= sql %></textarea><br/>
+<input type="submit" value="Submit"/>
+&nbsp;
+<input type="button" value="Download" onClick="Javascript:download()"/>
+</form>
+
+<form name="form0" id="form0">
+<textarea style="display: none;" id="sql" name="sql" ><%= sql %></textarea>
 <input type="hidden" id="sortColumn" name="sortColumn" value="">
 <input type="hidden" id="sortDirection" name="sortDirection" value="0">
 <input type="hidden" id="hideColumn" name="hideColumn" value="">
 <input type="hidden" id="filterColumn" name="filterColumn" value="">
 <input type="hidden" id="filterValue" name="filterValue" value="">
+<input type="hidden" id="searchValue" name="searchValue" value="">
 <input type="hidden" id="pageNo" name="pageNo" value="1">
 <input type="hidden" id="rowsPerPage" name="rowsPerPage" value="20">
-<textarea id="sql" name="sql" cols=100 rows=<%= lineLength %>><%= sql %></textarea><br/>
-<input type="submit" value="Submit"/>
-&nbsp;
-<input type="button" value="Download" onClick="Javascript:download()"/>
 </form>
 
 <%= q.getMessage() %>
@@ -219,11 +144,17 @@ Table
 %>
 
 <a id="modeCopy" href="Javascript:setDoMode('copy')">Copy&amp;Paste</a>&nbsp;
-<a id="modeHide" href="Javascript:setDoMode('hide')">Hide</a>&nbsp;
+<a id="modeHide" href="Javascript:setDoMode('hide')">Hide Column</a>&nbsp;
 <span id="showAllCol" style="display: none;"><a id="modeHide" href="Javascript:showAllColumn()">Show All Column</a>&nbsp;</span>
 <a id="modeSort" href="Javascript:setDoMode('sort')">Sort</a>&nbsp;
 <a id="modeFilter" href="Javascript:setDoMode('filter')">Filter</a>&nbsp;
 <span id="filter-div"></span>
+
+<%--
+<a id="showTableLink" style="display: none;" href="Javascript:showTableLink()">Show Table Link</a>
+<a id="hideTableLink" href="Javascript:hideTableLink()">Hide Table Link</a>
+--%>
+
 <div id="data-div">
 <jsp:include page="ajax/qry.jsp">
 	<jsp:param value="<%= sql%>" name="sql"/>
