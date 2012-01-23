@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -260,6 +261,43 @@ public class Query {
 		List<String> list = new ArrayList<String>(set);
 		Collections.sort(list);
 		return list;
+	}
+	
+	public List<FilterRecord> getFilterListWithCount(String col) {
+
+		int colIdx = qData.getColumnIndex(col);
+		
+		HashSet<String> set = new HashSet<String>();
+		Hashtable<String,String> counts = new Hashtable<String, String>(); 
+		int size = qData.rows.size();
+		for (int i=0;i<size;i++) {
+			String value = qData.rows.get(i).row.get(colIdx).value;
+			if (value != null)
+			if (!set.contains(value)) {
+				set.add(value);
+				counts.put(value, "1");
+			} else {
+				String temp = counts.get(value);
+				temp = "" + (Integer.parseInt(temp) + 1);
+				counts.put(value, temp);
+			}
+		}
+
+		List<String> list = new ArrayList<String>(set);
+		Collections.sort(list);
+		
+//		for (int i=0; i < list.size(); i++) {
+//			System.out.println(list.get(i) + " = " + counts.get(list.get(i)));
+//		}
+		List<FilterRecord> newList = new ArrayList<FilterRecord>();
+		for (int i=0; i < list.size(); i++) {
+			FilterRecord rec = new FilterRecord();
+			rec.value = list.get(i);
+			rec.count = Integer.parseInt(counts.get(list.get(i)));
+			newList.add(rec);
+		}
+		
+		return newList;
 	}
 	
 	public void filter(String col, String val) {
