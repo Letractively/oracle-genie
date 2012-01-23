@@ -6,6 +6,7 @@
 	pageEncoding="ISO-8859-1"
 %>
 
+
 <%
 	int counter = 0;
 	String sql = request.getParameter("sql");

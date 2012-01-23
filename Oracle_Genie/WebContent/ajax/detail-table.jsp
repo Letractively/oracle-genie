@@ -143,9 +143,11 @@ Please select a Table to see the detail.
 	List<String> refTrgs = cn.getReferencedTriggers(tname);
 	List<String> refIdx = cn.getIndexes(owner, tname);
 %>
+<hr>
+
 
 <% if (pkName != null)  {%>
-Primary Key:<br/>
+<b>Primary Key</b><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<%= pkName %> (<%= pkCols.toLowerCase() %>) 
 
 <br/><br/>
@@ -155,7 +157,7 @@ Primary Key:<br/>
 <% 
 	if (fks.size()>0) { 
 %>
-Foreign Key:<br/>
+<b>Foreign Key</b><br/>
 <%
 
 	for (int i=0; i<fks.size(); i++) {
@@ -201,7 +203,7 @@ Foreign Key:<br/>
 <% 
 	if (refIdx.size()>0) { 
 %>
-Index:<br/>
+<b>Index</b><br/>
 <%
 
 	for (int i=0; i<refIdx.size(); i++) {
@@ -222,7 +224,7 @@ Index:<br/>
 <% 
 	if (refTabs.size()>0) { 
 %>
-Related Table:
+<b>Related Table</b>
 <table border=0>
 <td width=10>&nbsp;</td>
 <td valign=top>
@@ -254,7 +256,7 @@ Related Table:
 <% 
 	if (refPkgs.size()>0) { 
 %>
-Related Program:
+<b>Related Program</b>
 <table border=0>
 <td width=10>&nbsp;</td>
 <td valign=top>
@@ -287,7 +289,7 @@ Related Program:
 <% 
 	if (refViews.size()>0) { 
 %>
-Related View:
+<b>Related View</b>
 <table border=0>
 <td width=10>&nbsp;</td>
 <td valign=top>
@@ -321,7 +323,7 @@ Related View:
 <% 
 	if (refTrgs.size()>0) { 
 %>
-Related Trigger:
+<b>Related Trigger</b>
 <table border=0>
 <td width=10>&nbsp;</td>
 <td valign=top>
