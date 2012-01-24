@@ -171,10 +171,16 @@ public class Query {
 	}
 
 	public void rewind(int linePerPage, int pageNo) {
+		int idx = 0;
 		if (pageNo == 1)
-			currentRow = -1;
+			idx = -1;
 		else
-			currentRow = linePerPage * (pageNo-1) -1;
+			idx = linePerPage * (pageNo-1) -1;
+		
+		currentRow = -1;
+		for (int i=0; i <= idx; i++) next();
+		
+		System.out.println("currentRow=" + currentRow);
 	}
 	
 	public boolean next() {
