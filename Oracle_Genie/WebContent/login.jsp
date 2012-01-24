@@ -66,7 +66,7 @@
     <h2>Welcome to Oracle Genie.</h2>
 
 <b>Local</b>
-	<form action="connect.jsp" method="POST">
+	<form action="connect_new.jsp" method="POST">
     <table border=0>
     <tr>
     	<td>Database URL</td>
