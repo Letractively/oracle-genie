@@ -30,8 +30,10 @@
 	
 	String hiddenColumns[] = hideColumn.split("\\,");
 	
-System.out.println("filterColumn=" + filterColumn);
-System.out.println("filterValue=" + filterValue);
+//System.out.println("filterColumn=" + filterColumn);
+//System.out.println("filterValue=" + filterValue);
+System.out.println("pageNo=" + pgNo);
+System.out.println("rowsPerPage=" + rowsPerPage);
 
 	if (sql==null) sql = "SELECT * FROM TABLE";
 	sql = sql.trim();
@@ -261,6 +263,8 @@ Shows
 <%
 	int rowCnt = 0;
 
+System.out.println("pageNo=" + pgNo);
+System.out.println("linesPerPage=" + linesPerPage);
 	q.rewind(linesPerPage, pgNo);
 	
 	while (q.next() && rowCnt < linesPerPage) {
