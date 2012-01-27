@@ -240,7 +240,7 @@ Shows
 			int colType = q.getColumnType(i);
 			if (colType == 2 || colType == 4 || colType == 8) numberCol[colIdx] = true;
 			
-			String tooltip = ""; //q.getColumnTypeName(i);
+			String tooltip = q.getColumnTypeName(i);
 			String comment =  cn.getComment(tname, colName);
 			if (comment != null && comment.length() > 0) tooltip += " " + comment;
 		

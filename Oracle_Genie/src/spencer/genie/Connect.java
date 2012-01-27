@@ -228,6 +228,10 @@ public class Connect implements HttpSessionBindingListener {
 	}
 
 	private void loadData() {
+		
+		ListCache.getInstance().clearAll();
+		QueryCache.getInstance().clearAll();
+		
 		loadSchema();
 		loadTables();
 		loadComments();
