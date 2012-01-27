@@ -7,16 +7,7 @@
 %>
 
 <%
-
 	Connect cn = (Connect) session.getAttribute("CN");
-	
-	if (cn==null) {
-%>	
-		Connection lost. <a href="Javascript:window.close()">Close</a>
-<%
-		return;
-	}
-
 %>
 <select size=1 id="selectTable" name=""selectTable"" onChange="showTable(this.options[this.selectedIndex].value);"">
 	<option></option>

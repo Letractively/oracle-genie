@@ -11,13 +11,6 @@
 
 	Connect cn = (Connect) session.getAttribute("CN");
 	
-	if (cn==null) {
-%>	
-		Connection lost. <a href="Javascript:window.close()">Close</a>
-<%
-		return;
-	}
-
 	int counter = 0;
 	String sql = request.getParameter("sql");
 	if (sql==null) sql = "SELECT * FROM TAB";
@@ -27,9 +20,6 @@
 	sql = sql.replaceAll("&gt;",">").replace("&lt;","<");
 	
 	String norun = request.getParameter("norun");
-	
-	Connection conn = cn.getConnection();
-	System.out.println(request.getRemoteAddr()+": " + sql +";");
 	
 	int lineLength = Util.countLines(sql);
 	if (lineLength <3) lineLength = 3;
@@ -74,6 +64,8 @@
 		showTable('<%=tbl%>');
 		setDoMode('copy');
 		$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
+		var cnt = $("#recordCount").val();
+		if (cnt != "0") $("#buttonsDiv").show('slow');
 	});	    
     </script>
 </head> 
@@ -145,16 +137,18 @@
 %>
 
 <BR/>
+<div id="buttonsDiv" style="display: none;">
 <TABLE>
 <TD><a class="qryBtn" id="modeCopy" href="Javascript:setDoMode('copy')">Copy&amp;Paste</a></TD>
 <TD><a class="qryBtn" id="modeHide" href="Javascript:setDoMode('hide')">Hide Column</a>
-	<span id="showAllCol" style="display: none;"><a id="modeHide" href="Javascript:showAllColumn()">Show All Column</a>&nbsp;</span>
+	<span id="showAllCol" style="display: none;"><a href="Javascript:showAllColumn()">Show All Column</a>&nbsp;</span>
 </TD>
-<TD><a class="qryBtn" id="modeSort" href="Javascript:setDoMode('sort')">Sort</a></TD>
+<TD><a class="qryBtn" id="modeSort" href="Javascript:setDoMode('sort')">Sort</a>
+</TD>
 <TD><a class="qryBtn" id="modeFilter" href="Javascript:setDoMode('filter')">Filter</a></TD>
 <TD><span id="filter-div"></span></TD>
 </TABLE>
-
+</div>
 <BR/>
 
 <div id="data-div">

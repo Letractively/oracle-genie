@@ -10,16 +10,7 @@
 	String tool = request.getParameter("name");
 	Connect cn = (Connect) session.getAttribute("CN");
 
-	if (cn==null) {
-%>	
-		Connection lost. Please log in again.
-<%
-		return;
-	}
-
 	String catalog = cn.getSchemaName();
-
-	Connection conn = cn.getConnection();
 
 	String qry=null;
 	if (tool.equalsIgnoreCase("dictionary"))

@@ -12,22 +12,12 @@
 	
 	String sql = request.getParameter("sql");
 
-System.out.println("filterColumn=" + filterColumn);
-
 	if (sql==null) sql = "SELECT * FROM TABLE";
 	sql = sql.trim();
 	if (sql.endsWith(";")) sql = sql.substring(0, sql.length()-1);
 	sql = sql.replaceAll("&gt;",">").replace("&lt;","<");
 	
 	Connect cn = (Connect) session.getAttribute("CN");
-	
-	if (cn==null) {
-%>	
-		Connection lost. <a href="Javascript:window.close()">Close</a>
-<%
-		return;
-	}
-	Connection conn = cn.getConnection();
 	
 //	Query q = (Query) session.getAttribute(sql);
 	Query q = QueryCache.getInstance().getQueryObject(sql);

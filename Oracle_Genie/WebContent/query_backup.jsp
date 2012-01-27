@@ -24,8 +24,6 @@
 <%
 		return;
 	}
-	Connection conn = cn.getConnection();
-	System.out.println(request.getRemoteAddr()+": " + sql +";");
 	
 	int lineLength = Util.countLines(sql);
 	if (lineLength <5) lineLength = 5;

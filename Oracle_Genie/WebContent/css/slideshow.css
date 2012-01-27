@@ -17,3 +17,17 @@
 #slideshow IMG.last-active {
     z-index:9;
 }
+
+.waitontop {
+    position:absolute;
+    top:435;
+    left:300;
+    z-index:11;
+}
+
+#waitimg {
+	position:relative;
+	top: -220;
+	left: 100;
+    z-index:11;
+}

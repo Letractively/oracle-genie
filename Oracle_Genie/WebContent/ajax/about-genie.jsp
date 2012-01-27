@@ -2,12 +2,13 @@
 <br/>
 Thanks for using Oracle Genie.<br/>
 
-Genie is a web-based tool for Oracle database (10g and higher).<br/>
+Genie is open-source web-based tool for Oracle database.<br/>
 Genie will help you navigate through database objects and their relationships.<br/> 
 
 <br/>
 If you have any question or suggestion, please feel free to contact me.
 <br/><br/>
 
+January 2012<br/>
 Spencer Hwang - the creator of Genie<br/>
 <a href="mailto:spencer.hwang@gmail.com">spencer.hwang@gmail.com</a>

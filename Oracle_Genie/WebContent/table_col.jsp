@@ -1,7 +1,7 @@
 <%@ page language="java" 
 	import="java.util.*" 
 	import="java.sql.*" 
-	import="spencer.genie.Connect" 
+	import="spencer.genie.*" 
 	pageEncoding="ISO-8859-1"
 %>
 
@@ -9,15 +9,8 @@
 	String table = request.getParameter("table");
 	Connect cn = (Connect) session.getAttribute("CN");
 
-	if (cn==null) {
-%>	
-		Connection lost. Please log in again.
-<%
-		return;
-	}
-		
-	Connection conn = cn.getConnection();
-
+	if (!table.startsWith("\"")) table = table.toUpperCase();
+	
 	String catalog = null;
 	String tname = table;
 	
@@ -55,6 +48,16 @@ Please select a Table to see the detail.
 </tr>
 <tr>
 <%	
+
+	List<TableCol> cols = cn.getTableDetail(catalog, tname);
+	ArrayList<String> pk = cn.getPrimaryKeys(catalog, tname);
+
+	for (int i=0; i<cols.size();i++) {
+		TableCol col = cols.get(i);
+		String colName = col.getName();
+		String colDisp = col.getName().toLowerCase();
+		if (pk.contains(colName)) colDisp = "<b>" + colDisp + "</b>";
+/*
 	DatabaseMetaData dbm = conn.getMetaData();
 	ResultSet rs1 = dbm.getColumns(catalog,"%",tname,"%");
 
@@ -82,13 +85,15 @@ Please select a Table to see the detail.
 		String tooltip = dType;
 		String comment =  cn.getComment(tname, col_name);
 		if (comment != null && comment.length() > 0) tooltip += " " + comment;
+*/
+
 %>
-<td>&nbsp;<a href="Javascript:copyPaste('<%=col_name.toLowerCase()%>');" title="<%= tooltip %>"><%= colDisp %></a></td>
+<td>&nbsp;<a href="Javascript:copyPaste('<%=colName%>');" title="<%= col.getTypeName() %>"><%= colDisp%></a></td>
 <%
-		if (colCnt%5==0) out.println("</tr><tr>");
+		if ((i+1)%5==0) out.println("</tr><tr>");
 	}
 	
-	rs1.close();
+//	rs1.close();
 	
 %>
 

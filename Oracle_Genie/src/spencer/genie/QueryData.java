@@ -21,11 +21,11 @@ public class QueryData {
 
 			columns.add(cDef);
 			
-			System.out.println("cDef.columnLabel="+cDef.columnLabel);
-			System.out.println("cDef.columnType="+cDef.columnType);
-			System.out.println("cDef.columnTypeName="+cDef.columnTypeName);
-			System.out.println("cDef.columnName="+cDef.columnName);
-			System.out.println("cDef.tableName="+cDef.tableName);
+//			System.out.println("cDef.columnLabel="+cDef.columnLabel);
+//			System.out.println("cDef.columnType="+cDef.columnType);
+//			System.out.println("cDef.columnTypeName="+cDef.columnTypeName);
+//			System.out.println("cDef.columnName="+cDef.columnName);
+//			System.out.println("cDef.tableName="+cDef.tableName);
 		}
 	}
 	

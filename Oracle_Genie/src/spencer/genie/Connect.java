@@ -39,6 +39,8 @@ public class Connect implements HttpSessionBindingListener {
 	private String urlString = null;
 	private String message = "";
 	private List<String> tables;
+
+	private HashSet<String> comment_tables = new HashSet<String>();
 	private Hashtable<String,String> comments;
 	private Hashtable<String,String> constraints;
 	private Hashtable<String,String> pkByTab;
@@ -167,26 +169,26 @@ public class Connect implements HttpSessionBindingListener {
     	return (String) schemas.get(idx);
     }
     
-    public void getTableDetail(String table) throws SQLException {
-    	DatabaseMetaData dbm = conn.getMetaData();
-        ResultSet rs1 = dbm.getColumns(null,"%",table,"%");
-        while (rs1.next()){
-        	String col_name = rs1.getString("COLUMN_NAME");
-        	String data_type = rs1.getString("TYPE_NAME");
-        	int data_size = rs1.getInt("COLUMN_SIZE");
-        	int nullable = rs1.getInt("NULLABLE");
-/*        	
-        	System.out.print(col_name+"\t"+data_type+"("+data_size+")"+"\t");
-        	if(nullable == 1){
-        		System.out.print("YES\t");
-        	}
-        	else{
-        		System.out.print("NO\t");
-        	}
-        	System.out.println();
-*/        	
-        }
-	}
+//    public void getTableDetail(String table) throws SQLException {
+//    	DatabaseMetaData dbm = conn.getMetaData();
+//        ResultSet rs1 = dbm.getColumns(null,"%",table,"%");
+//        while (rs1.next()){
+//        	String col_name = rs1.getString("COLUMN_NAME");
+//        	String data_type = rs1.getString("TYPE_NAME");
+//        	int data_size = rs1.getInt("COLUMN_SIZE");
+//        	int nullable = rs1.getInt("NULLABLE");
+///*        	
+//        	System.out.print(col_name+"\t"+data_type+"("+data_size+")"+"\t");
+//        	if(nullable == 1){
+//        		System.out.print("YES\t");
+//        	}
+//        	else{
+//        		System.out.print("NO\t");
+//        	}
+//        	System.out.println();
+//*/        	
+//        }
+//	}
 
     public void printQueryLog() {
     	HashMap<String, QueryLog> map = this.getQueryHistory();
@@ -300,7 +302,7 @@ public class Connect implements HttpSessionBindingListener {
 		pkByCon.clear();
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select * from user_constraints where CONSTRAINT_TYPE = 'P'");	
+       		ResultSet rs = stmt.executeQuery("select CONSTRAINT_NAME, TABLE_NAME  from user_constraints where CONSTRAINT_TYPE = 'P'");	
 
        		String prevConName = null;
        		String temp = "";
@@ -326,7 +328,7 @@ public class Connect implements HttpSessionBindingListener {
 		foreignKeys.clear();
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select * from user_constraints where CONSTRAINT_TYPE = 'R' order by table_name, constraint_type");	
+       		ResultSet rs = stmt.executeQuery("select OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE from user_constraints where CONSTRAINT_TYPE = 'R' order by table_name, constraint_type");	
 
        		while (rs.next()) {
        			ForeignKey fk = new ForeignKey();
@@ -349,9 +351,59 @@ public class Connect implements HttpSessionBindingListener {
  		}
 	}
 
+	private void loadComment(String tname) {
+		
+		// column comments
+		try {
+       		Statement stmt = conn.createStatement();
+       		ResultSet rs = stmt.executeQuery("select * from USER_COL_COMMENTS where TABLE_NAME='" + tname + "'");	
+
+	   		while (rs.next()) {
+	   			String tab = rs.getString(1);
+	   			String col = rs.getString(2);
+	   			String comment = rs.getString(3);
+	   			
+	   			String key = tab + "." + col;
+	   			if (comment != null && key != null) comments.put(key, comment);
+	   			//System.out.println( key + ", " + comment);           		
+	   		}
+	   		rs.close();
+	   		stmt.close();
+
+		} catch (SQLException e) {
+            System.err.println ("loadComment() - Cannot connect to database server");
+            message = e.getMessage();
+		}
+		
+		// table comments
+		try {
+       		Statement stmt = conn.createStatement();
+       		ResultSet rs = stmt.executeQuery("select * from USER_TAB_COMMENTS where TABLE_NAME='" + tname + "'");	
+
+	   		while (rs.next()) {
+	   			String tab = rs.getString(1);
+	   			//String type = rs.getString(2);
+	   			String comment = rs.getString(3);
+	   			
+	   			if (comment != null && tab != null) comments.put(tab, comment);
+	       		//System.out.println( tab + ", " + comment);       		
+	   		}
+	   		rs.close();
+	   		stmt.close();
+
+		} catch (SQLException e) {
+            System.err.println ("2 Cannot connect to database server");
+            message = e.getMessage();
+		}
+
+		comment_tables.add(tname);
+	}
+	
 	private void loadComments() {
 		comments.clear();
 
+		
+/* late binding
 		// column comments
 		try {
        		Statement stmt = conn.createStatement();
@@ -394,13 +446,15 @@ public class Connect implements HttpSessionBindingListener {
             System.err.println ("2 Cannot connect to database server");
             message = e.getMessage();
 		}
-
+*/
 	}
 	
 	// get table comments
 	public String getComment(String tname) {
-		
 		String key = tname.toUpperCase().trim();
+
+		if (!comment_tables.contains(key))
+			loadComment(tname);
 		
 		String comment = comments.get(key);
 		return (comment != null? comment : "");
@@ -408,6 +462,9 @@ public class Connect implements HttpSessionBindingListener {
 	
 	// get column comments
 	public String getComment(String tname, String cname) {
+
+		if (!comment_tables.contains(tname))
+			loadComment(tname);
 		
 		String key = (tname + "." + cname).toUpperCase().trim();
 		
@@ -883,7 +940,7 @@ public class Connect implements HttpSessionBindingListener {
 		String qry = "SELECT OWNER||'.'||TABLE_NAME FROM ALL_CONSTRAINTS WHERE " +
 				"R_CONSTRAINT_NAME='" + pkName +"' ORDER BY TABLE_NAME";
 		
-		return this.queryMulti(qry);
+		return this.queryMultiUnique(qry);
 	}
 	
 	public List<String> getReferencedPackages(String tname) {
@@ -1018,7 +1075,7 @@ public class Connect implements HttpSessionBindingListener {
 		String res = "";
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' AND NAME='" + name + "' AND REFERENCED_TYPE IN ('PACKAGE','FUNCTION','PROCEDURE','TYPE') ORDER BY REFERENCED_NAME");	
+       		ResultSet rs = stmt.executeQuery("select distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' AND NAME='" + name + "' AND REFERENCED_TYPE IN ('PACKAGE','FUNCTION','PROCEDURE','TYPE') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
 
        		int count = 0;
        		while (rs.next()) {
@@ -1046,7 +1103,7 @@ public class Connect implements HttpSessionBindingListener {
 		String res = "";
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' and NAME='" + name + "' AND REFERENCED_TYPE IN ('TABLE') ORDER BY REFERENCED_NAME");	
+       		ResultSet rs = stmt.executeQuery("select distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' and NAME='" + name + "' AND REFERENCED_TYPE IN ('TABLE') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
 
        		int count = 0;
        		while (rs.next()) {
@@ -1076,7 +1133,7 @@ public class Connect implements HttpSessionBindingListener {
 		String res = "";
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' AND NAME='" + name + "' AND REFERENCED_TYPE IN ('VIEW') ORDER BY REFERENCED_NAME");	
+       		ResultSet rs = stmt.executeQuery("select distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' AND NAME='" + name + "' AND REFERENCED_TYPE IN ('VIEW') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
 
        		int count = 0;
        		while (rs.next()) {
@@ -1106,7 +1163,7 @@ public class Connect implements HttpSessionBindingListener {
 		String res = "";
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' and NAME='" + name + "' AND REFERENCED_TYPE IN ('SYNONYM') ORDER BY REFERENCED_NAME");	
+       		ResultSet rs = stmt.executeQuery("select distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' and NAME='" + name + "' AND REFERENCED_TYPE IN ('SYNONYM') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
 
        		int count = 0;
        		while (rs.next()) {
@@ -1151,7 +1208,11 @@ public class Connect implements HttpSessionBindingListener {
 	}
 	
 	public List<String> queryMulti(String qry) {
-		List <String> list = new ArrayList<String>();
+		
+		List<String> list = ListCache.getInstance().getListObject(qry);
+		if (list != null) return list;
+		
+		list = new ArrayList<String>();
 		try {
        		Statement stmt = conn.createStatement();
        		ResultSet rs = stmt.executeQuery(qry);	
@@ -1167,7 +1228,18 @@ public class Connect implements HttpSessionBindingListener {
              System.err.println ("queryMulti - " + qry);
              message = e.getMessage();
  		}
+		
+		ListCache.getInstance().addList(qry, list);
 		return list;
+	}
+
+	public List<String> queryMultiUnique(String qry) {
+		List <String> list = queryMulti(qry);
+		HashSet<String> set = new HashSet<String>(list);
+		
+		List <String> newList = new ArrayList<String>(set);
+		
+		return newList;
 	}
 
 	public String getSynonym(String sname) {
@@ -1226,5 +1298,140 @@ public class Connect implements HttpSessionBindingListener {
 		if (dba.equals("DBA")) return true;
 		
 		return false;
+	}
+	
+	public List<TableCol> getTableDetail(String owner, String tname) throws SQLException {
+		List<TableCol> list = new ArrayList<TableCol>();
+
+		
+		if (owner==null) owner = schemaName.toUpperCase();
+		
+		Statement stmt = conn.createStatement();
+		String qry = "SELECT * FROM ALL_TAB_COLUMNS WHERE OWNER='" + owner.toUpperCase() + "' AND TABLE_NAME='" + tname + "' ORDER BY column_id";
+
+//System.out.println(qry);		
+		ResultSet rs1 = stmt.executeQuery(qry);
+
+		// primary key
+		ArrayList<String> pk = getPrimaryKeys(owner, tname);
+		
+		//System.out.println("Detail for " + table);
+		while (rs1.next()){
+			String colName = rs1.getString("COLUMN_NAME");
+			String dataType = rs1.getString("DATA_TYPE");
+			int dataSize = rs1.getInt("DATA_LENGTH");
+			int decimalDigits = rs1.getInt("DATA_PRECISION");
+			int scale = rs1.getInt("DATA_SCALE");
+			int nullable = rs1.getString("NULLABLE").equals("Y")?1:0;
+			
+			String colDef = rs1.getString("DATA_DEFAULT");
+			if (colDef==null) colDef="";
+			
+			String dType = dataType.toLowerCase();
+			
+			if (dType.equals("varchar") || dType.equals("varchar2") || dType.equals("char"))
+				dType += "(" + dataSize + ")";
+
+			if (dType.equals("number")) {
+				if (scale > 0)
+					dType += "(" + decimalDigits + "," +  scale +")";
+				else if (dataSize > 0)
+					dType += "(" + decimalDigits + ")";
+			}
+
+			TableCol rec = new TableCol();
+			rec.setName(colName);
+			rec.setType(dataType);
+			rec.setSize(dataSize);
+			rec.setDecimalDigits(decimalDigits);
+			rec.setNullable(nullable);
+			rec.setDefaults(colDef);
+			rec.setTypeName(dType);
+			rec.setPrimaryKey(pk.contains(colName));
+
+			list.add(rec);
+		}
+		
+		return list;
+	}
+
+/*	
+	public List<TableCol> getTableDetail(String catalog, String tname) throws SQLException {
+		List<TableCol> list = new ArrayList<TableCol>();
+
+		DatabaseMetaData dbm = conn.getMetaData();
+		ResultSet rs1 = dbm.getColumns(catalog,"%",tname,"%");
+
+		// primary key
+		ArrayList<String> pk = getPrimaryKeys(catalog, tname);
+		
+		//System.out.println("Detail for " + table);
+		while (rs1.next()){
+			String colName = rs1.getString("COLUMN_NAME");
+			String dataType = rs1.getString("TYPE_NAME");
+			int dataSize = rs1.getInt("COLUMN_SIZE");
+			int decimalDigits = rs1.getInt("DECIMAL_DIGITS");
+			int nullable = rs1.getInt("NULLABLE");
+			
+			String nulls = (nullable==1)?"":"N";
+			String colDef = rs1.getString("COLUMN_DEF");
+			if (colDef==null) colDef="";
+			
+			String dType = dataType.toLowerCase();
+			
+			if (dType.equals("varchar") || dType.equals("varchar2") || dType.equals("char"))
+				dType += "(" + dataSize + ")";
+
+			if (dType.equals("number")) {
+				if (dataSize > 0 && decimalDigits > 0)
+					dType += "(" + dataSize + "," + decimalDigits +")";
+				else if (dataSize > 0)
+					dType += "(" + dataSize + ")";
+			}
+
+			TableCol rec = new TableCol();
+			rec.setName(colName);
+			rec.setType(dataType);
+			rec.setSize(dataSize);
+			rec.setDecimalDigits(decimalDigits);
+			rec.setNullable(nullable);
+			rec.setDefaults(colDef);
+			rec.setTypeName(dType);
+			rec.setPrimaryKey(pk.contains(colName));
+
+			list.add(rec);
+		}
+		
+		return list;
+	}
+*/
+	
+	public List<String[]> queryMultiCol(String qry, int cols) {
+		
+//		List<String> list = ListCache.getInstance().getListObject(qry);
+//		if (list != null) return list;
+		
+		List<String[]>list = new ArrayList<String[]>();
+		try {
+       		Statement stmt = conn.createStatement();
+       		ResultSet rs = stmt.executeQuery(qry);	
+
+       		while (rs.next()) {
+       			String res[] = new String[cols+1];
+       			
+       			for (int i=1; i<=cols;i++)
+       				res[i] = rs.getString(i);
+       			list.add(res);
+       		}
+       		
+       		rs.close();
+       		stmt.close();
+		} catch (SQLException e) {
+             System.err.println ("queryMultiCol - " + qry);
+             message = e.getMessage();
+ 		}
+		
+//		ListCache.getInstance().addList(qry, list);
+		return list;
 	}
 }

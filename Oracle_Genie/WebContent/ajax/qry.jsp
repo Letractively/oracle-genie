@@ -43,14 +43,6 @@ System.out.println("rowsPerPage=" + rowsPerPage);
 	String norun = request.getParameter("norun");
 	
 	Connect cn = (Connect) session.getAttribute("CN");
-	
-	if (cn==null) {
-%>	
-		Connection lost. <a href="Javascript:window.close()">Close</a>
-<%
-		return;
-	}
-	Connection conn = cn.getConnection();
 	System.out.println(request.getRemoteAddr()+": " + sql +";");
 	
 	int lineLength = Util.countLines(sql);
@@ -251,9 +243,23 @@ Shows
 			String tooltip = ""; //q.getColumnTypeName(i);
 			String comment =  cn.getComment(tname, colName);
 			if (comment != null && comment.length() > 0) tooltip += " " + comment;
+		
+			boolean highlight=false;
+			if (colName.equals(filterColumn)) highlight = true;
+			
+			String extraImage = "";
+			if (colName.equals(sortColumn)) {
+				if (sortDirection.equals("0"))
+					extraImage = "<img src='image/sort-ascending.png'>";
+				else
+					extraImage = "<img src='image/sort-descending.png'>";
+			}
 			
 %>
-<th class="headerRow"><b><a href="Javascript:doAction('<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colName%></a></b><%-- <a href="Javascript:hide(<%=colIdx + offset%>)">x</a> --%></th>
+<th class="headerRow"><b><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
+	href="Javascript:doAction('<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colName%></a></b>
+	<%= extraImage %>
+	<%-- <a href="Javascript:hide(<%=colIdx + offset%>)">x</a> --%></th>
 <%
 	} 
 %>
@@ -367,6 +373,8 @@ if (fkLinkTab.size()>0) {
 
 %>
 </table>
+
+<input id="recordCount" value="<%= q.getRecordCount() %>" type="hidden">
 
 <%--
 <%= counter %> rows found.<br/>

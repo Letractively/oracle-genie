@@ -5,6 +5,13 @@
 %>
 
 <%
+	Connect cn = (Connect) session.getAttribute("CN");
+	// if connected, redirect to home
+	if (cn!=null && cn.isConnected()) {
+		response.sendRedirect("index.jsp");
+		return;
+	}
+
 	String url = request.getParameter("url");
 	String username = request.getParameter("username");
 	String password = request.getParameter("password");
@@ -21,14 +28,14 @@
     
 <script type="text/javascript">
 $(document).ready(function(){
-	$("#loadingDiv").append("<div id='wait'><img src='image/loading_big.gif'/></div>");
+//	$("#loadingDiv").append("<div id='wait'><img src='image/loading_big.gif'/></div>");
 	$.ajax({
 		type: 'POST',
 		url: "connect_behind.jsp?",
 		data: $("#form0").serialize(),
 		success: function(data){
 			$("#loadingDiv").append(data);
-			$("#wait").remove();
+//			$("#wait").remove();
 			if (data.indexOf("Connected.") != -1) {
 				$(location).attr('href',"index.jsp");
 			} else {
@@ -56,7 +63,7 @@ function slideSwitch() {
 }
 
 $(function() {
-    setInterval( "slideSwitch()", 4000 );
+    setInterval( "slideSwitch()", 2000 );
 });
 
 function stopShow() {
@@ -91,6 +98,7 @@ function stopShow() {
     <img src="image/nature4.jpg" alt=""/>
     <img src="image/nature5.jpg" alt=""/>
 </div>
+<img src="image/waiting_big.gif" class="waitontop">  
 	
   </body>
 </html>

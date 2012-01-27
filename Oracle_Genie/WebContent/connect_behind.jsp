@@ -26,11 +26,18 @@
 %>
 
 <%
+	Connect cn = (Connect) session.getAttribute("CN");
+	// if connected, redirect to home
+	if (cn!=null && cn.isConnected()) {
+		out.println("Connected.");
+		return;
+	}
+
 	String url = request.getParameter("url");
 	String username = request.getParameter("username");
 	String password = request.getParameter("password");
 	
-	Connect cn = new Connect(url, username, password, request.getRemoteAddr());
+	cn = new Connect(url, username, password, request.getRemoteAddr());
 	
 	if (cn.isConnected()) {
 		// you're connected.

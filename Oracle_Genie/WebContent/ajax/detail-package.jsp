@@ -8,13 +8,6 @@
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
 
-	if (cn==null) {
-%>	
-		Connection lost. Please log in again.
-<%
-		return;
-	}
-
 	String owner = request.getParameter("owner");
 	String name = request.getParameter("name");
 
@@ -29,8 +22,6 @@
 	
 	String catalog = cn.getSchemaName();
 
-	Connection conn = cn.getConnection();
-
 	String sourceUrl = "source.jsp?name=" + name;
 	if (owner != null) sourceUrl += "&owner=" + owner;
 	
@@ -42,25 +33,40 @@
 
 <%
 
-	Statement stmt2 = conn.createStatement();
 	String qry = "SELECT distinct PROCEDURE_NAME FROM all_procedures where owner='" + owner + "' and object_name='" + name + "' and PROCEDURE_NAME is not null order by 1";
-	ResultSet rs2 = stmt2.executeQuery(qry);
+	List<String> list = cn.queryMulti(qry);
 
+%>
+
+
+<% 
+	if (list.size()>0) { 
+%>
+<b>Procedures</b>
+<table border=0 width=100%>
+<td width=10>&nbsp;</td>
+<td valign=top>
+<%
+	int listSize = (list.size() / 3) + 1;
 	int cnt = 0;
-	while (rs2.next()) {
-		String proc = rs2.getString("PROCEDURE_NAME");
-		cnt ++;
+	for (int i=0; i<list.size(); i++) {
+		cnt++;
 %>
-<% if (cnt==1) { %><b>Procedures</b><br/><% } %>
-	&nbsp;&nbsp;&nbsp;&nbsp;<%= proc.toLowerCase() %><br/>
-<%	
-	}
-	
-	rs2.close();
-	stmt2.close();
-	
 
+<% if ((cnt-1)>=listSize) { %>
+		</td><td valign=top>
+<%
+		cnt = 1;
+	} 
 %>
+	<%= list.get(i).toLowerCase() %><br/>		
+<% }
+}
+%>
+</td>
+</table>
+
+
 <br/>
 
 <b>Dependencies</b>
