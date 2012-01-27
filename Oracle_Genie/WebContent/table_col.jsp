@@ -57,43 +57,15 @@ Please select a Table to see the detail.
 		String colName = col.getName();
 		String colDisp = col.getName().toLowerCase();
 		if (pk.contains(colName)) colDisp = "<b>" + colDisp + "</b>";
-/*
-	DatabaseMetaData dbm = conn.getMetaData();
-	ResultSet rs1 = dbm.getColumns(catalog,"%",tname,"%");
 
-	// primary key
-	ArrayList<String> pk = cn.getPrimaryKeys(catalog, tname);
-
-	//System.out.println("Detail for " + table);
-	int colCnt = 0;
-	while (rs1.next()){
-		String col_name = rs1.getString("COLUMN_NAME");
-		String data_type = rs1.getString("TYPE_NAME");
-		int data_size = rs1.getInt("COLUMN_SIZE");
-		int nullable = rs1.getInt("NULLABLE");
-		
-		String nulls = (nullable==1)?"N":"";
-		
-		String dType = data_type.toLowerCase();
-		
-		String colDisp = col_name.toLowerCase();
-		if (dType.equals("varchar") || dType.equals("char"))
-			dType += "(" + data_size + ")";
-			colCnt ++;
-			if (pk.contains(col_name)) colDisp = "<b>" + colDisp + "</b>";
-			
-		String tooltip = dType;
-		String comment =  cn.getComment(tname, col_name);
+		String tooltip = col.getTypeName();
+		String comment = cn.getComment(tname, colName);
 		if (comment != null && comment.length() > 0) tooltip += " " + comment;
-*/
-
 %>
-<td>&nbsp;<a href="Javascript:copyPaste('<%=colName%>');" title="<%= col.getTypeName() %>"><%= colDisp%></a></td>
+<td>&nbsp;<a href="Javascript:copyPaste('<%=colName%>');" title="<%= tooltip %>"><%= colDisp%></a></td>
 <%
 		if ((i+1)%5==0) out.println("</tr><tr>");
 	}
-	
-//	rs1.close();
 	
 %>
 

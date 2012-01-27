@@ -144,6 +144,13 @@ public class Query {
 		return qData.columns.get(idx).columnType;
 	}
 
+	public String getColumnTypeName(int idx) {
+		if (idx <0 || idx > qData.columns.size()-1) {
+			return "";
+		}
+		return qData.columns.get(idx).columnTypeName;
+	}
+
 	public boolean hasData() {
 		return (qData != null && qData.columns != null && qData.rows.size() > 0);
 	}
@@ -211,6 +218,70 @@ public class Query {
 			System.err.println("column " + col + " not found");
 			return;
 		}
+
+		int size = qData.rows.size();
+		
+		// copy new order
+		for (int i=0;i<size;i++) newOrder[i] = sortOrder[i];
+		
+		for (int i=0;i<size-1;i++) {
+			for (int j=i+1;j<size;j++) {
+
+				DataDef v1 = qData.rows.get(newOrder[i]).row.get(colIdx);
+				DataDef v2 = qData.rows.get(newOrder[j]).row.get(colIdx);
+			
+				String typeName = qData.columns.get(colIdx).columnTypeName;
+				
+				boolean switchPos = false;
+				if (v1.isNull && v2.isNull) {
+					switchPos = false;
+				} else if (v1.isNull) {
+					switchPos = true;
+				} else if (v2.isNull) {
+					switchPos = false;
+				} else if (v1.compareTo(v2, typeName) <= 0) {
+					switchPos = false;
+				} else {
+					switchPos = true;
+				}
+				
+				if (isReverse) {
+					switchPos = !switchPos;
+				}
+				
+				if (switchPos) {
+					int temp = newOrder[i];
+					newOrder[i] = newOrder[j];
+					newOrder[j] = temp;
+				}
+				
+				//System.out.println("v1=" + v1.value + " v2=" + v2.value);
+			}
+			//System.out.println(i + " -> " + (size - i -1));
+		}
+
+		for (int i=0;i<size;i++) sortOrder[i] = newOrder[i];
+
+	}
+
+/*	
+	public void _sort(String col, String direction) {
+		int newOrder[] = new int[1000];
+
+		boolean isReverse = direction.equals("1");
+		
+		for (int i=0; i<1000; i++) newOrder[i] = 0;
+		
+		if (qData==null) {
+			System.err.println("qData is null");
+			return;
+		}
+		int colIdx = qData.getColumnIndex(col);
+
+		if (colIdx < 0) {
+			System.err.println("column " + col + " not found");
+			return;
+		}
 		
 		int size = qData.rows.size();
 		for (int i=0;i<size-1;i++) {
@@ -252,6 +323,7 @@ public class Query {
 //			System.out.println(sortOrder[i]);
 		
 	}
+*/
 	
 	public List<String> getFilterList(String col) {
 
