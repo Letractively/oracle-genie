@@ -55,7 +55,7 @@ public class Query {
 //			if (q2.toLowerCase().indexOf("limit ")<0) q2 += " LIMIT 200";
 			
 			String targetQry = processQuery(q2);
-			System.out.println("NEW QUERY: " + targetQry);	
+//			System.out.println("NEW QUERY: " + targetQry);	
 			rs = stmt.executeQuery(targetQry);
 			
 			qData = new QueryData();
@@ -117,7 +117,7 @@ public class Query {
 		}
 
 		String newQry = "SELECT " + newCols + " " + theRest;
-		System.out.println("newQry=" + newQry);
+//		System.out.println("newQry=" + newQry);
 		return newQry;
 	}
 
@@ -180,7 +180,7 @@ public class Query {
 		currentRow = -1;
 		for (int i=0; i <= idx; i++) next();
 		
-		System.out.println("currentRow=" + currentRow);
+//		System.out.println("currentRow=" + currentRow);
 	}
 	
 	public boolean next() {
@@ -248,8 +248,8 @@ public class Query {
 			sortOrder[newOrder[i]] = i;
 
 		//System.out.println("new order=");
-		for (int i=0;i<size;i++)
-			System.out.println(sortOrder[i]);
+//		for (int i=0;i<size;i++)
+//			System.out.println(sortOrder[i]);
 		
 	}
 	

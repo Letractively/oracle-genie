@@ -8,13 +8,6 @@
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
 
-	if (cn==null) {
-%>	
-		Connection lost. Please log in again.
-<%
-		return;
-	}
-
 	String table = request.getParameter("table");
 	String owner = request.getParameter("owner");
 	
@@ -27,8 +20,6 @@
 	
 	System.out.println("owner=" + owner);
 	
-	Connection conn = cn.getConnection();
-
 	String catalog = null;
 	String tname = table;
 	int idx = table.indexOf(".");
@@ -71,56 +62,25 @@ Please select a Table to see the detail.
 </tr>
 
 <%	
-
-	DatabaseMetaData dbm = conn.getMetaData();
-	ResultSet rs1 = dbm.getColumns(catalog,"%",tname,"%");
-
-	// primary key
-	ArrayList<String> pk = cn.getPrimaryKeys(catalog, tname);
-	
-	//System.out.println("Detail for " + table);
-	while (rs1.next()){
-		String col_name = rs1.getString("COLUMN_NAME");
-		String data_type = rs1.getString("TYPE_NAME");
-		int data_size = rs1.getInt("COLUMN_SIZE");
-		int decimal_digits = rs1.getInt("DECIMAL_DIGITS");
-		int nullable = rs1.getInt("NULLABLE");
-		
-		String nulls = (nullable==1)?"":"N";
-		String colDef = rs1.getString("COLUMN_DEF");
-		if (colDef==null) colDef="";
-		
-		String dType = data_type.toLowerCase();
-		
-		if (dType.equals("varchar") || dType.equals("varchar2") || dType.equals("char"))
-			dType += "(" + data_size + ")";
-//		if (nullable==1) dType +=" not null";
-
-		if (dType.equals("number")) {
-			if (data_size > 0 && decimal_digits > 0)
-				dType += "(" + data_size + "," + decimal_digits +")";
-			else if (data_size > 0)
-				dType += "(" + data_size + ")";
-		}
+	List<TableCol> list = cn.getTableDetail(owner, tname);
+	for (int i=0;i<list.size();i++) {
+		TableCol rec = list.get(i);
 		
 		// check if primary key
-		String col_disp = col_name;
-		if (pk.contains(col_name)) col_disp = "<font color=blue><b>" + col_disp + "</b></font>";
+		String col_disp = rec.getName();
+		if (rec.isPrimaryKey()) col_disp = "<span class='primary-key'>" + col_disp + "</span>";
 %>
 <tr>
 	<td>&nbsp;</td>
 	<td><%= col_disp.toLowerCase() %></td>
-	<td><%= dType %></td>
-	<td><%= nulls %></td>
-	<td><%= colDef %></td>
-	<td><%= owner==null?cn.getComment(tname, col_name):cn.getSynColumnComment(owner, tname, col_name) %></td>
+	<td><%= rec.getTypeName() %></td>
+	<td><%= rec.getNullable()==0?"N":"" %></td>
+	<td><%= rec.getDefaults() %></td>
+	<td><%= owner==null?cn.getComment(tname, rec.getName()):cn.getSynColumnComment(owner, tname, rec.getName()) %></td>
 </tr>
 
 <%
 	}
-	
-	rs1.close();
-	
 %>
 </table>
 </form>
@@ -317,8 +277,6 @@ Please select a Table to see the detail.
 	}
 %>
 
-
-
 <br/>
 <% 
 	if (refTrgs.size()>0) { 
@@ -348,5 +306,6 @@ Please select a Table to see the detail.
 %>
 </td>
 </table>
+
 
 </div>

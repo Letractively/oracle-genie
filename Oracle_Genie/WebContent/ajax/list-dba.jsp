@@ -9,13 +9,6 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	String filter = request.getParameter("filter");
 
-	if (cn==null) {
-%>	
-		Connection lost. Please log in again.
-<%
-		return;
-	}	
-
 	List<String> list = new ArrayList<String>();
 	list.add("session");
 	list.add("Sequence");

@@ -7,13 +7,6 @@
 
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
-
-	if (cn==null || !cn.isConnected()) {
-		response.sendRedirect("login.jsp");
-		return;
-	}
-
-	Connection conn = cn.getConnection();
 %>
 
 <html>
@@ -32,7 +25,7 @@
     <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
     <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="css/colorbox.css" />
-
+    
 <script type="text/javascript">
 var CATALOG="";
 var to;
@@ -97,7 +90,13 @@ $(document).ready(function(){
 	
 function callserver() {
 	var remoteURL = 'ping.jsp';
-	$.get(remoteURL, function(data) { to = setTimeout("callserver()",60000); });
+	$.get(remoteURL, function(data) {
+		if (data.indexOf("true")>0)
+			to = setTimeout("callserver()",600000);
+		else {
+			$("#inner-result1").html("Connection Closed.");
+		}
+	});
 }	
 </script>
 
@@ -123,6 +122,7 @@ Database
 <td>
 <a href="index.jsp">Home</a> |
 <a href="javascript:queryHistory()">Query History</a> |
+<a href="javascript:clearCache()">Clear Cache</a> |
 <a href="logout.jsp">Log out</a>
 &nbsp;
 &nbsp;

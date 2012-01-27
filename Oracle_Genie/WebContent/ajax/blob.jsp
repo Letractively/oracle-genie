@@ -10,14 +10,6 @@
 <%
 	int counter = 0;
 	Connect cn = (Connect) session.getAttribute("CN");
-	
-	if (cn==null) {
-%>	
-		Connection lost. <a href="Javascript:window.close()">Close</a>
-<%
-		return;
-	}
-	Connection conn = cn.getConnection();
 
 	String table = request.getParameter("table");
 	String col = request.getParameter("col");

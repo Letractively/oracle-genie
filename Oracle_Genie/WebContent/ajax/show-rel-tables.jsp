@@ -10,13 +10,6 @@
 
 	Connect cn = (Connect) session.getAttribute("CN");
 	
-	if (cn==null) {
-%>	
-		Connection lost. <a href="Javascript:window.close()">Close</a>
-<%
-		return;
-	}
-	
 	String table = request.getParameter("tname");
 	String owner = request.getParameter("owner");
 	

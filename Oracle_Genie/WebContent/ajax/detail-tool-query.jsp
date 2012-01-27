@@ -16,15 +16,6 @@
 	
 	Connect cn = (Connect) session.getAttribute("CN");
 	
-	if (cn==null) {
-%>	
-		Connection lost. <a href="Javascript:window.close()">Close</a>
-<%
-		return;
-	}
-	Connection conn = cn.getConnection();
-	System.out.println(request.getRemoteAddr()+": " + sql +";");
-	
 	OldQuery q = new OldQuery(cn, sql, request);
 	ResultSet rs = q.getResultSet();
 	

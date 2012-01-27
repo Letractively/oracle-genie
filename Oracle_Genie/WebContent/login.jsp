@@ -6,13 +6,6 @@
 
 
 <%
-	Connect cn = (Connect) session.getAttribute("CN");
-	// if connected, redirect to home
-	if (cn!=null && cn.isConnected()) {
-		response.sendRedirect("index.jsp");
-		return;
-	}
-	
 	session.removeAttribute("CN");
 
 	String cookieName = "url";

@@ -14,42 +14,26 @@
     <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
     <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
     <link href="css/style.css" rel="stylesheet" type="text/css" />
-
 </head>
 <%
 	String name = request.getParameter("name");
 	String owner = request.getParameter("owner");
 	
 	Connect cn = (Connect) session.getAttribute("CN");
-
-	if (cn==null) {
-%>	
-		Connection lost. Please log in again.
-<%
-		return;
-	}
 		
 	String catalog = cn.getSchemaName();
 
-	Connection conn = cn.getConnection();
+	String qry = "SELECT TEXT FROM USER_SOURCE WHERE NAME='" + name +"' ORDER BY TYPE, LINE";
+	if (owner != null) qry = "SELECT TEXT FROM ALL_SOURCE WHERE OWNER='" + owner + "' AND NAME='" + name +"' ORDER BY TYPE, LINE";
 
-	Statement stmt = conn.createStatement();
-	String qry = "SELECT * FROM USER_SOURCE WHERE NAME='" + name +"' ORDER BY TYPE, LINE";
-	if (owner != null) qry = "SELECT * FROM ALL_SOURCE WHERE OWNER='" + owner + "' AND NAME='" + name +"' ORDER BY TYPE, LINE";
-	ResultSet rs = stmt.executeQuery(qry);
-
+	List<String> list = cn.queryMulti(qry);
+	
 	String text = "";
-	while (rs.next()) {
-		String line = rs.getString("TEXT");
-		text += Util.escapeHtml(line);
+	for (int i=0;i<list.size();i++) {
+		text += Util.escapeHtml(list.get(i));
 	}
-	
-	rs.close();
-	stmt.close();
-	
 %>
 <h2><%= name %></h2>
-
 
 <pre class='brush: sql'>
 <%= text %>

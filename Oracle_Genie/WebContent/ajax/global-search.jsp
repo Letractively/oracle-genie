@@ -4,123 +4,94 @@
 	import="spencer.genie.*" 
 	pageEncoding="ISO-8859-1"
 %>
-
 <%
 	String keyword = request.getParameter("keyword").toUpperCase();
 	Connect cn = (Connect) session.getAttribute("CN");
-
-	if (cn==null) {
-%>	
-		Connection lost. Please log in again.
-<%
-		return;
-	}
 		
 	String catalog = cn.getSchemaName();
-
-	Connection conn = cn.getConnection();
 %>
 
 <h2>Search Result for "<%= keyword %>"</h2>
 
 <b>Table:</b><br/>
 <%
-	Statement stmt = conn.createStatement();
-	ResultSet rs = stmt.executeQuery("SELECT TABLE_NAME FROM USER_TABLES WHERE TABLE_NAME LIKE '%" + keyword +"%' ORDER BY TABLE_NAME");
 
-	String text = "";
-	while (rs.next()) {
-		text = rs.getString("TABLE_NAME");
+	String qry = "SELECT TABLE_NAME FROM USER_TABLES WHERE TABLE_NAME LIKE '%" + Util.escapeQuote(keyword) +"%' ORDER BY TABLE_NAME";
+	List<String> list = cn.queryMulti(qry);
+
+	for (String text : list) {
 %>
 	&nbsp;&nbsp;
 	<a href="javascript:loadTable('<%=text%>');"><%=text%></a><br/>
 	
 <%
 	}
-	
-	rs.close();
-	stmt.close();
 %>
 
 <br/>
 <b>View:</b><br/>
 <%
-	stmt = conn.createStatement();
-	rs = stmt.executeQuery("SELECT VIEW_NAME FROM USER_VIEWS WHERE VIEW_NAME LIKE '%" + keyword +"%' ORDER BY VIEW_NAME");
-
-	text = "";
-	while (rs.next()) {
-		text = rs.getString("VIEW_NAME");
+	qry = "SELECT VIEW_NAME FROM USER_VIEWS WHERE VIEW_NAME LIKE '%" + Util.escapeQuote(keyword) +"%' ORDER BY VIEW_NAME";
+	list = cn.queryMulti(qry);
+	
+	for (String text : list) {
 %>
 	&nbsp;&nbsp;
 	<a href="javascript:loadView('<%=text%>');"><%=text%></a><br/>
 	
 <%
 	}
-	
-	rs.close();
-	stmt.close();
 %>
 
 <br/>
 <b>Program:</b><br/>
 <%
-	stmt = conn.createStatement();
-	rs = stmt.executeQuery("SELECT OBJECT_NAME FROM USER_OBJECTS WHERE object_type IN ('PACKAGE','PROCEDURE','FUNCTION','TYPE') AND OBJECT_NAME LIKE '%" + keyword +"%' ORDER BY OBJECT_NAME");
+	qry = "SELECT OBJECT_NAME FROM USER_OBJECTS WHERE object_type IN ('PACKAGE','PROCEDURE','FUNCTION','TYPE') AND OBJECT_NAME LIKE '%" + Util.escapeQuote(keyword) + "%' ORDER BY OBJECT_NAME";
+	list = cn.queryMulti(qry);
 
-	text = "";
-	while (rs.next()) {
-		text = rs.getString("OBJECT_NAME");
+	for (String text : list) {
 %>
 	&nbsp;&nbsp;
 	<a href="javascript:loadPackage('<%=text%>');"><%=text%></a><br/>
 	
 <%
 	}
-	
-	rs.close();
-	stmt.close();
 %>
 
 <br/>
 <b>Synonym:</b><br/>
 <%
-	stmt = conn.createStatement();
-	rs = stmt.executeQuery("SELECT OBJECT_NAME FROM USER_OBJECTS WHERE object_type='SYNONYM' AND OBJECT_NAME LIKE '%" + keyword +"%' ORDER BY OBJECT_NAME");
+	qry = "SELECT OBJECT_NAME FROM USER_OBJECTS WHERE object_type='SYNONYM' AND OBJECT_NAME LIKE '%" + Util.escapeQuote(keyword) +"%' ORDER BY OBJECT_NAME";
+	list = cn.queryMulti(qry);
 
-	text = "";
-	while (rs.next()) {
-		text = rs.getString("OBJECT_NAME");
+	for (String text : list) {
 %>
 	&nbsp;&nbsp;
 	<a href="javascript:loadSynonym('<%=text%>');"><%=text%></a><br/>
 <%
 	}
-	
-	rs.close();
-	stmt.close();
 %>
 
 <br/>
 <b>Column:</b><br/>
 <%
-	stmt = conn.createStatement();
-	rs = stmt.executeQuery("SELECT * FROM USER_TAB_COLUMNS WHERE COLUMN_NAME='" + keyword +"' ORDER BY TABLE_NAME");
+	qry = "SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION, DATA_SCALE FROM USER_TAB_COLUMNS WHERE COLUMN_NAME='" + Util.escapeQuote(keyword) +"' ORDER BY TABLE_NAME";
+	List<String[]> lst = cn.queryMultiCol(qry, 6);
+	
+	for (String[] rec : lst) {
+		String tname = rec[1];
+		String cname = rec[2];
 
-	text = "";
-	while (rs.next()) {
-		String tname = rs.getString("TABLE_NAME");
-		String cname = rs.getString("COLUMN_NAME");
+		String data_type = rec[3];
 
-		String data_type = rs.getString("DATA_TYPE");
-		int data_length = rs.getInt("DATA_LENGTH");
-		int data_prec = rs.getInt("DATA_PRECISION");
-		int data_scale = rs.getInt("DATA_SCALE");
+		int data_length = (rec[4]!=null?Integer.parseInt(rec[4]):0);
+		int data_prec   = (rec[5]!=null?Integer.parseInt(rec[5]):0);
+		int data_scale  = (rec[6]!=null?Integer.parseInt(rec[6]):0);
+
 		String dType = data_type.toLowerCase();
-		
+
 		if (dType.equals("varchar") || dType.equals("varchar2") || dType.equals("char"))
 			dType += "(" + data_length + ")";
-//		if (nullable==1) dType +=" not null";
 
 		if (dType.equals("number")) {
 			if (data_prec > 0 && data_scale > 0)
@@ -131,54 +102,42 @@
 %>
 	&nbsp;&nbsp;
 	<a href="javascript:loadTable('<%=tname%>');"><%=tname%></a>.<%= cname.toLowerCase() %> <%= dType %><br/>
-	
 <%
 	}
-	
-	rs.close();
-	stmt.close();
 %>
 
 
 <br/>
 <b>Table Comments:</b><br/>
 <%
-	stmt = conn.createStatement();
-	rs = stmt.executeQuery("SELECT * FROM USER_TAB_COMMENTS WHERE UPPER(COMMENTS) LIKE '%" + keyword +"%' ORDER BY TABLE_NAME");
+	qry = "SELECT TABLE_NAME, COMMENTS FROM USER_TAB_COMMENTS WHERE UPPER(COMMENTS) LIKE '%" + Util.escapeQuote(keyword) +"%' ORDER BY TABLE_NAME";
+	lst = cn.queryMultiCol(qry, 2);
 
-	text = "";
-	while (rs.next()) {
-		String tname = rs.getString("TABLE_NAME");
-		String comments = rs.getString("COMMENTS");
+	for (String[] rec : lst) {
+		String tname = rec[1];
+		String comments = rec[2];
 %>
 	&nbsp;&nbsp;
 	<a href="javascript:loadTable('<%=tname%>');"><%=tname%></a> <%= comments %><br/>
 <%
 	}
-	
-	rs.close();
-	stmt.close();
 %>
 
 
 <br/>
 <b>Column Comments:</b><br/>
 <%
-	stmt = conn.createStatement();
-	rs = stmt.executeQuery("SELECT * FROM USER_COL_COMMENTS WHERE UPPER(COMMENTS) LIKE '%" + keyword +"%' ORDER BY TABLE_NAME");
+	qry = "SELECT TABLE_NAME, COLUMN_NAME, COMMENTS FROM USER_COL_COMMENTS WHERE UPPER(COMMENTS) LIKE '%" + Util.escapeHtml(keyword) +"%' ORDER BY TABLE_NAME";
+	lst = cn.queryMultiCol(qry, 3);
 
-	text = "";
-	while (rs.next()) {
-		String tname = rs.getString("TABLE_NAME");
-		String cname = rs.getString("COLUMN_NAME");
-		String comments = rs.getString("COMMENTS");
+	for (String[] rec : lst) {
+		String tname = rec[1];
+		String cname = rec[2];
+		String comments = rec[3];
 %>
 	&nbsp;&nbsp;
 	<a href="javascript:loadTable('<%=tname%>');"><%=tname%></a>.<%= cname %> <%= comments %><br/>
 <%
 	}
-	
-	rs.close();
-	stmt.close();
 %>
 

@@ -9,22 +9,14 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	String filter = request.getParameter("filter");
 
-	if (cn==null) {
-%>	
-		Connection lost. Please log in again.
-<%
-		return;
-	}	
-
-	Connection conn = cn.getConnection();
-%>
-<% 
+	String qry = "SELECT TABLE_NAME FROM USER_TABLES ORDER BY 1"; 	
+	List<String> list = cn.queryMulti(qry);
+	
 	if (filter !=null) filter = filter.toUpperCase();
-	for (int i=0; i<cn.getTables().size();i++) { 
-		if (filter != null && !cn.getTable(i).contains(filter)) continue;
+	for (int i=0; i<list.size();i++) {
+		if (filter != null && !list.get(i).contains(filter)) continue;
 %>
-	<li><a href="javascript:loadTable('<%=cn.getTable(i)%>');"><%=cn.getTable(i)%></a></li>
+	<li><a href="javascript:loadTable('<%=list.get(i)%>');"><%=list.get(i)%></a></li>
 <% 
 	} 
 %>
-

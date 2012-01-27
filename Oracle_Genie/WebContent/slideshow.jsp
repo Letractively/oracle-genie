@@ -45,7 +45,8 @@ $(function() {
   </head>
   
   <body>
-  
+
+<img src="image/waiting_big.gif" class="waitontop">  
 <div id="slideshow">
     <img src="image/nature1.jpg" alt="" class="active" />
     <img src="image/nature2.jpg" alt=""/>
@@ -53,6 +54,7 @@ $(function() {
     <img src="image/nature4.jpg" alt=""/>
     <img src="image/nature5.jpg" alt=""/>
 </div>
+<img id="waitimg" src="image/waiting_big.gif">  
 
 
   </body>

@@ -57,7 +57,7 @@ function loadView(vName) {
 		url: "ajax/detail-view.jsp?view=" + vName + "&t=" + (new Date().getTime()),
 		success: function(data){
 			$("#inner-result1").html(data);
-			//SyntaxHighlighter.all();
+			SyntaxHighlighter.all();
 		}
 	});	
 	addHistory("<a href='Javascript:loadView(\""+vName+"\")'>" + vName + "</a>");
@@ -282,9 +282,9 @@ function runQuery(catalog,tab) {
 		});
 	}
 	
-	function aboutGenie() {
-		
-		
+	function clearCache() {
+		var remoteURL = 'ajax/clear-cache.jsp';
+		$.get(remoteURL, function(data) {
+			alert('Cache Cleared!');
+		});
 	}
-	
-	

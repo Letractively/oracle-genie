@@ -10,13 +10,6 @@
 	String syn = request.getParameter("name");
 	Connect cn = (Connect) session.getAttribute("CN");
 
-	if (cn==null) {
-%>	
-		Connection lost. Please log in again.
-<%
-		return;
-	}
-
 	// incase owner is null & table has owner info
 	if (owner==null && syn!=null && syn.indexOf(".")>0) {
 		int idx = syn.indexOf(".");
@@ -26,33 +19,24 @@
 		
 	String catalog = cn.getSchemaName();
 
-	Connection conn = cn.getConnection();
-
-	Statement stmt = conn.createStatement();
-	ResultSet rs = stmt.executeQuery("SELECT * FROM USER_SYNONYMS WHERE SYNONYM_NAME='" + syn +"'");
-
+	String qry = "SELECT TABLE_OWNER, TABLE_NAME FROM USER_SYNONYMS WHERE SYNONYM_NAME='" + syn +"'";
+	List<String[]> list = cn.queryMultiCol(qry, 2);
+	
 	String oname = "";
-	if (rs.next()) {
-		
-		owner = rs.getString("TABLE_OWNER");
-		oname = rs.getString("TABLE_NAME");
+	if (list.size()>0) {
+		owner = list.get(0)[1];
+		oname = list.get(0)[2];
 	}
 	
-	rs.close();
-	stmt.close();
+	qry = "SELECT OBJECT_TYPE FROM ALL_OBJECTS WHERE OWNER='" + owner +
+			"' AND OBJECT_NAME='" + oname + "' ORDER BY OBJECT_TYPE";
+	List<String> list2 = cn.queryMulti(qry);
 	
-	stmt = conn.createStatement();
-	rs = stmt.executeQuery("SELECT * FROM ALL_OBJECTS WHERE OWNER='" + owner +
-			"' AND OBJECT_NAME='" + oname + "' ORDER BY OBJECT_TYPE");
-
 	String otype = "";
-	if (rs.next()) {
-		otype = rs.getString("OBJECT_TYPE");
+	if (list2.size()>0) {
+		otype = list2.get(0);
 	}
 	
-	rs.close();
-	stmt.close();
-
 %>
 <h2>SYNONYM: <%= syn %> &nbsp;&nbsp;</h2>
 

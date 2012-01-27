@@ -7,8 +7,6 @@
 
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
-	Connection conn = cn.getConnection();
-	
 	HashMap<String, QueryLog> map = cn.getQueryHistory();
 	
 %>

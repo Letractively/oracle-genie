@@ -9,30 +9,9 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	String filter = request.getParameter("filter");
 
-	if (cn==null) {
-%>	
-		Connection lost. Please log in again.
-<%
-		return;
-	}	
-
-	Connection conn = cn.getConnection();
+	String qry = "SELECT VIEW_NAME FROM USER_VIEWS ORDER BY 1"; 	
+	List<String> list = cn.queryMulti(qry);
 	
-	Statement stmt = conn.createStatement();
-	ResultSet rs = stmt.executeQuery("SELECT VIEW_NAME FROM USER_VIEWS ORDER BY 1");
-	
-	List<String> list = new ArrayList<String>();
-	while (rs.next()) {
-		String vname = rs.getString(1);
-		list.add(vname);
-		
-	}
-	
-	rs.close();
-	stmt.close();
-	
-%>
-<% 
 	if (filter !=null) filter = filter.toUpperCase();
 	for (int i=0; i<list.size();i++) {
 		if (filter != null && !list.get(i).contains(filter)) continue;

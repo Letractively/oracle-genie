@@ -9,27 +9,8 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	String filter = request.getParameter("filter");
 
-	if (cn==null) {
-%>	
-		Connection lost. Please log in again.
-<%
-		return;
-	}	
-
-	Connection conn = cn.getConnection();
-	
-	Statement stmt = conn.createStatement();
-	ResultSet rs = stmt.executeQuery("SELECT * FROM USER_OBJECTS WHERE object_type IN ('PACKAGE','PROCEDURE','FUNCTION','TYPE') order by 1");
-	
-	List<String> list = new ArrayList<String>();
-	while (rs.next()) {
-		String oname = rs.getString(1);
-		list.add(oname);
-	}
-	
-	rs.close();
-	stmt.close();
-	
+	String qry = "SELECT OBJECT_NAME FROM USER_OBJECTS WHERE object_type IN ('PACKAGE','PROCEDURE','FUNCTION','TYPE') order by 1"; 	
+	List<String> list = cn.queryMulti(qry);
 %>
 <% 
 	if (filter !=null) filter = filter.toUpperCase();
@@ -40,4 +21,3 @@
 <% 
 	} 
 %>
-

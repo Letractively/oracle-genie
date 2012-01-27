@@ -32,8 +32,8 @@ public class Util {
 		String[] keys = key.split("\\^");
 		if (cols.length != keys.length) {
 			
-			System.out.println(col + " " + key);
-			System.out.println(cols.length + " " + keys.length);
+//			System.out.println(col + " " + key);
+//			System.out.println(cols.length + " " + keys.length);
 			return "ERROR";
 		}
 		
@@ -57,4 +57,7 @@ public class Util {
 		return java.net.URLEncoder.encode(str, "ISO-8859-1");
 	}
 	
+	public static String escapeQuote(String str) {
+		return str.replaceAll("'", "''");
+	}
 }

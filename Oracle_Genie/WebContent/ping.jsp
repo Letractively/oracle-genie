@@ -16,7 +16,7 @@
 		cn.ping();
 	}
 	
-	System.out.println("ping " + connected + " " + (new Date()));
+//	System.out.println("ping " + connected + " " + (new Date()));
 %>
 
 <%=connected%> <%= new Date() %>

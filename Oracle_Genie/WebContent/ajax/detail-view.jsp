@@ -11,14 +11,6 @@
 	
 	Connect cn = (Connect) session.getAttribute("CN");
 
-	if (cn==null) {
-%>	
-		Connection lost. Please log in again.
-<%
-		return;
-	}
-
-
 	// incase owner is null & table has owner info
 	if (owner==null && view!=null && view.indexOf(".")>0) {
 		int idx = view.indexOf(".");
@@ -28,23 +20,10 @@
 	
 	String catalog = cn.getSchemaName();
 
-	Connection conn = cn.getConnection();
-
-	Statement stmt = conn.createStatement();
-	String qry = "SELECT * FROM USER_VIEWS WHERE VIEW_NAME='" + view +"'";
+	String qry = "SELECT TEXT FROM USER_VIEWS WHERE VIEW_NAME='" + view +"'";
 	if (owner != null) 
-		qry = "SELECT * FROM ALL_VIEWS WHERE OWNER='" + owner + "' AND VIEW_NAME='" + view +"'"; 
-	ResultSet rs = stmt.executeQuery(qry);
-
-	String text = "";
-	if (rs.next()) {
-		text = rs.getString("TEXT");
-	}
-	
-	rs.close();
-	stmt.close();
-	
-
+		qry = "SELECT TEXT FROM ALL_VIEWS WHERE OWNER='" + owner + "' AND VIEW_NAME='" + view +"'"; 
+	String text = cn.queryOne(qry);
 %>
 <h2>VIEW: <%= view %> &nbsp;&nbsp;<a href="Javascript:runQuery('<%=catalog%>','<%=view%>')"><img border=0 src="image/icon_query.png" title="query"></a></h2>
 
@@ -57,52 +36,39 @@
 <b>Related Table</b><br/>
 
 <%
-	stmt = conn.createStatement();
-	qry = "SELECT * FROM USER_DEPENDENCIES WHERE NAME='" + view +"' AND REFERENCED_TYPE='TABLE' ORDER BY REFERENCED_NAME";
+	qry = "SELECT REFERENCED_NAME, REFERENCED_OWNER FROM USER_DEPENDENCIES WHERE NAME='" + view +"' AND REFERENCED_TYPE='TABLE' ORDER BY REFERENCED_NAME";
 	if (owner != null)
-		qry = "SELECT * FROM ALL_DEPENDENCIES WHERE OWNER='" + owner + "' AND NAME='" + view +"' AND REFERENCED_TYPE='TABLE' ORDER BY REFERENCED_NAME";
+		qry = "SELECT REFERENCED_NAME, REFERENCED_OWNER FROM ALL_DEPENDENCIES WHERE OWNER='" + owner + "' AND NAME='" + view +"' AND REFERENCED_TYPE='TABLE' ORDER BY REFERENCED_NAME";
 
-	rs = stmt.executeQuery(qry);
-
-	text = "";
-	while (rs.next()) {
-		String tname = rs.getString("REFERENCED_NAME");
-		String rOwner = rs.getString("REFERENCED_OWNER");
-		
-		if(!rOwner.equalsIgnoreCase(cn.getSchemaName()))
-			tname = rOwner + "." + tname;
+	List<String[]> list = cn.queryMultiCol(qry, 2);
+	
+	for (int i=0;i<list.size();i++) {
+		String tname = list.get(i)[1];
+		String rOwner = list.get(i)[2];
 %>
 	&nbsp;&nbsp;
 	<a href="javascript:loadTable('<%=tname%>');"><%=tname%></a><br/>
 <%
 	}
-	
-	rs.close();
-	stmt.close();
 %>
 
 
 <br/>
 <b>Related Program</b><br/>
 <%
-	stmt = conn.createStatement();
-	qry = "SELECT * FROM USER_DEPENDENCIES WHERE NAME='" + view +"' AND REFERENCED_TYPE='PACKAGE' ORDER BY REFERENCED_NAME";
+
+	qry = "SELECT REFERENCED_NAME, REFERENCED_OWNER FROM USER_DEPENDENCIES WHERE NAME='" + view +"' AND REFERENCED_TYPE='PACKAGE' ORDER BY REFERENCED_NAME";
 	if (owner != null)
-		qry = "SELECT * FROM ALL_DEPENDENCIES WHERE OWNER = '" + owner + "' AND NAME='" + view +"' AND REFERENCED_TYPE='PACKAGE' ORDER BY REFERENCED_NAME";
+		qry = "SELECT REFERENCED_NAME, REFERENCED_OWNER FROM ALL_DEPENDENCIES WHERE OWNER = '" + owner + "' AND NAME='" + view +"' AND REFERENCED_TYPE='PACKAGE' ORDER BY REFERENCED_NAME";
 
-	rs = stmt.executeQuery(qry);
-
-	text = "";
-	while (rs.next()) {
-		String tname = rs.getString("REFERENCED_NAME");
-		String rOwner = rs.getString("REFERENCED_OWNER");
+	List<String[]> list2 = cn.queryMultiCol(qry, 2);
+	for (int i=0;i<list2.size();i++) {
+		String tname = list2.get(i)[1];
+		String rOwner = list2.get(i)[2];
 %>
 	&nbsp;&nbsp;
 	<a href="javascript:loadPackage('<%=tname%>');"><%=tname%></a><br/>
 <%
 	}
-	
-	rs.close();
-	stmt.close();
 %>
 
