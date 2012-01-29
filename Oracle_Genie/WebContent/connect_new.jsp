@@ -68,6 +68,7 @@ $(function() {
 
 function stopShow() {
 	$("#slideshow").html('');
+	$("#waiting").hide();
 }
 
 </script>
@@ -98,7 +99,7 @@ function stopShow() {
     <img src="image/nature4.jpg" alt=""/>
     <img src="image/nature5.jpg" alt=""/>
 </div>
-<img src="image/waiting_big.gif" class="waitontop">  
+<img id="waiting" src="image/waiting_big.gif" class="waitontop">  
 	
   </body>
 </html>
