@@ -201,6 +201,12 @@ var doMode = 'copy';
 				$("#wait").remove();
 				$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
 				hideIfAny();
+				
+				$('.simplehighlight').hover(function(){
+					$(this).children().addClass('datahighlight');
+				},function(){
+					$(this).children().removeClass('datahighlight');
+				});
 			}
 		});	
 	}
