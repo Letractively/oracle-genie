@@ -278,7 +278,7 @@ System.out.println("linesPerPage=" + linesPerPage);
 		String rowClass = "oddRow";
 		if (rowCnt%2 == 0) rowClass = "evenRow";
 %>
-<tr>
+<tr class="simplehighlight">
 
 <%
 	if (pkLink && q.hasData()) {

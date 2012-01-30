@@ -67,6 +67,14 @@
 		var cnt = $("#recordCount").val();
 		if (cnt != "0") $("#buttonsDiv").show('slow');
 	});	    
+	
+    $(document).ready(function(){
+		$('.simplehighlight').hover(function(){
+			$(this).children().addClass('datahighlight');
+		},function(){
+			$(this).children().removeClass('datahighlight');
+		});
+      });
     </script>
 </head> 
 
