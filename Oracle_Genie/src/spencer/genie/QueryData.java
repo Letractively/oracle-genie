@@ -44,7 +44,7 @@ public class QueryData {
 			rows.add(aRow);
 			if (cnt>=1000) break;
 		}
-		System.out.println("Record Count=" + cnt);
+//		System.out.println("Record Count=" + cnt);
 	}
 	
 	private String getValue(ResultSet rs, int idx) {

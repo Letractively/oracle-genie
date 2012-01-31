@@ -46,7 +46,7 @@
 		if (idx > 0) tbl = tbl.substring(0, idx);
 		
 	}
-	System.out.println("XXX TBL=" + tbl);
+//	System.out.println("XXX TBL=" + tbl);
 %>
 
 SQL = <%= sql %>

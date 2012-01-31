@@ -32,8 +32,8 @@
 	
 //System.out.println("filterColumn=" + filterColumn);
 //System.out.println("filterValue=" + filterValue);
-System.out.println("pageNo=" + pgNo);
-System.out.println("rowsPerPage=" + rowsPerPage);
+//System.out.println("pageNo=" + pgNo);
+//System.out.println("rowsPerPage=" + rowsPerPage);
 
 	if (sql==null) sql = "SELECT * FROM TABLE";
 	sql = sql.trim();
@@ -43,7 +43,7 @@ System.out.println("rowsPerPage=" + rowsPerPage);
 	String norun = request.getParameter("norun");
 	
 	Connect cn = (Connect) session.getAttribute("CN");
-	System.out.println(request.getRemoteAddr()+": " + sql +";");
+//	System.out.println(request.getRemoteAddr()+": " + sql +";");
 	
 	int lineLength = Util.countLines(sql);
 	if (lineLength <5) lineLength = 5;
@@ -53,7 +53,7 @@ System.out.println("rowsPerPage=" + rowsPerPage);
 		q = new Query(cn, sql);
 		QueryCache.getInstance().addQuery(sql, q);
 	} else {
-		System.out.println("*** REUSE Query");
+//		System.out.println("*** REUSE Query");
 	}
 
 	if (q.isError()) {
@@ -94,7 +94,7 @@ System.out.println("rowsPerPage=" + rowsPerPage);
 		idx = tbl.indexOf(" ");
 		if (idx > 0) tbl = tbl.substring(0, idx);
 	}
-	System.out.println("XXX TBL=" + tbl);
+//	System.out.println("XXX TBL=" + tbl);
 	
 	String tname = tbl;
 	if (tname.indexOf(".") > 0) tname = tname.substring(tname.indexOf(".")+1);
@@ -112,13 +112,13 @@ System.out.println("rowsPerPage=" + rowsPerPage);
 		String linkCol = cn.getConstraintCols(rec.constraintName);
 		String rTable = cn.getTableNameByPrimaryKey(rec.rConstraintName);
 		
-		System.out.println("linkCol=" + linkCol);
-		System.out.println("rTable=" + rTable);
+//		System.out.println("linkCol=" + linkCol);
+//		System.out.println("rTable=" + rTable);
 		
 		int colCount = Util.countMatches(linkCol, ",") + 1;
 		if (colCount == 1) {
 			if (rTable != null) linkTable.put(linkCol, rTable);
-			System.out.println("linkTable");
+//			System.out.println("linkTable");
 		} else {
 			// check if columns are part of result set
 			int matchCount = 0;
@@ -137,7 +137,7 @@ System.out.println("rowsPerPage=" + rowsPerPage);
 				fkLinkTab.add(rTable);
 				fkLinkCol.add(linkCol);
 			}
-			System.out.println("linkTable2");
+//			System.out.println("linkTable2");
 		}
 	}
 	
@@ -176,7 +176,7 @@ System.out.println("rowsPerPage=" + rowsPerPage);
 %>
 
 <% if (pgNo>1) { %>
-<a href="Javascript:gotoPage(<%= pgNo - 1%>)"><img src="image/btn-prev.png" align="top"></a>
+<a href="Javascript:gotoPage(<%= pgNo - 1%>)"><img border=0 src="image/btn-prev.png" align="top"></a>
 <% } %>
 
 <% if (totalPage > 1) { %>
@@ -184,7 +184,7 @@ Page: <b><%= pgNo %></b> of <%= totalPage %>
 <% } %>
 
 <% if (q.getTotalPage(linesPerPage) > pgNo) { %>
-<a href="Javascript:gotoPage(<%= pgNo + 1%>)"><img src="image/btn-next.png" align="top"></a>
+<a href="Javascript:gotoPage(<%= pgNo + 1%>)"><img border=0 src="image/btn-next.png" align="top"></a>
 <% } %>
 
 
@@ -269,8 +269,8 @@ Shows
 <%
 	int rowCnt = 0;
 
-System.out.println("pageNo=" + pgNo);
-System.out.println("linesPerPage=" + linesPerPage);
+//System.out.println("pageNo=" + pgNo);
+//System.out.println("linesPerPage=" + linesPerPage);
 	q.rewind(linesPerPage, pgNo);
 	
 	while (q.next() && rowCnt < linesPerPage) {

@@ -14,6 +14,7 @@
     <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
     <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
     <link href="css/style.css" rel="stylesheet" type="text/css" />
+	<link rel="icon" type="image/png" href="image/Genie-icon.png">
 </head>
 <%
 	String name = request.getParameter("name");

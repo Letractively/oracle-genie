@@ -47,17 +47,21 @@
 		idx = tbl.indexOf(" ");
 		if (idx > 0) tbl = tbl.substring(0, idx);
 	}
-	System.out.println("XXX TBL=" + tbl);
+//	System.out.println("XXX TBL=" + tbl);
 	
 %>
+
 <html>
 <head> 
 	<title>Query result - Genie</title>
-    <link rel='stylesheet' type='text/css' href='css/style.css'>
-    <link rel="stylesheet" href="css/colorbox.css" />
     <script src="script/jquery.js" type="text/javascript"></script>
+
     <script src="script/jquery.colorbox-min.js"></script>
     <script src="script/query-methods.js" type="text/javascript"></script>
+
+    <link rel='stylesheet' type='text/css' href='css/style.css'>
+    <link rel="stylesheet" href="css/colorbox.css" />
+	<link rel="icon" type="image/png" href="image/Genie-icon.png">
     
     <script type="text/javascript">
 	$(document).ready(function() {

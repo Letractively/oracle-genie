@@ -13,18 +13,19 @@
 <head> 
 	<title>Genie</title>
 	
-    <link rel='stylesheet' type='text/css' href='css/style.css'> 
 	<script src="script/jquery.js" type="text/javascript"></script>
     <script src="script/jquery.colorbox-min.js"></script>
-
 	<script src="script/main.js" type="text/javascript"></script>
 
+    <link rel="stylesheet" href="css/colorbox.css" />
+    <link rel='stylesheet' type='text/css' href='css/style.css'> 
+
+	<link rel="icon" type="image/png" href="image/Genie-icon.png">
+<%--
 	<script type="text/javascript" src="script/shCore.js"></script>
 	<script type="text/javascript" src="script/shBrushSql.js"></script>
-
-    <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
     <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="css/colorbox.css" />
+--%>
     
 <script type="text/javascript">
 var CATALOG="";
