@@ -25,7 +25,7 @@
 		q = new Query(cn, sql);
 		QueryCache.getInstance().addQuery(sql, q);
 	} else {
-		System.out.println("*** REUSE Query");
+//		System.out.println("*** REUSE Query");
 	}
 
 	if (filterColumn.equals("0")) {

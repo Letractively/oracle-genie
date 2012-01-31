@@ -67,7 +67,7 @@ var doMode = 'copy';
 		$("#table-detail").append("<div id='wait'><img src='image/loading.gif'/></div>");
 		
 		$.ajax({
-			url: "table_col.jsp?table=" + tbl + "&t=" + (new Date().getTime()),
+			url: "ajax/table_col.jsp?table=" + tbl + "&t=" + (new Date().getTime()),
 			success: function(data){
 				$("#table-detail").append(data);
 				$("#wait").remove();

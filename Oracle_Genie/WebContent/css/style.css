@@ -159,6 +159,10 @@ html.busy, html.busy * {
 	font-weight: bold;
 }
 
-.datahighlight {
+.datahighlight_old {
         background-color: #ffdc87 !important;
+}
+
+.datahighlight {
+        background-color: yellow !important;
 }

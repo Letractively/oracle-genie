@@ -19,6 +19,7 @@
   <head>
     <title>Genie</title>
     <link rel='stylesheet' type='text/css' href='css/style.css'> 
+	<link rel="icon" type="image/png" href="image/Genie-icon.png">
   </head>
 
  <img src="image/genie2.jpg"/>
