@@ -405,8 +405,6 @@ public class Connect implements HttpSessionBindingListener {
 	
 	private void loadComments() {
 		comments.clear();
-
-		
 /* late binding
 		// column comments
 		try {
@@ -810,6 +808,12 @@ public class Connect implements HttpSessionBindingListener {
 
 	public String getConstraintCols(String cname) {
 		if (cname == null) return "";
+		
+		if (cname.contains(".")) {
+			String[] temp = cname.split("\\.");
+			return getConstraintCols(temp[0], temp[1]);
+		}
+		
 		String cols = constraints.get(cname.toUpperCase());
 		
 		// check for other owner
@@ -1275,6 +1279,34 @@ public class Connect implements HttpSessionBindingListener {
 		return cnt;
 	}
 
+	public String getRelatedLinkSql(String tname, String cols, String keys) {
+		
+		String condition = Util.buildCondition(cols,  keys);
+		String qry = "SELECT * FROM " + tname + " WHERE " + condition;
+
+		return qry;
+	}
+
+	public String getPKLinkSql(String tname, String keys) {
+		String qry="SELECT * FROM " + tname;
+
+		// Primary Key for PK Link
+		String pkName = getPrimaryKeyName(tname);
+		String pkCols = null;
+		String pkColName = null;
+		int pkColIndex = -1;
+		if (pkName != null) {
+			pkCols = getConstraintCols(pkName);
+			int colCount = Util.countMatches(pkCols, ",") + 1;
+//			System.out.println("pkCols=" + pkCols + ", colCount=" + colCount);
+			pkColName = pkCols;
+		}
+
+		String condition = Util.buildCondition(pkColName,  keys);
+		qry += " WHERE " + condition;
+		
+		return qry;
+	}
 	public String getObjectType(String oname) {
 		if (oname.contains(".")) {
 			String[] temp = oname.split("\\.");

@@ -55,12 +55,12 @@ function selectOption(select_id, option_val) {
 
 </script>
 
-<form name="formQry" method="post" target="_blank" action="query.jsp">
+<form name="formQry" method="post" action="query.jsp">
 <input name="sql" type="hidden" value="<%= sql %>">
 </form>
 
-SQL = <%= sql %> <a href="javascript:document.formQry.submit()"><img border=0 src="image/icon_query.png" title="Open Query"></a>
-
+SQL = <%= sql %> <a href="javascript:doQuery()"><img border=0 src="image/icon_query.png" title="Open Query"></a>
+<a href="javascript:doQueryNew()"><img border=0 src="image/icon_query_new.png" title="Open Query on New page"></a>
 <table id="dataTable" class=gridBody border=1>
 <tr>
 <%

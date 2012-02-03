@@ -13,6 +13,10 @@
 	String sortColumn = request.getParameter("sortColumn");
 	String sortDirection = request.getParameter("sortDirection");
 	String pageNo = request.getParameter("pageNo");
+	String dataLink = request.getParameter("dataLink");
+
+	boolean dLink = dataLink != null && dataLink.equals("1");  
+	
 	int pgNo = 1;
 	if (pageNo != null) pgNo = Integer.parseInt(pageNo);
 
@@ -95,7 +99,8 @@
 		if (idx > 0) tbl = tbl.substring(0, idx);
 	}
 //	System.out.println("XXX TBL=" + tbl);
-	
+
+	boolean hasDataLink = false;
 	String tname = tbl;
 	if (tname.indexOf(".") > 0) tname = tname.substring(tname.indexOf(".")+1);
 
@@ -141,6 +146,7 @@
 		}
 	}
 	
+	
 	// Primary Key for PK Link
 	String pkName = cn.getPrimaryKeyName(tname);
 	boolean pkLink = false;
@@ -167,6 +173,19 @@
 		List<String> refTabs = cn.getReferencedTables(tname);
 		if (matchCount == pkColList.size() && refTabs.size()>0) {
 			pkLink = true;
+			hasDataLink = true;
+		}
+	}
+	
+	// check if FK links are there
+	if (!hasDataLink) {
+		for  (int i = 0; q.hasData() && i < q.getColumnCount(); i++){
+			String colName = q.getColumnLabel(i);
+			String lTable = linkTable.get(colName);
+			if (lTable != null) {
+				hasDataLink = true;
+				break;
+			}
 		}
 	}
 	
@@ -174,6 +193,12 @@
 	int filteredCount = q.getFilteredCount();
 	int totalPage = q.getTotalPage(linesPerPage);
 %>
+<% if (totalCount>0 && hasDataLink) { 
+		String txt = "Hide DataLink";
+		if (!dLink) txt = "Show DataLink"; 
+%>
+<a id="dataLinkText" href="Javascript:toggleDataLink()"><%= txt %></a>
+<% } %>
 
 <% if (pgNo>1) { %>
 <a href="Javascript:gotoPage(<%= pgNo - 1%>)"><img border=0 src="image/btn-prev.png" align="top"></a>
@@ -215,13 +240,13 @@ Shows
 
 <%
 	int offset = 0;
-	if (pkLink) {
+	if (pkLink && dLink) {
 		offset ++;
 %>
 	<th class="headerRow"><b>PK</b></th>
 <%
 	}
-	if (fkLinkTab.size()>0) {
+	if (fkLinkTab.size()>0 && dLink) {
 		offset ++;
 %>
 	<th class="headerRow"><b>FK Link</b></th>
@@ -281,7 +306,7 @@ Shows
 <tr class="simplehighlight">
 
 <%
-	if (pkLink && q.hasData()) {
+	if (pkLink && q.hasData() && dLink) {
 		String keyValue = null;
 	
 		for (int i=0;q.hasData() && i<pkColList.size(); i++) {
@@ -291,11 +316,15 @@ Shows
 		}
 		
 		String linkUrl = "ajax/pk-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
+		String linkUrlTree = "data-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
 %>
-	<td class="<%= rowClass%>"><a class='inspect' href='<%= linkUrl %>'><img border=0 src="image/link.gif"></a></td>
+	<td class="<%= rowClass%>"><a class='inspect' href='<%= linkUrl %>'><img border=0 src="image/link.gif" title="Related Tables"></a>
+		&nbsp;
+		<a href='<%= linkUrlTree %>' target="_blank"><img src="image/tree.png" border=0 title="Data Link"></a>
+	</td>
 <%
 	}
-if (fkLinkTab.size()>0) {
+if (fkLinkTab.size()>0 && dLink) {
 %>
 <td class="<%= rowClass%>">
 <% 
@@ -337,7 +366,7 @@ if (fkLinkTab.size()>0) {
 				boolean isLinked = false;
 				String linkUrl = "";
 				String linkImage = "image/view.png";
-				if (lTable != null) {
+				if (lTable != null  && dLink) {
 					isLinked = true;
 					linkUrl = "ajax/fk-lookup.jsp?table=" + lTable + "&key=" + Util.encodeUrl(keyValue);
 				} else if (val != null && val.startsWith("BLOB ")) {

@@ -92,7 +92,9 @@
 <a href="Javascript:showRelatedTables('<%=tbl%>')">Show Related Tables</a>
 </div>
 
-<div id="table-detail"></div>
+<a href="Javascript:toggleTableDetail()"><img  style="float: left" id="tableDetailImage" border="0" src="image/close.jpg"></a>
+<div id="table-detail" style="float: left"></div>
+<br clear="all"/>
 
 <a href="Javascript:copyPaste('SELECT');">SELECT</a>&nbsp;
 <a href="Javascript:copyPaste('COUNT(*)');">COUNT(*)</a>&nbsp;
@@ -130,6 +132,7 @@
 <input type="hidden" id="searchValue" name="searchValue" value="">
 <input type="hidden" id="pageNo" name="pageNo" value="1">
 <input type="hidden" id="rowsPerPage" name="rowsPerPage" value="20">
+<input type="hidden" id="dataLink" name="dataLink" value="1">
 </form>
 
 <%= q.getMessage() %>
@@ -173,6 +176,7 @@
 	<jsp:param value="" name="filterColumn"/>
 	<jsp:param value="" name="filterValue"/>
 	<jsp:param value="" name="hideColumn"/>
+	<jsp:param value="1" name="dataLink"/>
 </jsp:include>
 </div>
 
