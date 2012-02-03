@@ -74,7 +74,7 @@
 	String id = Util.getId();
 %>
 <b><%= table %></b>
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png"/></a>
+&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" title="<%=sql%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
 <br/>
 <div id="data-div">
@@ -87,7 +87,7 @@
 <br/>
 
 <% if (fkLinkTab.size() > 0) {%>
-	<b><a href="Javascript:$('#div-fk').toggle();">Foreign Key</a></b><br/>
+	<b><a href="Javascript:toggleFK()">Foreign Key</a></b><br/>
 <div id="div-fk">
 <% } %>
 <%
@@ -112,7 +112,7 @@
 		autoLoadFK.add(id);
 %>
 <a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" src="image/open.jpg"></a>
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png"/></a>
+&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" title="<%=fsql%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
 <div id="div-<%=id%>" style="margin-left: 30px; display: none;"></div>
 <br/>
@@ -162,12 +162,12 @@
 %>
 
 <% if (cntRef == 1) {%>
-	<b><a href="Javascript:$('#div-child').toggle();">Child Table</a></b><br/>
+	<b><a href="Javascript:toggleChild()">Child Table</a></b><br/>
 <div id="div-child">
 <% } %>
 
 <a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> (<%= recCount %>) <img id="img-<%=id%>" src="image/open.jpg"></a>
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png"/></a>
+&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" title="<%=refsql%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= refsql%></div>
 <div id="div-<%=id%>" style="margin-left: 30px; display: none;"></div>
 <br/>

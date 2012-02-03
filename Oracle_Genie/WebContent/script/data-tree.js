@@ -162,3 +162,16 @@
         }
         return numCols;
     }
+
+    function toggleFK() {
+    	$('#div-fk').toggle();
+    }
+
+    function toggleChild() {
+    	$('#div-child').toggle();
+    }
+
+    function toggleText(arg1, arg2) {
+    	$('#'+arg1).toggle();
+    	$('#'+arg2).toggle();
+    }

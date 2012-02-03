@@ -290,8 +290,8 @@ Shows
 			}
 			
 %>
-<th class="headerRow"><b><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
-	href="Javascript:doAction('<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colName%></a></b>
+<th class="headerRow"><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
+	href="Javascript:doAction('<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><b><%=colName.toLowerCase()%></b></a>
 	<%= extraImage %>
 	<%-- <a href="Javascript:hide(<%=colIdx + offset%>)">x</a> --%></th>
 <%
@@ -374,7 +374,8 @@ if (fkLinkTab.size()>0 && dLink) {
 				if (val !=null && val.length() > 200) {
 					String id = Util.getId();
 					String id_x = Util.getId();
-					valDisp = valDisp.substring(0,200) + "<a id='"+id_x+"' href='Javascript:$(\"#"+id_x+"\").hide();$(\"#"+id+"\").show();'>...</a><span id='"+id+"' style='display: none;'>" + valDisp.substring(200) + "</span>";
+					valDisp = valDisp.substring(0,200) + "<a id='"+id_x+"' href='Javascript:toggleText(" +id_x + "," +id +")'>...</a><span id='"+id+"' style='display: none;'>" + valDisp.substring(200) + "</span>";
+					
 				}
 
 				String colName = q.getColumnLabel(i);

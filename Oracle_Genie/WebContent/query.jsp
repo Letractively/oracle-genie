@@ -83,10 +83,11 @@
 </head> 
 
 <body>
-<table>
-<td><br><img src="image/icon_query.png"/></td>
-<td><%= cn.getUrlString() %></td>
-</table>
+
+<img src="image/icon_query.png" align="middle"/>
+<%= cn.getUrlString() %>
+
+<br/><br/>
 
 <div id="tableList1">
 <a href="Javascript:showRelatedTables('<%=tbl%>')">Show Related Tables</a>
