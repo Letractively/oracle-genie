@@ -320,7 +320,7 @@ Shows
 %>
 	<td class="<%= rowClass%>"><a class='inspect' href='<%= linkUrl %>'><img border=0 src="image/link.gif" title="Related Tables"></a>
 		&nbsp;
-		<a href='<%= linkUrlTree %>' target="_blank"><img src="image/tree.png" border=0 title="Data Link"></a>
+		<a href='<%= linkUrlTree %>'><img src="image/follow.gif" border=0 title="Drill down"></a>
 	</td>
 <%
 	}
