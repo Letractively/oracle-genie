@@ -40,7 +40,7 @@
 <%= text %>
 </pre>
 
-<a href="javascript:window.close()">Close</a>
+<a href="javascript:window.close()"><img src="image/exit.png" title="Exit" border=0></a>
 
 <script type="text/javascript">
 $(document).ready(function(){

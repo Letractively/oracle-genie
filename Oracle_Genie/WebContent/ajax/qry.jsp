@@ -149,13 +149,16 @@
 	
 	// Primary Key for PK Link
 	String pkName = cn.getPrimaryKeyName(tname);
+//System.out.println("pkName=" + pkName);			
 	boolean pkLink = false;
+	boolean hasPK = false;
 	int pkColIndex = -1;
 	
 	List<String> pkColList = null;
 	if (pkName != null) {
 		pkColList = cn.getConstraintColList(pkName);
-		
+//System.out.println("pkColList=" + pkColList.size());			
+//System.out.println("pkColList=" + pkColList.get(0));			
 		// check if PK columns are in the result set
 		int matchCount = 0;
 		for (int j=0;j<pkColList.size();j++) {
@@ -169,12 +172,18 @@
 			}
 		}
 
+		hasPK = true;
+		
 		// there should be other tables that has FK to this
 		List<String> refTabs = cn.getReferencedTables(tname);
 		if (matchCount == pkColList.size() && refTabs.size()>0) {
 			pkLink = true;
 			hasDataLink = true;
 		}
+
+//		System.out.println("pkLink=" + pkLink);			
+//		System.out.println("hasPK=" + hasPK);			
+	
 	}
 	
 	// check if FK links are there
@@ -240,7 +249,7 @@ Shows
 
 <%
 	int offset = 0;
-	if (pkLink && dLink) {
+	if (hasPK && dLink) {
 		offset ++;
 %>
 	<th class="headerRow"><b>PK</b></th>
@@ -306,7 +315,7 @@ Shows
 <tr class="simplehighlight">
 
 <%
-	if (pkLink && q.hasData() && dLink) {
+	if (hasPK && q.hasData() && dLink) {
 		String keyValue = null;
 	
 		for (int i=0;q.hasData() && i<pkColList.size(); i++) {
@@ -316,11 +325,14 @@ Shows
 		}
 		
 		String linkUrl = "ajax/pk-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
-		String linkUrlTree = "data-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
+		String linkUrlTree = "data-tree.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
 %>
-	<td class="<%= rowClass%>"><a class='inspect' href='<%= linkUrl %>'><img border=0 src="image/link.gif" title="Related Tables"></a>
+	<td class="<%= rowClass%>">
+	<% if (pkLink) { %>
+		<a class='inspect' href='<%= linkUrl %>'><img border=0 src="image/link.gif" title="Related Tables"></a>
 		&nbsp;
-		<a href='<%= linkUrlTree %>'><img src="image/follow.gif" border=0 title="Drill down"></a>
+	<% } %>
+		<a href='<%= linkUrlTree %>'><img src="image/follow.gif" border=0 title="Data tree"></a>
 	</td>
 <%
 	}
@@ -358,7 +370,12 @@ if (fkLinkTab.size()>0 && dLink) {
 				String val = q.getValue(i);
 				String valDisp = Util.escapeHtml(val);
 				if (val != null && val.endsWith(" 00:00:00")) valDisp = val.substring(0, val.length()-9);
-				if (val==null) valDisp = "<span style='color: #999999;'>null</span>";
+				if (val==null) valDisp = "<span class='nullstyle'>null</span>";
+				if (val !=null && val.length() > 200) {
+					String id = Util.getId();
+					String id_x = Util.getId();
+					valDisp = valDisp.substring(0,200) + "<a id='"+id_x+"' href='Javascript:$(\"#"+id_x+"\").hide();$(\"#"+id+"\").show();'>...</a><span id='"+id+"' style='display: none;'>" + valDisp.substring(200) + "</span>";
+				}
 
 				String colName = q.getColumnLabel(i);
 				String lTable = linkTable.get(colName);

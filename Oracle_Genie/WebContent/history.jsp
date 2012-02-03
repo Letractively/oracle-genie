@@ -77,7 +77,7 @@
 </form>
 
 <br/><br/>
-<a href="Javascript:window.close()">Close</a>
+<a href="Javascript:window.close()"><img src="image/exit.png" title="Exit" border=0></a>
 <br/><br/>
 
 </body>

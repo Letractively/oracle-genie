@@ -172,6 +172,7 @@ public class Query {
 	}
 	
 	public String getValue(String colName) {
+		if (qData==null) return"";
 		int colIndex = qData.getColumnIndex(colName);
 		
 		return getValue(colIndex);

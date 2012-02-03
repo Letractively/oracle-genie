@@ -100,7 +100,7 @@
 				String val = q.getValue(i);
 				String valDisp = Util.escapeHtml(val);
 				if (val != null && val.endsWith(" 00:00:00")) valDisp = val.substring(0, val.length()-9);
-				if (val==null) valDisp = "<span style='color: #999999;'>null</span>";
+				if (val==null) valDisp = "<span class='nullstyle'>null</span>";
 
 				String colName = q.getColumnLabel(i);
 				String keyValue = val;
