@@ -41,7 +41,7 @@
 
 <html>
 <head> 
-	<title>Data Link - Genie</title>
+	<title>Data Drill Down - Genie</title>
     <script src="script/jquery.js" type="text/javascript"></script>
 
     <script src="script/jquery.colorbox-min.js"></script>
@@ -151,7 +151,7 @@
    	    //var row = 1;
    	 	var hideCol = []; 
    	 	var colCnt = numCol(divName);
-   	 	//alert(colCnt);
+   	 	//alert(rowCount + "," +colCnt);
     	for (var col = 0; col < colCnt; col++) {
    	 		var nullValue = true;
        	 	for (var row=1; row<rowCount;row++) {
@@ -213,8 +213,10 @@
 
 
 <b><%= table %></b>
+&nbsp;&nbsp;<a href="javascript:openQuery('<%=table%>')""><img src="image/view.png"/></a>
 &nbsp;<a href="Javascript:hideNull('<%= table%>')">Hide null</a>
 &nbsp;<a href="Javascript:showAllColumn('<%= table%>')">Show all</a>
+<div style="display: none;" id="sql-<%=table.replaceAll("\\.", "-")%>"><%= sql%></div>
 <br/>
 <div id="data-div">
 <jsp:include page="ajax/qry-simple.jsp">
@@ -250,7 +252,7 @@
 &nbsp;<a href="Javascript:hideNull('<%= ft%>')">Hide null</a>
 &nbsp;<a href="Javascript:showAllColumn('<%= ft%>')">Show all</a>
 <div style="display: none;" id="sql-<%=ft.replaceAll("\\.", "-")%>"><%= fsql%></div>
-<div id="div-<%=ft.replaceAll("\\.", "-")%>" style="margin-left: 20px; display:block;"></div>
+<div id="div-<%=ft.replaceAll("\\.", "-")%>" style="margin-left: 20px; display: none;"></div>
 <br/>
 <% } %>
 
@@ -290,7 +292,7 @@
 &nbsp;<a href="Javascript:hideNull('<%= refTab%>')">Hide null</a>
 &nbsp;<a href="Javascript:showAllColumn('<%= refTab%>')">Show all</a>
 <div style="display: none;" id="sql-<%=refTab.replaceAll("\\.", "-")%>"><%= refsql%></div>
-<div id="div-<%=refTab%>" style="margin-left: 20px; display:block;"></div>
+<div id="div-<%=refTab%>" style="margin-left: 20px; display: none;"></div>
 <br/>
 <%	
 	}	
@@ -310,8 +312,16 @@ $(document).ready(function() {
 	loadData('<%=ft%>');
 <%
 	}
-%>
 
+	for (int i=0; i<refTabs.size(); i++) {
+		String refTab = refTabs.get(i);
+		int recCount = cn.getPKLinkCount(refTab, pkColName, key);
+		if (recCount==0) continue;		
+%>
+loadData('<%=refTab%>');
+<%
+	}
+%>
 });	    
 </script>
 

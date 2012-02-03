@@ -193,7 +193,7 @@
 		String linkUrlTree = "data-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
 %>
 	<td class="<%= rowClass%>">
-		<a href='<%= linkUrlTree %>'><img src="image/tree.png" border=0 title="Data Link"></a>
+		<a href='<%= linkUrlTree %>'><img src="image/follow.gif" border=0 title="Drill down"></a>
 	</td>
 <%
 	}
