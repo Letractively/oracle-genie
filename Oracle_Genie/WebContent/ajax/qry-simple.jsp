@@ -115,7 +115,7 @@
 	if (hasPK && dLink) {
 		offset ++;
 %>
-	<th class="headerRow"><b>Link</b></th>
+	<th class="headerRow">Link</th>
 <%
 	}
 
@@ -137,8 +137,8 @@
 			String comment =  cn.getComment(tname, colName);
 			if (comment != null && comment.length() > 0) tooltip += " " + comment;
 %>
-<th class="headerRow"><b><a 
-	href="Javascript:hideColumn('table-<%= id %>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colName%></a></b>
+<th class="headerRow"><a 
+	href="Javascript:hideColumn('table-<%= id %>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colName.toLowerCase()%></a>
 <%
 	} 
 %>
@@ -186,7 +186,7 @@
 				if (val !=null && val.length() > 50) {
 					id = Util.getId();
 					String id_x = Util.getId();
-					valDisp = valDisp.substring(0,50) + "<a id='"+id_x+"' href='Javascript:$(\"#"+id_x+"\").hide();$(\"#"+id+"\").show();'>...</a><span id='"+id+"' style='display: none;'>" + valDisp.substring(50) + "</span>";
+					valDisp = valDisp.substring(0,50) + "<a id='"+id_x+"' href='Javascript:toggleText(" +id_x + "," +id +")'>...</a><span id='"+id+"' style='display: none;'>" + valDisp.substring(50) + "</span>";
 				}
 				
 				String colName = q.getColumnLabel(i);
@@ -255,9 +255,12 @@ for (int i=0; i<fkLinkTab.size(); i++) {
 	id = Util.getId();
 %>
 
+
 <br/>
+
 <a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" src="image/open.jpg"></a>
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png"/></a>
+&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" title="<%=fsql%>"/></a>
+ 
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
 <div id="div-<%=id%>" style="margin-left: 30px; display: none;"></div>
 <% } %>

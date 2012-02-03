@@ -78,10 +78,10 @@ var doMode = 'copy';
 	function toggleTableDetail() {
 		var src = $("#tableDetailImage").attr('src');
 		if (src.indexOf("close")>0) {
-			$("#table-detail").hide('slow');
+			$("#table-detail").slideUp();
 			$("#tableDetailImage").attr('src','image/open.jpg');
 		} else {
-			$("#table-detail").show('slow');
+			$("#table-detail").slideDown();
 			$("#tableDetailImage").attr('src','image/close.jpg');
 		}
 	}
@@ -383,4 +383,9 @@ function toggleDataLink() {
 	$("#dataLink").val(v);
 //	alert(v);
 	reloadData();
+}
+
+function toggleText(arg1, arg2) {
+	$('#'+arg1).toggle();
+	$('#'+arg2).toggle();
 }
