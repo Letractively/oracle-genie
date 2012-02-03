@@ -20,7 +20,7 @@
 	
 	if (cn==null) {
 %>	
-		Connection lost. <a href="Javascript:window.close()">Close</a>
+		Connection lost. <a href="Javascript:window.close()"><img src="image/exit.png" title="Exit" border=0></a>
 <%
 		return;
 	}
@@ -126,7 +126,7 @@
 %>
 <html>
 <head> 
-	<title>Query result - Genie</title>
+	<title>Genie - Query Builder</title>
     <link rel='stylesheet' type='text/css' href='css/style.css'>
     <link rel="stylesheet" href="css/colorbox.css" />
     <script src="script/jquery.js" type="text/javascript"></script>
@@ -209,7 +209,7 @@ Table
 	if (norun!=null || q.getResultSet() == null) {
 %>
 <br/><br/>
-<a href="Javascript:window.close()">Close</a>
+<a href="Javascript:window.close()"><img src="image/exit.png" title="Exit" border=0></a>
 <br/><br/>
 
 </body>
@@ -323,7 +323,7 @@ if (fkLinkTab.size()>0) {
 				String val = q.getValue(i);
 				String valDisp = Util.escapeHtml(val);
 				if (val != null && val.endsWith(" 00:00:00")) valDisp = val.substring(0, val.length()-9);
-				if (val==null) valDisp = "<span style='color: #999999;'>null</span>";
+				if (val==null) valDisp = "<span class='nullstyle'>null</span>";
 
 				String colName = q.getColumnLabel(i);
 				String lTable = linkTable.get(colName);
@@ -370,7 +370,7 @@ if (fkLinkTab.size()>0) {
 Elapsed Time <%= q.getElapsedTime() %>ms.<br/>
 
 <br/><br/>
-<a href="Javascript:window.close()">Close</a>
+<a href="Javascript:window.close()"><img src="image/exit.png" title="Exit" border=0></a>
 <br/><br/>
 
 </body>

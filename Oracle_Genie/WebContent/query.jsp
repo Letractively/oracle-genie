@@ -53,7 +53,7 @@
 
 <html>
 <head> 
-	<title>Query result - Genie</title>
+	<title>Genie - Query Builder</title>
     <script src="script/jquery.js" type="text/javascript"></script>
 
     <script src="script/jquery.colorbox-min.js"></script>
@@ -141,7 +141,7 @@
 	if (norun!=null || !q.hasMetaData()) {
 %>
 <br/><br/>
-<a href="Javascript:window.close()">Close</a>
+<a href="Javascript:window.close()"><img src="image/exit.png" title="Exit" border=0></a>
 <br/><br/>
 
 </body>
@@ -181,7 +181,7 @@
 </div>
 
 <br/>
-<a href="Javascript:window.close()">Close</a>
+<a href="Javascript:window.close()"><img src="image/exit.png" title="Exit" border=0></a>
 <br/><br/>
 
 </body>

@@ -95,7 +95,7 @@ public class Connect implements HttpSessionBindingListener {
 
 //       		this.schemaName = conn.getCatalog();
        		this.schemaName = userName;
-       		System.out.println("this.schemaName=" + this.schemaName);
+//       		System.out.println("this.schemaName=" + this.schemaName);
 
             loadData();
         }
@@ -853,7 +853,7 @@ public class Connect implements HttpSessionBindingListener {
 			return getForeignKeys(temp[0], temp[1]);
 		}
 		
-		List list = new ArrayList<ForeignKey>();
+		List<ForeignKey> list = new ArrayList<ForeignKey>();
 		
 		for (int i=0; i<foreignKeys.size(); i++) {
 			ForeignKey fk = foreignKeys.get(i);
@@ -862,10 +862,10 @@ public class Connect implements HttpSessionBindingListener {
 			}
 		}
 		
-		
 		// check for Synonym table
 		if (list.size()==0) {
 			String syn = getSynonym(tname);
+//			System.out.println("syn="+syn);
 			if (syn != null && syn.contains(".")) {
 				return getForeignKeys(syn);
 			}
@@ -876,6 +876,7 @@ public class Connect implements HttpSessionBindingListener {
 
 	public List<ForeignKey> getForeignKeys(String owner, String tname) {
 		List<ForeignKey> list = new ArrayList<ForeignKey>();
+//System.out.println("owner,tname=" + owner + "," + tname);		
 		try {
        		Statement stmt = conn.createStatement();
        		ResultSet rs = stmt.executeQuery("select * from all_constraints where CONSTRAINT_TYPE = 'R' " +
@@ -926,6 +927,7 @@ public class Connect implements HttpSessionBindingListener {
 		// check for synonym
 		if (list.size()==0) {
 			String syn = getSynonym(tname);
+System.out.println("*** syn=" + syn);			
 			if (syn != null && syn.contains(".")) {
 				return getReferencedTables(syn);
 			}
@@ -1261,20 +1263,8 @@ public class Connect implements HttpSessionBindingListener {
 		String condition = Util.buildCondition(cols,  keys);
 		String qry = "SELECT COUNT(*) FROM " + tname + " WHERE " + condition;
 
-		try {
-       		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery(qry);	
-
-       		if (rs.next()) {
-       			cnt = rs.getInt(1);
-       		}
-       		
-       		rs.close();
-       		stmt.close();
-		} catch (SQLException e) {
-             System.err.println ("getPKLinkCount - " + qry);
-             message = e.getMessage();
- 		}
+		String res = this.queryOne(qry);
+		cnt = Integer.parseInt(res);
 		
 		return cnt;
 	}
@@ -1469,5 +1459,22 @@ public class Connect implements HttpSessionBindingListener {
 		
 //		ListCache.getInstance().addList(qry, list);
 		return list;
+	}
+	
+	public String getRefConstraintCols(String master, String detail) {
+		// get master table's PK name
+		String pkName = this.getPrimaryKeyName(master);
+//System.out.println("pkName=" + pkName);		
+		// get foreign key list
+		List<ForeignKey> fks = this.getForeignKeys(detail);
+		
+		for (ForeignKey fk : fks) {
+			if (fk.rConstraintName.equals(pkName)) {
+//				System.out.println("fk.tableName=" + fk.tableName);		
+				return this.getConstraintCols(fk.constraintName);
+			}
+		}
+		
+		return "";
 	}
 }

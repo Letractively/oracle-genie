@@ -6,14 +6,17 @@
 	pageEncoding="ISO-8859-1"
 %>
 
-
 <%
 	int counter = 0;
 	String sql = request.getParameter("sql");
+	String id = request.getParameter("id");
 	
-//System.out.println(sql);	
+	
 	String dataLink = request.getParameter("dataLink");
-	boolean dLink = dataLink != null && dataLink.equals("1");  
+	boolean dLink = (dataLink != null && dataLink.equals("1"));  
+
+	String showFK = request.getParameter("showFK");
+	boolean showFKLink = (showFK != null && showFK.equals("1"));  
 	
 	if (sql==null) sql = "SELECT * FROM TABLE";
 	sql = sql.trim();
@@ -64,47 +67,21 @@
 	
 	List<String> fkLinkTab = new ArrayList<String>();
 	List<String> fkLinkCol = new ArrayList<String>();
-	
+
 	for (int i=0; i<fks.size(); i++) {
 		ForeignKey rec = fks.get(i);
 		String linkCol = cn.getConstraintCols(rec.constraintName);
 		String rTable = cn.getTableNameByPrimaryKey(rec.rConstraintName);
 		
-//		System.out.println("linkCol=" + linkCol);
-//		System.out.println("rTable=" + rTable);
-		
-		int colCount = Util.countMatches(linkCol, ",") + 1;
-		if (colCount == 1) {
-			if (rTable != null) linkTable.put(linkCol, rTable);
-//			System.out.println("linkTable");
-		} else {
-			// check if columns are part of result set
-			int matchCount = 0;
-			String[] t = linkCol.split("\\,");
-			for (int j=0;j<t.length;j++) {
-				String colName = t[j].trim();
-				for  (int k = 0; k<= q.getColumnCount()-1; k++){
-					String col = q.getColumnLabel(k);
-					if (col.equalsIgnoreCase(colName)) {
-						matchCount++;
-						continue;
-					}
-				}
-			}
-			if (rTable != null && matchCount==colCount) {
-				fkLinkTab.add(rTable);
-				fkLinkCol.add(linkCol);
-			}
-//			System.out.println("linkTable2");
-		}
+		fkLinkTab.add(rTable);
+		fkLinkCol.add(linkCol);
 	}
-	
 	
 	// Primary Key for PK Link
 	String pkName = cn.getPrimaryKeyName(tname);
 	int pkColIndex = -1;
-	System.out.println("sql=" + sql);
-	System.out.println("pkName=" + pkName);
+//	System.out.println("sql=" + sql);
+//	System.out.println("pkName=" + pkName);
 	
 	boolean hasPK = false;
 	List<String> pkColList = null;
@@ -129,8 +106,8 @@
 %>
 
 <%-- <b><%= tname %></b> --%> 
-<%= cn.getComment(tname) %>
-<table id="dataTable-<%= tname %>" border=1 class="gridBody">
+<%--<%= cn.getComment(tname) --%>
+<table id="table-<%= id %>" border=1 class="gridBody">
 <tr>
 
 <%
@@ -161,7 +138,7 @@
 			if (comment != null && comment.length() > 0) tooltip += " " + comment;
 %>
 <th class="headerRow"><b><a 
-	href="Javascript:hideColumn('dataTable-<%= tname %>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colName%></a></b>
+	href="Javascript:hideColumn('table-<%= id %>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colName%></a></b>
 <%
 	} 
 %>
@@ -190,10 +167,10 @@
 			else keyValue = keyValue + "^" + v; 
 		}
 		
-		String linkUrlTree = "data-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
+		String linkUrlTree = "data-tree.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
 %>
 	<td class="<%= rowClass%>">
-		<a href='<%= linkUrlTree %>'><img src="image/follow.gif" border=0 title="Drill down"></a>
+		<a href='<%= linkUrlTree %>'><img src="image/follow.gif" border=0 title="Data tree"></a>
 	</td>
 <%
 	}
@@ -205,8 +182,13 @@
 				String val = q.getValue(i);
 				String valDisp = Util.escapeHtml(val);
 				if (val != null && val.endsWith(" 00:00:00")) valDisp = val.substring(0, val.length()-9);
-				if (val==null) valDisp = "<span style='color: #999999;'>null</span>";
-
+				if (val==null) valDisp = "<span class='nullstyle'>null</span>";
+				if (val !=null && val.length() > 50) {
+					id = Util.getId();
+					String id_x = Util.getId();
+					valDisp = valDisp.substring(0,50) + "<a id='"+id_x+"' href='Javascript:$(\"#"+id_x+"\").hide();$(\"#"+id+"\").show();'>...</a><span id='"+id+"' style='display: none;'>" + valDisp.substring(50) + "</span>";
+				}
+				
 				String colName = q.getColumnLabel(i);
 				String lTable = linkTable.get(colName);
 				String keyValue = val;
@@ -215,7 +197,7 @@
 				String linkImage = "image/view.png";
 				if (lTable != null  && dLink) {
 					isLinked = true;
-					linkUrl = "data-link.jsp?table=" + lTable + "&key=" + Util.encodeUrl(keyValue);
+					linkUrl = "data-tree.jsp?table=" + lTable + "&key=" + Util.encodeUrl(keyValue);
 				} else if (val != null && val.startsWith("BLOB ")) {
 					isLinked = true;
 					String tpkName = cn.getPrimaryKeyName(tbl);
@@ -240,9 +222,43 @@
 %>
 </tr>
 <%		if (q.hasData()) counter++;
-		if (counter >= 100) break;
+		if (counter >= 20) break;
 	}
 	
 %>
 </table>
+<% if (counter >= 20) { %>
+Stopped at 20 rows. You can use query builder to see the result set.
+<% } %>
+
+
+<% if (!showFKLink) return; %>
+
+<%
+for (int i=0; i<fkLinkTab.size(); i++) {
+	String ft = fkLinkTab.get(i);
+	String fc = fkLinkCol.get(i);
+	
+	String keyValue = null;
+	String[] colnames = fc.split("\\,");
+	for (int j=0; j<colnames.length; j++) {
+		String x = colnames[j].trim();
+		String v = q.getValue(x);
+//		System.out.println("x,v=" +x +"," + v);
+		if (keyValue==null)
+			keyValue = v;
+		else
+			keyValue += "^" + v;
+	}
+	
+	String fsql = cn.getPKLinkSql(ft, keyValue);
+	id = Util.getId();
+%>
+
+<br/>
+<a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" src="image/open.jpg"></a>
+&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png"/></a>
+<div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
+<div id="div-<%=id%>" style="margin-left: 30px; display: none;"></div>
+<% } %>
 
