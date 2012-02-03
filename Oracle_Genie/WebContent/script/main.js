@@ -214,12 +214,19 @@ function runQuery(catalog,tab) {
 		$("#selectTable").css("font-weight", "");
 		$("#selectView").css("font-weight", "");
 		$("#selectPackage").css("font-weight", "");
-//		$("#selectType").css("font-weight", "");
 		$("#selectSynonym").css("font-weight", "");
 		$("#selectTool").css("font-weight", "");
 		$("#selectDba").css("font-weight", "");
 
+		$("#selectTable").css("background-color", "");
+		$("#selectView").css("background-color", "");
+		$("#selectPackage").css("background-color", "");
+		$("#selectSynonym").css("background-color", "");
+		$("#selectTool").css("background-color", "");
+		$("#selectDba").css("background-color", "");
+
 		cleanPage();
+		$("#inner-table").html("<img src='image/loading.gif'/>");
 		$.ajax({
 			url: gotoUrl,
 			success: function(data){
@@ -228,7 +235,8 @@ function runQuery(catalog,tab) {
 		});
 
 		$("#" + select).css("font-weight", "bold");
-
+		$("#" + select).css("background-color", "yellow");
+		
 		gMode = mode;
 	}
 	

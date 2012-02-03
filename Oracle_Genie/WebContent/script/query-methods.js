@@ -75,6 +75,17 @@ var doMode = 'copy';
 		});	
 	}
 
+	function toggleTableDetail() {
+		var src = $("#tableDetailImage").attr('src');
+		if (src.indexOf("close")>0) {
+			$("#table-detail").hide('slow');
+			$("#tableDetailImage").attr('src','image/open.jpg');
+		} else {
+			$("#table-detail").show('slow');
+			$("#tableDetailImage").attr('src','image/close.jpg');
+		}
+	}
+	
 	function gotoPage(pageNo) {
 		$("#pageNo").val(pageNo);
 		$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
@@ -355,4 +366,21 @@ function searchRecords(filter) {
 function clearSearch() {
 	$("#search").val("");
 	searchRecords('');
+}
+
+function doQuery() {
+	document.formQry.submit();
+}
+
+function doQueryNew() {
+	document.formQry.target="_blank"; 
+	document.formQry.submit();
+}
+
+function toggleDataLink() {
+	var v = $("#dataLink").val();
+	v = (v=="1"?"0":"1");
+	$("#dataLink").val(v);
+//	alert(v);
+	reloadData();
 }

@@ -40,6 +40,11 @@ public class Util {
 		for(int i =0; i < cols.length; i++) {
 			if (res==null) {
 				res = cols[i].trim() + "='" + keys[i] +"'";
+				continue;
+			} 
+
+			if (keys[i].length()==19 && keys[i].substring(4,5).endsWith("-")) { // date 
+				res = res + " AND " + cols[i].trim() + "= to_date('" + keys[i] + "','yyyy-mm-dd hh24:mi:ss')";
 			} else {
 				res = res + " AND " + cols[i].trim() + "='" + keys[i] + "'";
 			}

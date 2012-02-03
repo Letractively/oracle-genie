@@ -145,10 +145,10 @@ Keep Alive <a id="keepalivelink" href="Javascript:toggleKeepAlive()">Off</a>
 <table border=0 cellspacing=0>
 <td valign=top width=250>
 
-<a href="Javascript:setMode('table')" id="selectTable">Table</a> | 
-<a href="Javascript:setMode('view')" id="selectView">View</a> | 
-<a href="Javascript:setMode('synonym')" id="selectSynonym">Synonym</a> | 
-<a href="Javascript:setMode('package')" title="Package, Type, Function & Procedure" id="selectPackage">Program</a> 
+<a class="mainBtn" href="Javascript:setMode('table')" id="selectTable">Table</a> | 
+<a class="mainBtn" href="Javascript:setMode('view')" id="selectView">View</a> | 
+<a class="mainBtn" href="Javascript:setMode('synonym')" id="selectSynonym">Synonym</a> | 
+<a class="mainBtn" href="Javascript:setMode('package')" title="Package, Type, Function & Procedure" id="selectPackage">Program</a> 
 
 
 <!-- | <a href="Javascript:setMode('tool')" id="selectTool">Tool</a> -->
