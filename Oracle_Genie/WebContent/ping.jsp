@@ -3,7 +3,8 @@
 	import="java.util.Date" 
 	import="java.sql.*" 
 	import="spencer.genie.Connect" 
-	pageEncoding="ISO-8859-1"
+	contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"
 %>
 
 <%

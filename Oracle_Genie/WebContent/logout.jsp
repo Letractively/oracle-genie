@@ -2,7 +2,8 @@
 	import="java.util.*" 
 	import="java.sql.*" 
 	import="spencer.genie.Connect" 
-	pageEncoding="ISO-8859-1"
+	contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"
 %>
 <%
 	Connect cn = (Connect) session.getAttribute("CN");

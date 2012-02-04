@@ -1,7 +1,8 @@
 <%@ page language="java" 
 	import="java.util.*" 
 	import="spencer.genie.Connect" 
-	pageEncoding="ISO-8859-1"
+	contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"
 %>
 
 <%
