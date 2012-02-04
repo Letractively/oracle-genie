@@ -64,7 +64,8 @@ public class Util {
 	
 	public static String encodeUrl(String str) throws UnsupportedEncodingException {
 		if (str==null) return null;
-		return java.net.URLEncoder.encode(str, "ISO-8859-1");
+		//return java.net.URLEncoder.encode(str, "ISO-8859-1");
+		return java.net.URLEncoder.encode(str, "UTF-8");
 	}
 	
 	public static String escapeQuote(String str) {

@@ -4,7 +4,8 @@
 	import="java.sql.*" 
 	import="spencer.genie.*"
 	import="org.apache.commons.lang3.StringEscapeUtils" 
-	pageEncoding="ISO-8859-1"
+	contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"
 %>
 
 <%
