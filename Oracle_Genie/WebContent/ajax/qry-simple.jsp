@@ -155,7 +155,7 @@ Found: <%= filteredCount %>
 <a id="modeSort-<%=id%>" href="Javascript:setColumnMode(<%=id%>,'sort')">Sort</a>
 
 &nbsp;&nbsp;&nbsp;&nbsp;
-<% if (totalCount>20) { %>
+<% if (totalCount>=5) { %>
 <img src="image/view.png"><input id="search-<%=id%>" value="<%= searchValue %>" size=20 onChange="searchTable(<%=id%>,$(this).val())">
 <a href="Javascript:clearSearch(<%=id%>)"><img border="0" src="image/clear.gif"></a>
 <% } %>
