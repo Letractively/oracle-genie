@@ -39,10 +39,9 @@
 		
 		$("#sql").val(sql);
 		$("#id").val(id);
+		$("#pageNo").val("1");
+
 		$("#showFK").val(showFK);
-		//alert(sql);
-		$("#" + divName).append("<div id='wait'><img src='image/loading.gif'/></div>");
-		
 		$("#" + divName).hide();
 		$.ajax({
 			type: 'POST',
@@ -175,3 +174,113 @@
     	$('#'+arg1).toggle();
     	$('#'+arg2).toggle();
     }
+    
+	function gotoPage(id, pageNo) {
+		$("#pageNo").val(pageNo);
+
+		reloadData(id);
+	}
+	    
+	function reloadData(id) {
+		var divName = "div-" + id;
+		var sql = $("#sql-" + id).html();
+		$("#sql").val(sql);
+		$("#id").val(id);
+
+		$.ajax({
+			type: 'POST',
+			url: "ajax/qry-simple.jsp",
+			data: $("#form0").serialize(),
+			success: function(data){
+				$("#"+divName).html(data);
+				$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
+				//hideIfAny(divName);
+				
+				$('.simplehighlight').hover(function(){
+					$(this).children().addClass('datahighlight');
+				},function(){
+					$(this).children().removeClass('datahighlight');
+				});
+			}
+		});	
+	}
+
+	function hideIfAny(divName) {
+		var hiddenCols = $("#hideColumn").val();
+		if (hiddenCols != '') {
+			var cols = hiddenCols.split(",");
+			for(var i = 0;i<cols.length;i++){
+				hide(cols[i]);
+			}
+		}
+	}
+	
+	function setColumnMode(id, mode) {
+		$("#modeHide-"+id).css("background-color", "");
+		$("#modeSort-"+id).css("background-color", "");
+		$("#modeHide-"+id).css("font-weight", "");
+		$("#modeSort-"+id).css("font-weight", "");
+
+		$("#mode-"+id).html(mode);
+//		alert('mode=' + mode);
+//		alert('mode2=' + $("#mode-"+id).html());
+		if (mode =="sort") {
+			$("#modeSort-"+id).css("background-color", "yellow");
+			$("#modeSort-"+id).css("font-weight", "bold");
+		} else if (mode == "hide") {
+			$("#modeHide-"+id).css("background-color", "yellow");
+			$("#modeHide-"+id).css("font-weight", "bold");
+		}
+		
+	}
+	
+	function setColumn(id, colName, colIdx) {
+		var mode = $("#mode-"+id).html();
+//		alert(mode);
+		
+		if (mode=='hide') {
+			hideColumn('table-'+id, colIdx);
+		} else if (mode=='sort') {
+			//alert('sort');
+			sort(id, colName);
+		}
+	}
+	
+	function sort(id, col) {
+		$("#pageNo").val(1);
+		var prevSortColumn = $("#sortColumn").val();
+		var prevSortDirection = $("#sortDirection").val();
+		var newSortDirection = "0";
+		
+		if (prevSortColumn==col && prevSortDirection=="0") { 
+			newSortDirection = "1";  
+		}
+		$("#sortColumn").val(col);
+		$("#sortDirection").val(newSortDirection);
+		
+		reloadData(id);
+	}	
+
+	function hideIfAny(id) {
+		var hiddenCols = $("#hideColumn").val();
+		if (hiddenCols != '') {
+			var cols = hiddenCols.split(",");
+			for(var i = 0;i<cols.length;i++){
+				hide(cols[i]);
+			}
+		}
+	}	
+	
+	function searchTable(id, key) {
+		$("#pageNo").val(1);
+		$("#searchValue").val(key);
+
+		reloadData(id);
+	}
+
+	function clearSearch(id) {
+		$("#search"+id).val("");
+		$("#pageNo").val(1);
+		searchTable(id, '');
+	}
+	

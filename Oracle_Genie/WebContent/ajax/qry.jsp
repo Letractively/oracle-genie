@@ -294,7 +294,7 @@ Shows
 <th class="headerRow"><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
 	href="Javascript:doAction('<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><b><%=colName.toLowerCase()%></b></a>
 	<%= extraImage %>
-	<%-- <a href="Javascript:hide(<%=colIdx + offset%>)">x</a> --%></th>
+</th>
 <%
 	} 
 %>
