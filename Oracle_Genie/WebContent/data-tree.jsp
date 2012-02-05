@@ -77,6 +77,7 @@
 <b><%= table %></b>
 &nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" title="<%=sql%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
+<div style="display: none;" id="mode-<%=id%>">hide</div>
 <br/>
 <div id="data-div">
 <jsp:include page="ajax/qry-simple.jsp">
@@ -115,6 +116,7 @@
 <a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" src="image/open.jpg"></a>
 &nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" title="<%=fsql%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
+<div style="display: none;" id="mode-<%=id%>">hide</div>
 <div id="div-<%=id%>" style="margin-left: 30px; display: none;"></div>
 <br/>
 <% } %>
@@ -129,6 +131,14 @@
 <input id="dataLink" name="dataLink" type="hidden" value="1"/>
 <input id="id" name="id" type="hidden" value=""/>
 <input id="showFK" name="showFK" type="hidden" value="0"/>
+<input type="hidden" id="sortColumn" name="sortColumn" value="">
+<input type="hidden" id="sortDirection" name="sortDirection" value="0">
+<input type="hidden" id="hideColumn" name="hideColumn" value="">
+<input type="hidden" id="filterColumn" name="filterColumn" value="">
+<input type="hidden" id="filterValue" name="filterValue" value="">
+<input type="hidden" id="searchValue" name="searchValue" value="">
+<input type="hidden" id="pageNo" name="pageNo" value="1">
+<input type="hidden" id="rowsPerPage" name="rowsPerPage" value="20">
 </form>
 </div>
 
@@ -170,6 +180,9 @@
 <a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> (<%= recCount %>) <img id="img-<%=id%>" src="image/open.jpg"></a>
 &nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" title="<%=refsql%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= refsql%></div>
+<div style="display: none;" id="sort-<%=id%>"></div>
+<div style="display: none;" id="sortdir-<%=id%>">0</div>
+<div style="display: none;" id="mode-<%=id%>">sort</div>
 <div id="div-<%=id%>" style="margin-left: 30px; display: none;"></div>
 <br/>
 <%	

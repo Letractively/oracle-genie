@@ -18,11 +18,21 @@
 
 	String showFK = request.getParameter("showFK");
 	boolean showFKLink = (showFK != null && showFK.equals("1"));  
+
+	String pageNo = request.getParameter("pageNo");
+	int pgNo = 1;
+	if (pageNo != null) pgNo = Integer.parseInt(pageNo);
+
+	String sortColumn = request.getParameter("sortColumn");
+	String sortDirection = request.getParameter("sortDirection");
 	
 	if (sql==null) sql = "SELECT * FROM TABLE";
 	sql = sql.trim();
 	if (sql.endsWith(";")) sql = sql.substring(0, sql.length()-1);
 	sql = sql.replaceAll("&gt;",">").replace("&lt;","<");
+
+	String searchValue = request.getParameter("searchValue");
+	if (searchValue==null) searchValue = "";
 	
 	Connect cn = (Connect) session.getAttribute("CN");
 	Query q = QueryCache.getInstance().getQueryObject(sql);
@@ -38,6 +48,12 @@
 	}
 	
 	q.removeFilter();
+	if (sortColumn != null && !sortColumn.equals("")) q.sort(sortColumn, sortDirection);
+
+	if (searchValue !=null && !searchValue.equals("")) {
+		q.search(searchValue);
+	}
+	
 	// get table name
 	String tbl = null;
 	//String temp = sql.replaceAll("\n", " ").trim();
@@ -104,10 +120,47 @@
 
 		hasPK = pkColList.size() > 0;
 	}
+	
+	int linesPerPage = 20;
+	int totalCount = q.getRecordCount();
+	int filteredCount = q.getFilteredCount();
+	int totalPage = q.getTotalPage(linesPerPage);
+	
 %>
 
 <%-- <b><%= tname %></b> --%> 
 <%--<%= cn.getComment(tname) --%>
+
+<% if (q.getRecordCount() > 1) { %>
+
+<% if (pgNo>1) { %>
+<a href="Javascript:gotoPage(<%=id%>, <%= pgNo - 1%>)"><img border=0 src="image/prev.png" align="bottom"></a>
+<% } %>
+
+<% if (totalPage > 1) { %>
+Page: <b><%= pgNo %></b> of <%= totalPage %>
+<% } %>
+
+<% if (q.getTotalPage(linesPerPage) > pgNo) { %>
+<a href="Javascript:gotoPage(<%=id%>, <%= pgNo + 1%>)"><img border=0 src="image/next.png" align="bottom"></a>
+<% } %>
+
+Found: <%= filteredCount %>
+<% if (totalCount > filteredCount) {%>
+(of <%= totalCount %>)
+<% } %>
+
+<a id="modeHide-<%=id%>" href="Javascript:setColumnMode(<%=id%>,'hide')">Hide Column</a>
+<a href="Javascript:showAllColumnTable('table-<%=id%>')">Show All Column</a>&nbsp;
+<a id="modeSort-<%=id%>" href="Javascript:setColumnMode(<%=id%>,'sort')">Sort</a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+<% if (totalCount>20) { %>
+<img src="image/view.png"><input id="search-<%=id%>" value="<%= searchValue %>" size=20 onChange="searchTable(<%=id%>,$(this).val())">
+<a href="Javascript:clearSearch(<%=id%>)"><img border="0" src="image/clear.gif"></a>
+<% } %>
+
+<% } %>
 <table id="table-<%= id %>" border=1 class="gridBody">
 <tr>
 
@@ -137,19 +190,30 @@
 			String tooltip = q.getColumnTypeName(i);
 			String comment =  cn.getComment(tname, colName);
 			if (comment != null && comment.length() > 0) tooltip += " " + comment;
+			
+			String extraImage = "";
+			boolean highlight = false;
+			if (colName.equals(sortColumn)) {
+				highlight = true;
+				if (sortDirection.equals("0"))
+					extraImage = "<img src='image/sort-ascending.png'>";
+				else
+					extraImage = "<img src='image/sort-descending.png'>";
+			}
 %>
-<th class="headerRow"><a 
-	href="Javascript:hideColumn('table-<%= id %>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colName.toLowerCase()%></a>
+<th class="headerRow"><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
+	href="Javascript:setColumn(<%= id %>, '<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colName.toLowerCase()%></a>
+	<%= extraImage %>
+</th>
 <%
 	} 
 %>
 </tr>
 
-
 <%
 	int rowCnt = 0;
 
-	q.rewind(1000, 1);
+	q.rewind(linesPerPage, pgNo);
 	
 	while (q.next()) {
 		rowCnt++;
@@ -228,10 +292,6 @@
 	
 %>
 </table>
-<% if (counter >= 20) { %>
-Stopped at 20 rows. You can use query builder to see the result set.
-<% } %>
-
 
 <% if (!showFKLink) return; %>
 
