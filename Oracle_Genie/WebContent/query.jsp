@@ -54,7 +54,7 @@
 
 <html>
 <head> 
-	<title>Genie - Query Builder</title>
+	<title>Genie - Query</title>
     <script src="script/jquery.js" type="text/javascript"></script>
 
     <script src="script/jquery.colorbox-min.js"></script>
@@ -67,7 +67,7 @@
     <script type="text/javascript">
 	$(document).ready(function() {
 		showTable('<%=tbl%>');
-		setDoMode('copy');
+		setDoMode('sort');
 		$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
 		var cnt = $("#recordCount").val();
 		if (cnt != "0") $("#buttonsDiv").show('slow');
@@ -94,7 +94,7 @@
 <a href="Javascript:showRelatedTables('<%=tbl%>')">Show Related Tables</a>
 </div>
 
-<a href="Javascript:toggleTableDetail()"><img  style="float: left" id="tableDetailImage" border="0" src="image/close.jpg"></a>
+<a href="Javascript:toggleTableDetail()"><img  style="float: left" id="tableDetailImage" border="0" src="image/minus.gif"></a>
 <div id="table-detail" style="float: left"></div>
 <br clear="all"/>
 
@@ -143,7 +143,7 @@
 	if (norun!=null || !q.hasMetaData()) {
 %>
 <br/><br/>
-<a href="Javascript:window.close()"><img src="image/exit.png" title="Exit" border=0></a>
+<a href="Javascript:window.close()">Close</a>
 <br/><br/>
 
 </body>
@@ -156,11 +156,13 @@
 <BR/>
 <div id="buttonsDiv" style="display: none;">
 <TABLE>
+<%--
 <TD><a class="qryBtn" id="modeCopy" href="Javascript:setDoMode('copy')">Copy&amp;Paste</a></TD>
+ --%>
+<TD><a class="qryBtn" id="modeSort" href="Javascript:setDoMode('sort')">Sort</a>
 <TD><a class="qryBtn" id="modeHide" href="Javascript:setDoMode('hide')">Hide Column</a>
 	<span id="showAllCol" style="display: none;"><a href="Javascript:showAllColumn()">Show All Column</a>&nbsp;</span>
 </TD>
-<TD><a class="qryBtn" id="modeSort" href="Javascript:setDoMode('sort')">Sort</a>
 </TD>
 <TD><a class="qryBtn" id="modeFilter" href="Javascript:setDoMode('filter')">Filter</a></TD>
 <TD><span id="filter-div"></span></TD>
@@ -174,16 +176,14 @@
 	<jsp:param value="1" name="pageNo"/>
 	<jsp:param value="" name="sortColumn"/>
 	<jsp:param value="0" name="sortDirection"/>
-	<jsp:param value="" name="hideColumn"/>
 	<jsp:param value="" name="filterColumn"/>
 	<jsp:param value="" name="filterValue"/>
-	<jsp:param value="" name="hideColumn"/>
 	<jsp:param value="1" name="dataLink"/>
 </jsp:include>
 </div>
 
 <br/>
-<a href="Javascript:window.close()"><img src="image/exit.png" title="Exit" border=0></a>
+<a href="Javascript:window.close()">Close</a>
 <br/><br/>
 
 </body>

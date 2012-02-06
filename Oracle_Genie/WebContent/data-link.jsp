@@ -46,9 +46,9 @@
 
 <html>
 <head> 
-	<title>Genie - Data Tree</title>
+	<title>Genie - Data Link</title>
     <script src="script/jquery.js" type="text/javascript"></script>
-    <script src="script/data-tree.js" type="text/javascript"></script>
+    <script src="script/data-link.js" type="text/javascript"></script>
 
     <script src="script/jquery.colorbox-min.js"></script>
 
@@ -60,11 +60,12 @@
 
 <body>
 
-<img src="image/icon_query.png" align="middle"/>
+<img src="image/data-link.png" align="middle"/>
 <%= cn.getUrlString() %>
 
-<br/><br/>
+<br/>
 
+<h3><%= sql %></h3>
 
 <a href="Javascript:hideNullColumn()">Hide Null</a>
 &nbsp;&nbsp;
@@ -78,6 +79,7 @@
 &nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" title="<%=sql%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
 <div style="display: none;" id="mode-<%=id%>">hide</div>
+<div style="display: none;" id="hide-<%=id%>"></div>
 <br/>
 <div id="data-div">
 <jsp:include page="ajax/qry-simple.jsp">
@@ -89,7 +91,7 @@
 <br/>
 
 <% if (fkLinkTab.size() > 0) {%>
-	<b><a href="Javascript:toggleFK()">Foreign Key</a></b><br/>
+	<b><a href="Javascript:toggleFK()">Foreign Key <img id="img-fk" src="image/minus.gif"></a></b><br/>
 <div id="div-fk">
 <% } %>
 <%
@@ -113,10 +115,11 @@
 		id = Util.getId();
 		autoLoadFK.add(id);
 %>
-<a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" src="image/open.jpg"></a>
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" title="<%=fsql%>"/></a>
+<a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" align=middle src="image/plus.gif"></a>
+&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle  title="<%=fsql%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
 <div style="display: none;" id="mode-<%=id%>">hide</div>
+<div style="display: none;" id="hide-<%=id%>"></div>
 <div id="div-<%=id%>" style="margin-left: 30px; display: none;"></div>
 <br/>
 <% } %>
@@ -173,13 +176,14 @@
 %>
 
 <% if (cntRef == 1) {%>
-	<b><a href="Javascript:toggleChild()">Child Table</a></b><br/>
+	<b><a href="Javascript:toggleChild()">Child Table <img id="img-child" src="image/minus.gif"></a></b><br/>
 <div id="div-child">
 <% } %>
 
-<a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> (<%= recCount %>) <img id="img-<%=id%>" src="image/open.jpg"></a>
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" title="<%=refsql%>"/></a>
+<a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> (<%= recCount %>) <img id="img-<%=id%>" align=middle src="image/plus.gif"></a>
+&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle  title="<%=refsql%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= refsql%></div>
+<div style="display: none;" id="hide-<%=id%>"></div>
 <div style="display: none;" id="sort-<%=id%>"></div>
 <div style="display: none;" id="sortdir-<%=id%>">0</div>
 <div style="display: none;" id="mode-<%=id%>">sort</div>
@@ -194,7 +198,7 @@
 <% } %>
 
 <br/><br/>
-<a href="Javascript:window.close()"><img src="image/exit.png" title="Exit" border=0></a>
+<a href="Javascript:window.close()">Close</a>
 <br/><br/>
 
 <script type="text/javascript">

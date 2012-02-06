@@ -21,7 +21,7 @@
 	
 	if (cn==null) {
 %>	
-		Connection lost. <a href="Javascript:window.close()"><img src="image/exit.png" title="Exit" border=0></a>
+		Connection lost. <a href="Javascript:window.close()">Close</a>
 <%
 		return;
 	}
@@ -127,7 +127,7 @@
 %>
 <html>
 <head> 
-	<title>Genie - Query Builder</title>
+	<title>Genie - Query</title>
     <link rel='stylesheet' type='text/css' href='css/style.css'>
     <link rel="stylesheet" href="css/colorbox.css" />
     <script src="script/jquery.js" type="text/javascript"></script>
@@ -210,7 +210,7 @@ Table
 	if (norun!=null || q.getResultSet() == null) {
 %>
 <br/><br/>
-<a href="Javascript:window.close()"><img src="image/exit.png" title="Exit" border=0></a>
+<a href="Javascript:window.close()">Close</a>
 <br/><br/>
 
 </body>
@@ -371,7 +371,7 @@ if (fkLinkTab.size()>0) {
 Elapsed Time <%= q.getElapsedTime() %>ms.<br/>
 
 <br/><br/>
-<a href="Javascript:window.close()"><img src="image/exit.png" title="Exit" border=0></a>
+<a href="Javascript:window.close()">Close</a>
 <br/><br/>
 
 </body>

@@ -77,12 +77,12 @@ var doMode = 'copy';
 
 	function toggleTableDetail() {
 		var src = $("#tableDetailImage").attr('src');
-		if (src.indexOf("close")>0) {
+		if (src.indexOf("minus")>0) {
 			$("#table-detail").slideUp();
-			$("#tableDetailImage").attr('src','image/open.jpg');
+			$("#tableDetailImage").attr('src','image/plus.gif');
 		} else {
 			$("#table-detail").slideDown();
-			$("#tableDetailImage").attr('src','image/close.jpg');
+			$("#tableDetailImage").attr('src','image/minus.gif');
 		}
 	}
 	

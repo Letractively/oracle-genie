@@ -927,7 +927,7 @@ public class Connect implements HttpSessionBindingListener {
 		// check for synonym
 		if (list.size()==0) {
 			String syn = getSynonym(tname);
-System.out.println("*** syn=" + syn);			
+//System.out.println("*** syn=" + syn);			
 			if (syn != null && syn.contains(".")) {
 				return getReferencedTables(syn);
 			}
