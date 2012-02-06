@@ -29,12 +29,13 @@
 	String filterValue = request.getParameter("filterValue");
 	String searchValue = request.getParameter("searchValue");
 	if (searchValue==null) searchValue = "";
-
+/*
 	String hideColumn = request.getParameter("hideColumn");
 	if (hideColumn == null) hideColumn = "";
 	
 	String hiddenColumns[] = hideColumn.split("\\,");
-	
+*/
+
 //System.out.println("filterColumn=" + filterColumn);
 //System.out.println("filterValue=" + filterValue);
 //System.out.println("pageNo=" + pgNo);
@@ -229,7 +230,7 @@ Records: <%= filteredCount %>
 <% } %>
 
 <% if (filteredCount > 10) {%>
-Shows 
+Rows/Page 
 <select id="linePerPage" name="linePerPage" onChange="rowsPerPage(this.options[this.selectedIndex].value);">
 <option value="10" <%= (linesPerPage==10?"SELECTED":"") %>>10</option>
 <option value="20" <%= (linesPerPage==20?"SELECTED":"") %>>20</option>
@@ -242,7 +243,7 @@ Shows
 
 <% } %>
 
-&nbsp;&nbsp;Search<input id="search" name="search" value="<%= searchValue %>" size=20 onChange="searchRecords($(this).val())">
+&nbsp;&nbsp;<img src="image/view.png"><input id="search" name="search" value="<%= searchValue %>" size=20 onChange="searchRecords($(this).val())">
 <a href="Javascript:clearSearch()"><img border="0" src="image/clear.gif"></a>
 
 <table id="dataTable" border=1 class="gridBody">
@@ -326,14 +327,14 @@ Shows
 		}
 		
 		String linkUrl = "ajax/pk-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
-		String linkUrlTree = "data-tree.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
+		String linkUrlTree = "data-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
 %>
 	<td class="<%= rowClass%>">
 	<% if (pkLink) { %>
 		<a class='inspect' href='<%= linkUrl %>'><img border=0 src="image/link.gif" title="Related Tables"></a>
 		&nbsp;
 	<% } %>
-		<a href='<%= linkUrlTree %>'><img src="image/follow.gif" border=0 title="Data tree"></a>
+		<a href='<%= linkUrlTree %>'><img src="image/follow.gif" border=0 title="Data Link"></a>
 	</td>
 <%
 	}

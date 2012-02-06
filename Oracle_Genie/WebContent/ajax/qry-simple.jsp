@@ -232,10 +232,10 @@ Found: <%= filteredCount %>
 			else keyValue = keyValue + "^" + v; 
 		}
 		
-		String linkUrlTree = "data-tree.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
+		String linkUrlTree = "data-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
 %>
 	<td class="<%= rowClass%>">
-		<a href='<%= linkUrlTree %>'><img src="image/follow.gif" border=0 title="Data tree"></a>
+		<a href='<%= linkUrlTree %>'><img src="image/follow.gif" border=0 title="Data link"></a>
 	</td>
 <%
 	}
@@ -262,7 +262,7 @@ Found: <%= filteredCount %>
 				String linkImage = "image/view.png";
 				if (lTable != null  && dLink) {
 					isLinked = true;
-					linkUrl = "data-tree.jsp?table=" + lTable + "&key=" + Util.encodeUrl(keyValue);
+					linkUrl = "data-link.jsp?table=" + lTable + "&key=" + Util.encodeUrl(keyValue);
 				} else if (val != null && val.startsWith("BLOB ")) {
 					isLinked = true;
 					String tpkName = cn.getPrimaryKeyName(tbl);
@@ -319,10 +319,11 @@ for (int i=0; i<fkLinkTab.size(); i++) {
 
 <br/>
 
-<a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" src="image/open.jpg"></a>
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" title="<%=fsql%>"/></a>
+<a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" align=middle src="image/plus.gif"></a>
+&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle title="<%=fsql%>"/></a>
  
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
+<div style="display: none;" id="hide-<%=id%>"></div>
 <div id="div-<%=id%>" style="margin-left: 30px; display: none;"></div>
 <% } %>
 
