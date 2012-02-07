@@ -1,7 +1,7 @@
 <%@ page language="java" 
 	import="java.util.*" 
 	import="java.sql.*" 
-	import="spencer.genie.*" 
+	import="genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -10,7 +10,8 @@
 	String table = request.getParameter("table");
 	Connect cn = (Connect) session.getAttribute("CN");
 
-	if (!table.startsWith("\"")) table = table.toUpperCase();
+	System.out.println("table="+table);
+//	if (!table.startsWith("\"")) table = table.toUpperCase();
 	
 	String catalog = null;
 	String tname = table;
@@ -51,12 +52,14 @@ Please select a Table to see the detail.
 <%	
 
 	List<TableCol> cols = cn.getTableDetail(catalog, tname);
+System.out.println("catalog="+catalog);
+System.out.println("tname="+tname);
 	ArrayList<String> pk = cn.getPrimaryKeys(catalog, tname);
 
 	for (int i=0; i<cols.size();i++) {
 		TableCol col = cols.get(i);
 		String colName = col.getName();
-		String colDisp = col.getName().toLowerCase();
+		String colDisp = col.getName(); //.toLowerCase();
 		if (pk.contains(colName)) colDisp = "<b>" + colDisp + "</b>";
 
 		String tooltip = col.getTypeName();

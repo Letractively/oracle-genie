@@ -2,7 +2,7 @@
 	import="java.util.*" 
 	import="java.util.Date" 
 	import="java.sql.*" 
-	import="spencer.genie.*" 
+	import="genie.*" 
 	import="org.apache.commons.lang3.StringEscapeUtils" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
@@ -77,7 +77,7 @@ SQL = <%= sql %> <a href="javascript:doQuery()"><img border=0 src="image/icon_qu
 			//System.out.println(i + " column type=" +rs.getMetaData().getColumnType(i));
 			colIdx++;
 			int colType = q.getColumnType(i);
-			if (colType == 2 || colType == 4 || colType == 8) numberCol[colIdx] = true;
+			numberCol[colIdx] = Util.isNumberType(colType);
 			
 %>
 <th class="headerRow"><b><%=colName%></a></b></th>

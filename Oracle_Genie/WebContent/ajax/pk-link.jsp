@@ -2,7 +2,7 @@
 	import="java.util.*" 
 	import="java.util.Date" 
 	import="java.sql.*" 
-	import="spencer.genie.*" 
+	import="genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -35,7 +35,7 @@ Linked Tables: (<%= refTabs.size() %>)<br/>
 	String pkColName = null;
 	int pkColIndex = -1;
 	if (pkName != null) {
-		pkCols = cn.getConstraintCols(pkName);
+		pkCols = cn.getConstraintCols(table, pkName);
 		int colCount = Util.countMatches(pkCols, ",") + 1;
 		System.out.println("pkCols=" + pkCols + ", colCount=" + colCount);
 	
