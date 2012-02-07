@@ -21,7 +21,7 @@
 		tname = table.substring(idx+1);
 	}
 	
-	if (catalog==null) catalog = cn.getSchemaName();
+//	if (catalog==null) catalog=""; //cn.getSchemaName();
 	
 	if (table==null) { 
 %>
@@ -49,7 +49,6 @@ Please select a Table to see the detail.
 </tr>
 <tr>
 <%	
-
 	List<TableCol> cols = cn.getTableDetail(catalog, tname);
 	ArrayList<String> pk = cn.getPrimaryKeys(catalog, tname);
 
