@@ -754,7 +754,8 @@ public class Connect implements HttpSessionBindingListener {
 		// check for other owner
 		if (tName == null) {
 			String owner = this.queryOne("SELECT OWNER FROM ALL_CONSTRAINTS WHERE CONSTRAINT_NAME='" + kname +"'");
-			return getTableNameByPrimaryKey(owner, kname);
+			if (owner != null)
+				return getTableNameByPrimaryKey(owner, kname);
 		}
 		
 		return tName;
@@ -1334,9 +1335,24 @@ public class Connect implements HttpSessionBindingListener {
 	
 	public List<TableCol> getTableDetail(String owner, String tname) throws SQLException {
 		List<TableCol> list = new ArrayList<TableCol>();
-
 		
-		if (owner==null) owner = schemaName.toUpperCase();
+		if (owner==null) {
+			// see if the table is users
+			if (tables.contains(tname)) {
+				owner = schemaName.toUpperCase();
+			} else {
+				String syn = this.getSynonym(tname);
+				if (syn != null) {
+					String[] temp = syn.split("\\.");
+					owner = temp[0];
+					tname = temp[1];
+				}
+			}
+		}
+		
+		if (owner==null) {
+			return getTableDetail2(owner, tname);
+		}
 		
 		Statement stmt = conn.createStatement();
 		String qry = "SELECT * FROM ALL_TAB_COLUMNS WHERE OWNER='" + owner.toUpperCase() + "' AND TABLE_NAME='" + tname + "' ORDER BY column_id";
@@ -1387,8 +1403,8 @@ public class Connect implements HttpSessionBindingListener {
 		return list;
 	}
 
-/*	
-	public List<TableCol> getTableDetail(String catalog, String tname) throws SQLException {
+
+	public List<TableCol> getTableDetail2(String catalog, String tname) throws SQLException {
 		List<TableCol> list = new ArrayList<TableCol>();
 
 		DatabaseMetaData dbm = conn.getMetaData();
@@ -1436,7 +1452,6 @@ public class Connect implements HttpSessionBindingListener {
 		
 		return list;
 	}
-*/
 	
 	public List<String[]> queryMultiCol(String qry, int cols) {
 		
