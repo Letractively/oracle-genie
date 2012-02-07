@@ -2,7 +2,7 @@
 	import="java.util.*" 
 	import="java.util.Date" 
 	import="java.sql.*" 
-	import="genie.*" 
+	import="spencer.genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -15,7 +15,7 @@
 	String key = request.getParameter("key");
 	
 	String pkName = cn.getPrimaryKeyName(table);
-	String conCols = cn.getConstraintCols(table, pkName);
+	String conCols = cn.getConstraintCols(pkName);
 //	if (conCols.length() > 2) conCols = conCols.substring(1, conCols.length()-1);
 	
 	String condition = Util.buildCondition(conCols, key);

@@ -77,4 +77,19 @@ public class Util {
 		
 		return "" + counter;
 	}
+
+	public static boolean isNumberType(int typeId) {
+		boolean res = false;
+		
+		int[] types = {2,3,4,5,7,8};
+		
+		for (int i : types) {
+			if (typeId == i) {
+				res = true;
+				break;
+			}
+		}
+
+		return res;
+	}
 }

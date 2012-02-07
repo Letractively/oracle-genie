@@ -101,22 +101,26 @@
 		
 		String keyValue = null;
 		String[] colnames = fc.split("\\,");
+		boolean hasNull = false;
 		for (int j=0; j<colnames.length; j++) {
 			String x = colnames[j].trim();
 			String v = (q==null?"":q.getValue(x));
 //			System.out.println("x,v=" +x +"," + v);
+			if (v==null) hasNull = true;
 			if (keyValue==null)
 				keyValue = v;
 			else
 				keyValue += "^" + v;
 		}
 		
+		if (hasNull) continue;
 		String fsql = cn.getPKLinkSql(ft, keyValue);
 		id = Util.getId();
 		autoLoadFK.add(id);
 %>
 <a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" align=middle src="image/plus.gif"></a>
 &nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle  title="<%=fsql%>"/></a>
+(<%= table %>.<%= fc.toLowerCase() %>)
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
 <div style="display: none;" id="mode-<%=id%>">hide</div>
 <div style="display: none;" id="hide-<%=id%>"></div>
@@ -203,6 +207,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+	$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
 <%
 	for (String id1: autoLoadFK) {
 %>

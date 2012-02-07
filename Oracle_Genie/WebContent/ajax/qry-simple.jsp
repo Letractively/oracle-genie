@@ -2,7 +2,7 @@
 	import="java.util.*" 
 	import="java.util.Date" 
 	import="java.sql.*" 
-	import="genie.*" 
+	import="spencer.genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -87,11 +87,16 @@
 
 	for (int i=0; i<fks.size(); i++) {
 		ForeignKey rec = fks.get(i);
-		String linkCol = cn.getConstraintCols(rec.tableName, rec.constraintName);
-		String rTable = rec.rTableName;
+		String linkCol = cn.getConstraintCols(rec.constraintName);
+		String rTable = cn.getTableNameByPrimaryKey(rec.rConstraintName);
 		
 		fkLinkTab.add(rTable);
 		fkLinkCol.add(linkCol);
+
+		int colCount = Util.countMatches(linkCol, ",") + 1;
+		if (colCount == 1) {
+			if (rTable != null) linkTable.put(linkCol, rTable);
+		}	
 	}
 	
 	// Primary Key for PK Link
@@ -103,7 +108,7 @@
 	boolean hasPK = false;
 	List<String> pkColList = null;
 	if (pkName != null) {
-		pkColList = cn.getConstraintColList(tname, pkName);
+		pkColList = cn.getConstraintColList(pkName);
 		
 		// check if PK columns are in the result set
 		int matchCount = 0;
@@ -262,11 +267,11 @@ Found: <%= filteredCount %>
 				String linkImage = "image/view.png";
 				if (lTable != null  && dLink) {
 					isLinked = true;
-					linkUrl = "data-link.jsp?table=" + lTable + "&key=" + Util.encodeUrl(keyValue);
+					linkUrl = "ajax/fk-lookup.jsp?table=" + lTable + "&key=" + Util.encodeUrl(keyValue);
 				} else if (val != null && val.startsWith("BLOB ")) {
 					isLinked = true;
 					String tpkName = cn.getPrimaryKeyName(tbl);
-					String tpkCol = cn.getConstraintCols(tbl, tpkName);
+					String tpkCol = cn.getConstraintCols(tpkName);
 					String tpkValue = q.getValue(tpkCol);
 					
 					linkUrl ="ajax/blob.jsp?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue);
@@ -280,7 +285,7 @@ Found: <%= filteredCount %>
 */
 %>
 <td class="<%= rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
-<%= (val!=null && isLinked?"<a href='" + linkUrl  + "'><img border=0 src='" + linkImage + "'></a>":"")%>
+<%= (val!=null && isLinked?"<a class='inspect' href='" + linkUrl  + "'><img border=0 src='" + linkImage + "'></a>":"")%>
 </td>
 <%
 		}
@@ -302,13 +307,14 @@ for (int i=0; i<fkLinkTab.size(); i++) {
 	
 	String keyValue = null;
 	String[] colnames = fc.split("\\,");
+
 	boolean hasNull = false;
 	for (int j=0; j<colnames.length; j++) {
 		String x = colnames[j].trim();
 		String v = q.getValue(x);
-		
+//		System.out.println("x,v=" +x +"," + v);
+
 		if (v==null) hasNull = true;
-		System.out.println("x,v=" +x +"," + v);
 		if (keyValue==null)
 			keyValue = v;
 		else
@@ -320,11 +326,12 @@ for (int i=0; i<fkLinkTab.size(); i++) {
 	id = Util.getId();
 %>
 
+
 <br/>
 
 <a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" align=middle src="image/plus.gif"></a>
 &nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle title="<%=fsql%>"/></a>
- 
+(<%= tname %>.<%=fc.toLowerCase() %>) 
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
 <div style="display: none;" id="hide-<%=id%>"></div>
 <div id="div-<%=id%>" style="margin-left: 30px; display: none;"></div>
