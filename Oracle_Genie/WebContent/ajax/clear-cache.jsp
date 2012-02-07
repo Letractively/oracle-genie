@@ -1,7 +1,7 @@
 <%@ page language="java" 
 	import="java.util.*" 
 	import="java.sql.*" 
-	import="spencer.genie.*" 
+	import="genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -11,4 +11,5 @@
 	
 	QueryCache.getInstance().clearAll();
 	ListCache.getInstance().clearAll();
+	StringCache.getInstance().clearAll();
 %>

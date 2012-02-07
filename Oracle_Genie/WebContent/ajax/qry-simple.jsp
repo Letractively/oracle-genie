@@ -2,7 +2,7 @@
 	import="java.util.*" 
 	import="java.util.Date" 
 	import="java.sql.*" 
-	import="spencer.genie.*" 
+	import="genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -87,8 +87,8 @@
 
 	for (int i=0; i<fks.size(); i++) {
 		ForeignKey rec = fks.get(i);
-		String linkCol = cn.getConstraintCols(rec.constraintName);
-		String rTable = cn.getTableNameByPrimaryKey(rec.rConstraintName);
+		String linkCol = cn.getConstraintCols(rec.tableName, rec.constraintName);
+		String rTable = rec.rTableName;
 		
 		fkLinkTab.add(rTable);
 		fkLinkCol.add(linkCol);
@@ -103,7 +103,7 @@
 	boolean hasPK = false;
 	List<String> pkColList = null;
 	if (pkName != null) {
-		pkColList = cn.getConstraintColList(pkName);
+		pkColList = cn.getConstraintColList(tname, pkName);
 		
 		// check if PK columns are in the result set
 		int matchCount = 0;
@@ -185,7 +185,7 @@ Found: <%= filteredCount %>
 			//System.out.println(i + " column type=" +rs.getMetaData().getColumnType(i));
 			colIdx++;
 			int colType = q.getColumnType(i);
-			if (colType == 2 || colType == 4 || colType == 8) numberCol[colIdx] = true;
+			numberCol[colIdx] = Util.isNumberType(colType);
 			
 			String tooltip = q.getColumnTypeName(i);
 			String comment =  cn.getComment(tname, colName);
@@ -266,7 +266,7 @@ Found: <%= filteredCount %>
 				} else if (val != null && val.startsWith("BLOB ")) {
 					isLinked = true;
 					String tpkName = cn.getPrimaryKeyName(tbl);
-					String tpkCol = cn.getConstraintCols(tpkName);
+					String tpkCol = cn.getConstraintCols(tbl, tpkName);
 					String tpkValue = q.getValue(tpkCol);
 					
 					linkUrl ="ajax/blob.jsp?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue);
@@ -302,20 +302,23 @@ for (int i=0; i<fkLinkTab.size(); i++) {
 	
 	String keyValue = null;
 	String[] colnames = fc.split("\\,");
+	boolean hasNull = false;
 	for (int j=0; j<colnames.length; j++) {
 		String x = colnames[j].trim();
 		String v = q.getValue(x);
-//		System.out.println("x,v=" +x +"," + v);
+		
+		if (v==null) hasNull = true;
+		System.out.println("x,v=" +x +"," + v);
 		if (keyValue==null)
 			keyValue = v;
 		else
 			keyValue += "^" + v;
 	}
 	
+	if (hasNull) continue;
 	String fsql = cn.getPKLinkSql(ft, keyValue);
 	id = Util.getId();
 %>
-
 
 <br/>
 

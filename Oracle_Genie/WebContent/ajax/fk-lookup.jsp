@@ -2,7 +2,7 @@
 	import="java.util.*" 
 	import="java.util.Date" 
 	import="java.sql.*" 
-	import="spencer.genie.*" 
+	import="genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -15,7 +15,7 @@
 	String key = request.getParameter("key");
 	
 	String pkName = cn.getPrimaryKeyName(table);
-	String conCols = cn.getConstraintCols(pkName);
+	String conCols = cn.getConstraintCols(table, pkName);
 //	if (conCols.length() > 2) conCols = conCols.substring(1, conCols.length()-1);
 	
 	String condition = Util.buildCondition(conCols, key);
@@ -82,7 +82,7 @@ SQL = <%= sql %> <a href="javascript:doQuery()"><img border=0 src="image/icon_qu
 
 			colIdx++;
 			int colType = q.getColumnType(i);
-			if (colType == 2 || colType == 4 || colType == 8) numberCol[colIdx] = true;
+			numberCol[colIdx] = Util.isNumberType(colType);
 			
 			String val = q.getValue(i);
 			String valDisp = Util.escapeHtml(val);

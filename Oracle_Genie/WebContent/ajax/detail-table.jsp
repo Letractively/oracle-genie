@@ -1,7 +1,7 @@
 <%@ page language="java" 
 	import="java.util.*" 
 	import="java.sql.*" 
-	import="spencer.genie.*" 
+	import="genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -59,7 +59,7 @@ Please select a Table to see the detail.
 	<th bgcolor=#ccccff>Type</th>
 	<th bgcolor=#ccccff>Null</th>
 	<th bgcolor=#ccccff>Default</th>
-	<th bgcolor=#ccccff>Comments</th>
+	<th bgcolor=#ccccff>Remarks</th>
 </tr>
 
 <%	
@@ -73,11 +73,11 @@ Please select a Table to see the detail.
 %>
 <tr>
 	<td>&nbsp;</td>
-	<td><%= col_disp.toLowerCase() %></td>
+	<td><%= col_disp %></td>
 	<td><%= rec.getTypeName() %></td>
 	<td><%= rec.getNullable()==0?"N":"" %></td>
 	<td><%= rec.getDefaults() %></td>
-	<td><%= owner==null?cn.getComment(tname, rec.getName()):cn.getSynColumnComment(owner, tname, rec.getName()) %></td>
+	<td><%= rec.getRemarks() %></td>
 </tr>
 
 <%
@@ -91,9 +91,9 @@ Please select a Table to see the detail.
 	String pkName = cn.getPrimaryKeyName(tname);
 	if (pkName == null && owner != null) pkName = cn.getPrimaryKeyName(owner, tname);
 
-	String pkCols = cn.getConstraintCols(pkName);
+	String pkCols = cn.getConstraintCols(tname, pkName);
 	if (pkName != null && pkCols.equals(""))
-		pkCols = cn.getConstraintCols(owner, pkName);
+		pkCols = cn.getConstraintCols(owner, tname, pkName);
 	
 	List<ForeignKey> fks = cn.getForeignKeys(tname);
 	if (owner != null) fks = cn.getForeignKeys(owner, tname);
@@ -104,6 +104,7 @@ Please select a Table to see the detail.
 	List<String> refTrgs = cn.getReferencedTriggers(tname);
 	List<String> refIdx = cn.getIndexes(owner, tname);
 %>
+
 <hr>
 
 
@@ -123,20 +124,16 @@ Please select a Table to see the detail.
 
 	for (int i=0; i<fks.size(); i++) {
 		ForeignKey rec = fks.get(i);
-		String rTable = cn.getTableNameByPrimaryKey(rec.rConstraintName);
+		String rTable = rec.rTableName;
 		boolean tabLink = true;
 		if (rTable == null) {
-//			rTable = rec.rOwner + "." + rec.rConstraintName;
-
-			rTable = cn.getTableNameByPrimaryKey(rec.rOwner, rec.rConstraintName);
-			
-//			rTable = rec.rOwner + "." + rec.tableName;
+			rTable = rec.rTableName;
 			tabLink = false;
 			tabLink = true;
 		}
 %>
 &nbsp;&nbsp;&nbsp;&nbsp;<%= rec.constraintName %>
-	(<%= cn.getConstraintCols(rec.owner, rec.constraintName).toLowerCase() %>)
+	(<%= cn.getConstraintCols(rec.owner, rec.tableName, rec.constraintName) %>)
 	->
 <%
 	if (tabLink) {
@@ -149,7 +146,7 @@ Please select a Table to see the detail.
 <%
 	}
 %>
-	(<%= cn.getConstraintCols(rec.rOwner, rec.rConstraintName).toLowerCase() %>)
+	(<%= cn.getConstraintCols(rec.rOwner, rec.rTableName, rec.rConstraintName) %>)
 	<br/>
 <%
  }
@@ -171,7 +168,7 @@ Please select a Table to see the detail.
 		String indexName = refIdx.get(i);
 %>
 	&nbsp;&nbsp;&nbsp;&nbsp;<%= indexName %> 
-	<%= cn.getIndexColumns(owner, indexName).toLowerCase() %>
+	<%= cn.getIndexColumns(owner, tname, indexName).toLowerCase() %>
 	<br/>
 <%
 	}

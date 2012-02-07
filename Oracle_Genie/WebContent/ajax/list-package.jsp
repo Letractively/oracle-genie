@@ -1,7 +1,7 @@
 <%@ page language="java" 
 	import="java.util.*" 
 	import="java.sql.*" 
-	import="spencer.genie.Connect" 
+	import="genie.Connect" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -10,7 +10,7 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	String filter = request.getParameter("filter");
 
-	String qry = "SELECT OBJECT_NAME FROM USER_OBJECTS WHERE object_type IN ('PACKAGE','PROCEDURE','FUNCTION','TYPE') order by 1"; 	
+	String qry = "SELECT ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES WHERE routine_schema	='"+cn.getSchemaName()+"' order by 1"; 	
 	List<String> list = cn.queryMulti(qry);
 %>
 <% 

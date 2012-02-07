@@ -2,7 +2,7 @@
 	import="java.util.*" 
 	import="java.util.Date" 
 	import="java.sql.*" 
-	import="spencer.genie.*" 
+	import="genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -116,8 +116,8 @@
 	
 	for (int i=0; i<fks.size(); i++) {
 		ForeignKey rec = fks.get(i);
-		String linkCol = cn.getConstraintCols(rec.constraintName);
-		String rTable = cn.getTableNameByPrimaryKey(rec.rConstraintName);
+		String linkCol = cn.getConstraintCols(rec.tableName, rec.constraintName);
+		String rTable = rec.rTableName;
 		
 //		System.out.println("linkCol=" + linkCol);
 //		System.out.println("rTable=" + rTable);
@@ -158,9 +158,11 @@
 	
 	List<String> pkColList = null;
 	if (pkName != null) {
-		pkColList = cn.getConstraintColList(pkName);
-//System.out.println("pkColList=" + pkColList.size());			
-//System.out.println("pkColList=" + pkColList.get(0));			
+		pkColList = cn.getConstraintColList(tname, pkName);
+System.out.println("tname=" + tname);			
+System.out.println("pkName=" + pkName);			
+System.out.println("pkColList=" + pkColList.size());			
+System.out.println("pkColList=" + pkColList.get(0));			
 		// check if PK columns are in the result set
 		int matchCount = 0;
 		for (int j=0;j<pkColList.size();j++) {
@@ -175,7 +177,7 @@
 		}
 
 		hasPK = true;
-		
+System.out.println("hasPK=" + hasPK);		
 		// there should be other tables that has FK to this
 		List<String> refTabs = cn.getReferencedTables(tname);
 		if (matchCount == pkColList.size() && refTabs.size()>0) {
@@ -274,9 +276,9 @@ Rows/Page
 			//System.out.println(i + " column type=" +rs.getMetaData().getColumnType(i));
 			colIdx++;
 			int colType = q.getColumnType(i);
-			if (colType == 2 || colType == 4 || colType == 8) numberCol[colIdx] = true;
+			numberCol[colIdx] = Util.isNumberType(colType);
 			
-			String tooltip = q.getColumnTypeName(i);
+			String tooltip = q.getColumnTypeName(i) + " " + colType;
 			String comment =  cn.getComment(tname, colName);
 			if (comment != null && comment.length() > 0) tooltip += " " + comment;
 		
@@ -293,7 +295,7 @@ Rows/Page
 			
 %>
 <th class="headerRow"><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
-	href="Javascript:doAction('<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><b><%=colName.toLowerCase()%></b></a>
+	href="Javascript:doAction('<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><b><%=colName%></b></a>
 	<%= extraImage %>
 </th>
 <%
@@ -322,6 +324,8 @@ Rows/Page
 	
 		for (int i=0;q.hasData() && i<pkColList.size(); i++) {
 			String v = q.getValue(pkColList.get(i));
+System.out.println("v=" + v);	
+System.out.println("pkColList.get(i)=" + pkColList.get(i));
 			if (i==0) keyValue = v;
 			else keyValue = keyValue + "^" + v; 
 		}
@@ -392,7 +396,7 @@ if (fkLinkTab.size()>0 && dLink) {
 				} else if (val != null && val.startsWith("BLOB ")) {
 					isLinked = true;
 					String tpkName = cn.getPrimaryKeyName(tbl);
-					String tpkCol = cn.getConstraintCols(tpkName);
+					String tpkCol = cn.getConstraintCols(tbl, tpkName);
 					String tpkValue = q.getValue(tpkCol);
 					
 					linkUrl ="ajax/blob.jsp?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue);

@@ -2,7 +2,7 @@
 	import="java.util.*" 
 	import="java.util.Date" 
 	import="java.sql.*" 
-	import="spencer.genie.*"
+	import="genie.*"
 	import="org.apache.commons.lang3.StringEscapeUtils" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
@@ -17,7 +17,7 @@
 	String key = request.getParameter("key");
 	
 	String pkName = cn.getPrimaryKeyName(table);
-	String conCols = cn.getConstraintCols(pkName);
+	String conCols = cn.getConstraintCols(table, pkName);
 	
 
 	String sql = "SELECT " + col + " FROM " + table + " WHERE " + conCols + "='" + key +"'";
