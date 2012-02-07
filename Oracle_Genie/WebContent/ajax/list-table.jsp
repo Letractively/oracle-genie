@@ -1,7 +1,7 @@
 <%@ page language="java" 
 	import="java.util.*" 
 	import="java.sql.*" 
-	import="genie.Connect" 
+	import="spencer.genie.Connect" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -10,7 +10,7 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	String filter = request.getParameter("filter");
 
-	String qry = "select TABLE_NAME from information_schema.TABLES WHERE table_type='BASE TABLE' AND table_schema='"+ cn.getSchemaName()+"'"; 	
+	String qry = "SELECT TABLE_NAME FROM USER_TABLES ORDER BY 1"; 	
 	List<String> list = cn.queryMulti(qry);
 	
 	if (filter !=null) filter = filter.toUpperCase();

@@ -2,7 +2,7 @@
 	import="java.util.*" 
 	import="java.util.Date" 
 	import="java.sql.*" 
-	import="genie.*" 
+	import="spencer.genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -29,7 +29,7 @@
 	
 	for (int i=0; i<fks.size(); i++) {
 		ForeignKey rec = fks.get(i);
-		String rTable = rec.rTableName;
+		String rTable = cn.getTableNameByPrimaryKey(rec.rConstraintName);
 		list.add(rTable);
 	}
 	if (fks.size() > 0) list.add("");

@@ -252,7 +252,7 @@ Time : <%=new Date()%>
 			//System.out.println(i + " column type=" +rs.getMetaData().getColumnType(i));
 			colIdx++;
 			int colType = q.getColumnType(i);
-			if (colType == 2 || colType == 4 || colType == 8) numberCol[colIdx] = true;
+			numberCol[colIdx] = Util.isNumberType(colType);
 			
 			String tooltip = ""; //q.getColumnTypeName(i);
 			String comment =  cn.getComment(tname, colName);

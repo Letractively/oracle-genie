@@ -1,7 +1,7 @@
 <%@ page language="java" 
 	import="java.util.*" 
 	import="java.sql.*" 
-	import="genie.*" 
+	import="spencer.genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>

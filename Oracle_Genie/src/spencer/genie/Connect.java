@@ -211,6 +211,8 @@ public class Connect implements HttpSessionBindingListener {
 	public void valueUnbound(HttpSessionBindingEvent arg0) {
 		printQueryLog();
 		QueryCache.getInstance().clearAll();
+		ListCache.getInstance().clearAll();
+		StringCache.getInstance().clearAll();
 		this.disconnect();
 	}
 	
@@ -231,6 +233,7 @@ public class Connect implements HttpSessionBindingListener {
 		
 		ListCache.getInstance().clearAll();
 		QueryCache.getInstance().clearAll();
+		StringCache.getInstance().clearAll();
 		
 		loadSchema();
 		loadTables();
@@ -1199,7 +1202,9 @@ public class Connect implements HttpSessionBindingListener {
 	}
 
 	public String queryOne(String qry) {
-		String res = "";
+		String res = StringCache.getInstance().get(qry);
+		if (res != null) return res;
+		
 		try {
        		Statement stmt = conn.createStatement();
        		ResultSet rs = stmt.executeQuery(qry);	
@@ -1214,6 +1219,7 @@ public class Connect implements HttpSessionBindingListener {
              System.err.println ("queryOne - " + qry);
              message = e.getMessage();
  		}
+		StringCache.getInstance().add(qry, res);
 		return res;
 	}
 	
