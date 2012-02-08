@@ -44,9 +44,9 @@
 
 %>
 
-
-<h3><%= sql %>
+<h3>
 <a href="javascript:form1.submit()"><img border=0 src="image/icon_query.png" title="open query"></a>
+<%= sql %>
 </h3>
 
 <form id="form1" name="form1" target=_blank action="query.jsp" method="post">

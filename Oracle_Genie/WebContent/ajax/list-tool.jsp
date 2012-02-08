@@ -13,6 +13,7 @@
 	List<String> list = new ArrayList<String>();
 	list.add("Search Content");
 	list.add("Search Program");
+	list.add("");
 
 	list.add("Dictionary");
 	list.add("Sequence");
