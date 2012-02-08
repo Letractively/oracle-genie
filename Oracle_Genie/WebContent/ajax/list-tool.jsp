@@ -11,6 +11,9 @@
 	String filter = request.getParameter("filter");
 
 	List<String> list = new ArrayList<String>();
+	list.add("Search Content");
+	list.add("Search Program");
+
 	list.add("Dictionary");
 	list.add("Sequence");
 	list.add("DB link");
