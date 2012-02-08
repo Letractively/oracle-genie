@@ -25,8 +25,8 @@
 	if (myCookie != null) cookieUrls = myCookie.getValue();
 	
 	// default login info
-	String initJdbcUrl = "jdbc:oracle:thin:@localhost:1521/LDEV";
-	String initUserName = "client_55";
+	String initJdbcUrl = "jdbc:oracle:thin:@localhost:1521/SID";
+	String initUserName = "userid";
 	
 	// get the last login from cookie
 	if (cookieUrls != null && cookieUrls.length()>1) {

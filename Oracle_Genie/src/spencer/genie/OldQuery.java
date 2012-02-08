@@ -91,7 +91,7 @@ public class OldQuery {
 		}
 
 		String newQry = "SELECT " + newCols + " " + theRest;
-		System.out.println("newQry=" + newQry);
+		//System.out.println("newQry=" + newQry);
 		return newQry;
 	}
 	
