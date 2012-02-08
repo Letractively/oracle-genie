@@ -25,7 +25,7 @@
 		qry = "SELECT * FROM USER_SOURCE WHERE lower(text) like '%[keyword]%'";
 
 %>
-<h2>TOOL: <%= tool %> &nbsp;&nbsp;</h2>
+<h2><%= tool %> &nbsp;&nbsp;</h2>
 
 <% if (qry != null)  {%>
 <jsp:include page="detail-tool-query.jsp">
