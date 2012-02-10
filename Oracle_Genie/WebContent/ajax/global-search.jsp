@@ -100,9 +100,11 @@
 			else if (data_prec > 0)
 				dType += "(" + data_prec + ")";
 		}
+		
+		String comment = cn.getComment(tname, cname);
 %>
 	&nbsp;&nbsp;
-	<a href="javascript:loadTable('<%=tname%>');"><%=tname%></a>.<%= cname.toLowerCase() %> <%= dType %><br/>
+	<a href="javascript:loadTable('<%=tname%>');"><%=tname%></a>.<%= cname.toLowerCase() %> <%= dType %> <%= comment %><br/>
 <%
 	}
 %>
