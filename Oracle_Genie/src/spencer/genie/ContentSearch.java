@@ -60,9 +60,19 @@ public class ContentSearch {
 		
 		if (exclTable !=null && exclTable.length()>0)
 			qry += " AND TABLE_NAME NOT LIKE '%" + exclTable.toUpperCase() + "%' ";
+
+		if (owner.equals("both")) {
+			qry += " UNION ALL " +
+				"SELECT SYNONYM_NAME FROM USER_SYNONYMS A WHERE TABLE_OWNER != USER AND SYNONYM_NAME LIKE '%" + inclTable.toUpperCase() +"%' " +
+				" AND EXISTS (select 1 from ALL_TABLES WHERE OWNER=A.TABLE_OWNER AND TABLE_NAME=A.TABLE_NAME)";
+
+			if (exclTable !=null && exclTable.length()>0)
+				qry += " AND TABLE_NAME NOT LIKE '%" + exclTable.toUpperCase() + "%' ";
+			
+		}
 		
-		qry += "ORDER BY TABLE_NAME";
-		//System.out.println("qry=" + qry);
+		qry += "ORDER BY 1";
+		System.out.println("qry=" + qry);
 
 		List<String> tlist = cn.queryMulti(qry);
 		totalTableCount = tlist.size();
