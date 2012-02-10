@@ -123,7 +123,7 @@ Please select a Table to see the detail.
 
 	for (int i=0; i<fks.size(); i++) {
 		ForeignKey rec = fks.get(i);
-		String rTable = cn.getTableNameByPrimaryKey(rec.rConstraintName);
+		String rTable = rec.rTableName; //cn.getTableNameByPrimaryKey(rec.rConstraintName);
 		boolean tabLink = true;
 		if (rTable == null) {
 //			rTable = rec.rOwner + "." + rec.rConstraintName;
