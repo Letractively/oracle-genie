@@ -26,8 +26,9 @@
 <tr>
 	<td>Owner</td>
 	<td>
-		<input type="radio" name="owner" value="mine" checked>My User
-		<input type="radio" name="owner" value="other">Other Users (Synonym)
+		<input type="radio" name="owner" value="mine" checked>Table
+		<input type="radio" name="owner" value="other">Synonym
+		<input type="radio" name="owner" value="both">Both
 	</td>
 </tr>
 <tr>
@@ -48,7 +49,7 @@
 	<td>&nbsp;</td>
 	<td>
 		<input id="startButton" type="button" value="Start Search" onclick="startSearch()">
-		<input id="cancelButton" type="button" disabled=true value="Cancel" onclick="cancelSearch()">
+		<input id="cancelButton" type="button" disabled=true value="Stop" onclick="cancelSearch()">
 	</td>
 </tr>
 </table>
@@ -60,7 +61,7 @@
 
 <br/><br/>
 
-<div id="progressDiv" style="display: none; width: 400px; height: 200px; overflow: auto;">
+<div id="progressDiv" style="display: none; margin-left: 40px; border: 1px solid #D9D9D9; width: 400px; height: 200px; overflow: auto;">
 	<div id="searchProgress"></div>
 </div>
 
