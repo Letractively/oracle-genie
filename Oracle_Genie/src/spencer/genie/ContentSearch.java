@@ -4,15 +4,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class ContentSearch {
 
 	private Connect cn;
 	
 	private String searchKeyword;
-	private String inclTable;
-	private String exclTable;
-	private String owner;
 	private String matchType;
 	private String caseType;
 
@@ -37,9 +35,6 @@ public class ContentSearch {
 		this.cn = cn;
 		
 		this.searchKeyword = searchKeyword;
-		this.inclTable = inclTable;
-		this.exclTable = exclTable;
-		this.owner = owner;
 		this.matchType = matchType;
 		this.caseType = caseType;
 
@@ -52,24 +47,52 @@ public class ContentSearch {
 		running = true;
 		List<String> tables = new ArrayList<String>();
 		
-		String qry = "SELECT TABLE_NAME FROM USER_TABLES WHERE TABLE_NAME LIKE '%" + inclTable.toUpperCase() +"%' ";
+		String qry = "SELECT TABLE_NAME FROM USER_TABLES WHERE 1=1 ";
 		
-		if (owner.equals("other"))
-			qry = "SELECT SYNONYM_NAME FROM USER_SYNONYMS A WHERE TABLE_OWNER != USER AND SYNONYM_NAME LIKE '%" + inclTable.toUpperCase() +"%' " +
-					" AND EXISTS (select 1 from ALL_TABLES WHERE OWNER=A.TABLE_OWNER AND TABLE_NAME=A.TABLE_NAME)";
-		
-		if (exclTable !=null && exclTable.length()>0)
-			qry += " AND TABLE_NAME NOT LIKE '%" + exclTable.toUpperCase() + "%' ";
-
-		if (owner.equals("both")) {
-			qry += " UNION ALL " +
-				"SELECT SYNONYM_NAME FROM USER_SYNONYMS A WHERE TABLE_OWNER != USER AND SYNONYM_NAME LIKE '%" + inclTable.toUpperCase() +"%' " +
-				" AND EXISTS (select 1 from ALL_TABLES WHERE OWNER=A.TABLE_OWNER AND TABLE_NAME=A.TABLE_NAME)";
-
-			if (exclTable !=null && exclTable.length()>0)
-				qry += " AND TABLE_NAME NOT LIKE '%" + exclTable.toUpperCase() + "%' ";
-			
+		if (inclTable !=null && inclTable.length()>0) {
+			qry += " AND ( ";
+			StringTokenizer st = new StringTokenizer(inclTable, " ");
+			int i = 0;
+			while (st.hasMoreTokens()) {
+				i ++;
+				String token = st.nextToken();
+				if (i>1) qry += " OR ";
+				qry += "TABLE_NAME LIKE '%" + token.toUpperCase() + "%' ";
+			}
+			qry += " )";
 		}
+		if (exclTable !=null && exclTable.length()>0) {
+			StringTokenizer st = new StringTokenizer(exclTable, " ");
+			while (st.hasMoreTokens()) {
+				String token = st.nextToken();
+				qry += " AND TABLE_NAME NOT LIKE '%" + token.toUpperCase() + "%' ";
+			}
+		}
+		
+		String qry2 = "SELECT SYNONYM_NAME FROM USER_SYNONYMS A WHERE EXISTS (select 1 from ALL_TABLES WHERE OWNER=A.TABLE_OWNER AND TABLE_NAME=A.TABLE_NAME) ";
+
+		if (inclTable !=null && inclTable.length()>0) {
+			qry2 += " AND ( ";
+			StringTokenizer st = new StringTokenizer(inclTable, " ");
+			int i = 0;
+			while (st.hasMoreTokens()) {
+				i ++;
+				String token = st.nextToken();
+				if (i>1) qry2 += " OR ";
+				qry2 += "SYNONYM_NAME LIKE '%" + token.toUpperCase() + "%' ";
+			}
+			qry2 += " )";
+		}
+		if (exclTable !=null && exclTable.length()>0) {
+			StringTokenizer st = new StringTokenizer(exclTable, " ");
+			while (st.hasMoreTokens()) {
+				String token = st.nextToken();
+				qry2 += " AND SYNONYM_NAME NOT LIKE '%" + token.toUpperCase() + "%' ";
+			}
+		}
+		
+		if (owner.equals("both")) qry += " UNION ALL " + qry2;
+		else if (owner.equals("other")) qry = qry2;
 		
 		qry += "ORDER BY 1";
 		System.out.println("qry=" + qry);
