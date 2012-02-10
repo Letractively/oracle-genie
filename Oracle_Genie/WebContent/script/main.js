@@ -20,7 +20,17 @@ function addHistory(value) {
 	$("#inner-result2").html(newItem + current);
 }
 
+function saveForNavigation() {
+	var current = $("#inner-result1").html();
+	stack.push(current);
+	
+	stackFwd = [];
+//	console.log(stackFwd.length);
+	showNavButton();
+}
+
 function loadTable(tName) {
+	saveForNavigation();
 	var tableName = tName;
 	$("#inner-result1").html("<img src='image/loading.gif'/>");
 
@@ -38,6 +48,7 @@ function loadTable(tName) {
 }
 
 function globalSearch(keyword) {
+	saveForNavigation();
 	$("#inner-result1").html("<img src='image/loading.gif'/>");
 
 	$.ajax({
@@ -51,6 +62,7 @@ function globalSearch(keyword) {
 }
 
 function loadView(vName) {
+	saveForNavigation();
 	$("#inner-result1").html("<img src='image/loading.gif'/>");
 
 	$.ajax({
@@ -64,6 +76,7 @@ function loadView(vName) {
 }
 
 function loadPackage(pName) {
+	saveForNavigation();
 	$("#inner-result1").html("<img src='image/loading.gif'/>");
 
 	$.ajax({
@@ -76,6 +89,7 @@ function loadPackage(pName) {
 }
 
 function loadSynonym(sName) {
+	saveForNavigation();
 	$("#inner-result1").html("<img src='image/loading.gif'/>");
 
 	$.ajax({
@@ -88,6 +102,7 @@ function loadSynonym(sName) {
 }
 
 function loadTool(name) {
+	saveForNavigation();
 	$("#inner-result1").html("<img src='image/loading.gif'/>");
 
 	$.ajax({
@@ -100,6 +115,7 @@ function loadTool(name) {
 }
 
 function loadDba(name) {
+	saveForNavigation();
 	$("#inner-result1").html("<img src='image/loading.gif'/>");
 
 	$.ajax({
@@ -280,6 +296,7 @@ function runQuery(catalog,tab) {
 	}	
 	
 	function queryHistory() {
+		saveForNavigation();
 		$("#inner-result1").html("<img src='image/loading.gif'/>");
 		
 		$.ajax({
@@ -315,7 +332,7 @@ function runQuery(catalog,tab) {
     	checkProgress();
     	$("#progressDiv").show();
     	
-    	$("#searchResult").html("Running...");
+    	$("#searchResult").html("Searching...");
 		$("#searchResult").append("<div id='wait'><img src='image/loading.gif'/></div>");
 		$.ajax({
 			type: 'POST',
@@ -369,4 +386,72 @@ function runQuery(catalog,tab) {
     	$("#sql").val(sql);
     	$("#form_qry").submit();
     	//alert(sql);
+    }
+
+    function runToolQuery(cnt) {
+    	var p1, p2, p3, p4, p5;
+    	
+    	if (cnt >=1) p1 = $("#param-1").val();
+    	if (cnt >=2) p2 = $("#param-2").val();
+    	if (cnt >=3) p3 = $("#param-3").val();
+    	if (cnt >=4) p4 = $("#param-4").val();
+    	if (cnt >=5) p5 = $("#param-5").val();
+    	
+    	var sql = $("#paramQuery").html();
+//    	alert(sql);
+    	if (cnt >=1) sql = sql.replace("[1]", p1);
+    	if (cnt >=2) sql = sql.replace("[2]", p2);
+    	if (cnt >=3) sql = sql.replace("[3]", p3);
+    	if (cnt >=4) sql = sql.replace("[4]", p4);
+    	if (cnt >=5) sql = sql.replace("[5]", p5);
+//    	alert(sql);
+    	$("#param-sql").val(sql);
+    	
+		$("#paramQueryResult").html("<div id='wait'><img src='image/loading.gif'/></div>");
+    	$.ajax({
+			type: 'POST',
+    		url: "ajax/detail-tool-query.jsp",
+			data: $("#formParam").serialize(),
+    		success: function(data){
+    			$("#paramQueryResult").html(data);
+    		}
+    	});
+    	
+    }
+
+    
+    function toolQuery() {
+    	document.form1.submit();
+    }
+    
+    function goBack() {
+    	if (stack.length>0) {
+    		var current = $("#inner-result1").html();
+    		var data = stack.pop();
+    		$("#inner-result1").html(data);
+    		stackFwd.push(current);
+    		showNavButton();
+    	}
+    }
+    
+    function goFoward() {
+    	if (stackFwd.length>0) {
+    		var current = $("#inner-result1").html();
+    		var data = stackFwd.pop();
+    		$("#inner-result1").html(data);
+    		stack.push(current);
+    		showNavButton();
+    	}
+    }
+    
+    function showNavButton() {
+    	if (stack.length > 0 )
+    		$("#imgBackward").show();
+    	else
+    		$("#imgBackward").hide();
+
+    	if (stackFwd.length > 0 )
+			$("#imgForward").show();
+		else
+			$("#imgForward").hide();
     }
