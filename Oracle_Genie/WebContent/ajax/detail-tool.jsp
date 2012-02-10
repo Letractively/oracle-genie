@@ -22,8 +22,11 @@
 	else if (tool.equalsIgnoreCase("User role priv")) 
 		qry = "SELECT * FROM USER_ROLE_PRIVS";
 	else if (tool.equalsIgnoreCase("search program")) 
-		qry = "SELECT * FROM USER_SOURCE WHERE lower(text) like '%[keyword]%'";
-
+		qry = "SELECT * FROM USER_SOURCE WHERE lower(text) like lower('%[Search Keyword (ex: insert into TABLE )]%')";
+	else if (tool.equalsIgnoreCase("invalid objects")) 
+		qry = "SELECT owner, object_type, object_name, status FROM all_objects WHERE status != 'VALID' ORDER BY owner, object_type, object_name";
+	else if (tool.equalsIgnoreCase("oracle version"))
+		qry = "SELECT * FROM GV$VERSION";
 %>
 <h2><%= tool %> &nbsp;&nbsp;</h2>
 
@@ -35,6 +38,6 @@
 
 <% } %>
 
-<% if (tool.equalsIgnoreCase("search content")) { %>
+<% if (tool.equalsIgnoreCase("search db content")) { %>
 <jsp:include page="content-search.jsp"/>
 <% } %>
