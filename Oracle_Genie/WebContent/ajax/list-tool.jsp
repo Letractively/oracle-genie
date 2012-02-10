@@ -11,7 +11,7 @@
 	String filter = request.getParameter("filter");
 
 	List<String> list = new ArrayList<String>();
-	list.add("Search Content");
+	list.add("Search DB Content");
 	list.add("Search Program");
 	list.add("");
 
@@ -19,14 +19,21 @@
 	list.add("Sequence");
 	list.add("DB link");
 	list.add("User role priv");
+	list.add("Invalid Objects");
+	list.add("Oracle Version");
 %>
 <% 
 	if (filter !=null) filter = filter.toUpperCase();
 	for (int i=0; i<list.size();i++) {
 		if (filter != null && !list.get(i).toUpperCase().contains(filter)) continue;
+		
+	if (list.get(i)==null || list.get(i).equals("")) {
 %>
+	<br/>
+<%	} else { %>
 	<li><a href="javascript:loadTool('<%=list.get(i)%>');"><%=list.get(i)%></a></li>
 <% 
 	} 
+	}
 %>
 
