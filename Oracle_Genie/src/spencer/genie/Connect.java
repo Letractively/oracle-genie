@@ -345,6 +345,7 @@ public class Connect implements HttpSessionBindingListener {
        			fk.rOwner = rs.getString("R_OWNER");
        			fk.rConstraintName = rs.getString("R_CONSTRAINT_NAME");
        			fk.deleteRule = rs.getString("DELETE_RULE");
+       			fk.rTableName = getTableNameByPrimaryKey(fk.rConstraintName);
 
        			foreignKeys.add(fk);
        		}
@@ -894,6 +895,7 @@ public class Connect implements HttpSessionBindingListener {
        			fk.rOwner = rs.getString("R_OWNER");
        			fk.rConstraintName = rs.getString("R_CONSTRAINT_NAME");
        			fk.deleteRule = rs.getString("DELETE_RULE");
+       			fk.rTableName = getTableNameByPrimaryKey(fk.rConstraintName);
 
        			list.add(fk);
        		}
