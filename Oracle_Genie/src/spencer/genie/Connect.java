@@ -1402,6 +1402,9 @@ public class Connect implements HttpSessionBindingListener {
 			list.add(rec);
 		}
 		
+		rs1.close();
+		stmt.close();
+		
 		return list;
 	}
 

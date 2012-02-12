@@ -60,7 +60,10 @@
 <img style="float:left;" src="image/blue_arrow_left.png">
 
 <div id="mainDiv" style="background-color: #ffffcc; width:220px; height: 150px; overflow: auto; border: 1px solid #cccccc; float: left">
-<b><%= tname %></b><br/>
+<b><%= tname %></b>
+&nbsp;
+<a href="Javascript:selectFromErd('<%=tname%>')"><img border=0 src="image/view.png" /></a>
+<br/>
 <hr>
 <table>
 <% for (TableCol t: list) {

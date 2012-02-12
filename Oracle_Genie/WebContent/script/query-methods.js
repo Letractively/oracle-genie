@@ -492,3 +492,7 @@ function toggleText(arg1, arg2) {
 	$('#'+arg1).toggle();
 	$('#'+arg2).toggle();
 }
+
+function selectFromErd(tname) {
+	showTable(tname);
+}
