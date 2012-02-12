@@ -344,3 +344,11 @@
 		});
 	}
 	
+	function selectFromErd(tname) {
+//		alert(tname);
+		var sql = "SELECT * FROM " + tname;
+		$("#sql").val(sql);
+		document.form0.submit();
+		
+	}
+	
