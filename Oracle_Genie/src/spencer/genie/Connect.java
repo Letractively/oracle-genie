@@ -685,7 +685,7 @@ public class Connect implements HttpSessionBindingListener {
 		
 		return res;
 	}
-	
+/*	
 	public ResultSet getQueryRS(String sql)  {
 		ResultSet rs = null;
 		
@@ -700,7 +700,7 @@ public class Connect implements HttpSessionBindingListener {
 		
 		return rs;
 	}
-	
+*/	
 	public void addQueryHistory(String qry) {
 		QueryLog ql = new QueryLog(qry);
 		queryLog.put(qry, ql);
@@ -1455,6 +1455,7 @@ public class Connect implements HttpSessionBindingListener {
 			list.add(rec);
 		}
 		
+		rs1.close();
 		return list;
 	}
 	
