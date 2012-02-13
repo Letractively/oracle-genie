@@ -93,7 +93,31 @@ public class ContentSearch {
 		
 		if (owner.equals("both")) qry += " UNION ALL " + qry2;
 		else if (owner.equals("other")) qry = qry2;
-		
+
+		if (owner.equals("dict")) {
+			qry = "SELECT TABLE_NAME FROM DICTIONARY WHERE TABLE_NAME LIKE 'USER_%' ";
+
+			if (inclTable !=null && inclTable.length()>0) {
+				qry += " AND ( ";
+				StringTokenizer st = new StringTokenizer(inclTable, " ");
+				int i = 0;
+				while (st.hasMoreTokens()) {
+					i ++;
+					String token = st.nextToken();
+					if (i>1) qry += " OR ";
+					qry += "TABLE_NAME LIKE '%" + token.toUpperCase() + "%' ";
+				}
+				qry += " )";
+			}
+			if (exclTable !=null && exclTable.length()>0) {
+				StringTokenizer st = new StringTokenizer(exclTable, " ");
+				while (st.hasMoreTokens()) {
+					String token = st.nextToken();
+					qry += " AND TABLE_NAME NOT LIKE '%" + token.toUpperCase() + "%' ";
+				}
+			}
+		}
+
 		qry += "ORDER BY 1";
 		System.out.println("qry=" + qry);
 
@@ -127,7 +151,7 @@ public class ContentSearch {
 		ResultSet rs = q.getResultSet();
 		try {
 			int cnt=0;
-			while (rs.next() && cnt <= 5000) {
+			while (rs !=null && rs.next() && cnt <= 5000) {
 				if (!running) break; 
 				cnt++;
 				for  (int i = 1; i<= rs.getMetaData().getColumnCount(); i++){
