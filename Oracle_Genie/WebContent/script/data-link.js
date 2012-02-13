@@ -352,3 +352,6 @@
 		
 	}
 	
+	function hideDiv(divName) {
+		$("#"+divName).slideUp();
+	}
