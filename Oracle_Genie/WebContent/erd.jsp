@@ -9,6 +9,7 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 
 	String table = request.getParameter("tname");
+	String tname = table;
 	String owner = request.getParameter("owner");
 	
 	// incase owner is null & table has owner info
@@ -18,10 +19,7 @@
 		table = table.substring(idx+1);
 	}
 	
-	System.out.println("owner=" + owner);
-	
 //	String catalog = null;
-	String tname = table;
 	int idx = table.indexOf(".");
 /* 	if (idx>0) {
 		catalog = table.substring(0, idx);
@@ -29,20 +27,26 @@
 	}
 	if (catalog==null) catalog = cn.getSchemaName();
  */
-	String pkName = cn.getPrimaryKeyName(tname);
+	if (owner==null) owner = cn.getSchemaName().toUpperCase();
+	System.out.println("owner=" + owner);
+	System.out.println("tname=" + tname);
+	
+	String pkName = cn.getPrimaryKeyName(owner, table);
+	System.out.println("pkName=" + pkName);
+	
 	ArrayList<String> pk = cn.getPrimaryKeys(owner, tname);
-	if (pkName == null && owner != null) pkName = cn.getPrimaryKeyName(owner, tname);
+	if (pkName == null && owner != null) pkName = cn.getPrimaryKeyName(owner, table);
 
-	String pkCols = cn.getConstraintCols(pkName);
+	String pkCols = cn.getConstraintCols(owner, pkName);
 	if (pkName != null && pkCols.equals(""))
 		pkCols = cn.getConstraintCols(owner, pkName);
 	
-	List<ForeignKey> fks = cn.getForeignKeys(tname);
-	if (owner != null) fks = cn.getForeignKeys(owner, tname);
+	List<ForeignKey> fks = cn.getForeignKeys(owner, table);
+	if (owner != null) fks = cn.getForeignKeys(owner, table);
 	
-	List<String> refTabs = cn.getReferencedTables(owner, tname);
+	List<String> refTabs = cn.getReferencedTables(owner, table);
 	
-	List<TableCol> list = cn.getTableDetail(owner, tname);	
+	List<TableCol> list = cn.getTableDetail(owner, table);	
 %>
 
 <html>
@@ -114,8 +118,8 @@
 &nbsp;
 
 <% for (ForeignKey rec: fks) { 
-	List<TableCol> list1 = cn.getTableDetail(owner, rec.rTableName);
-	ArrayList<String> pk1 = cn.getPrimaryKeys(owner, rec.rTableName);
+	List<TableCol> list1 = cn.getTableDetail(rec.rOwner, rec.rTableName);
+	ArrayList<String> pk1 = cn.getPrimaryKeys(rec.rOwner, rec.rTableName);
 	String id = Util.getId();
 %>
 <div id="div-<%=id%>" style="margin-left: 20px; background-color: #ffffcc; width:220px; border: 1px solid #cccccc; float: left;">
@@ -154,7 +158,8 @@ for (TableCol t: list1) {
 <%
 	String id = Util.getId();
 %>
-<div id="mainDiv" style="margin-left: 80px; background-color: #99FFFF; width:220px; border: 1px solid #cccccc;">
+
+<div id="mainDiv" style="margin-left: 60px; padding:4px; background-color: #99FFFF; width:240px; border: 2px solid #333333;">
 <b><%= tname %></b>
 <a href="javascript:toggleDiv('<%= id %>')"><img id="img-<%=id%>" align=top src="image/minus.gif"></a>
 <div id="sub-<%=id%>" style="display: block;">
@@ -185,10 +190,11 @@ for (TableCol t: list) {
 <div id="childDiv">
 
 <% for (String tbl: refTabs) { 
-	List<TableCol> list1 = cn.getTableDetail(owner, tbl);
-	ArrayList<String> pk1 = cn.getPrimaryKeys(owner, tbl);
+	List<TableCol> list1 = cn.getTableDetail(tbl);
+	ArrayList<String> pk1 = cn.getPrimaryKeys(tbl);
 	id = Util.getId();
 %>
+
 <div id="div-<%=id%>" style="margin-left: 20px; background-color: #ffffcc; width:220px; border: 1px solid #cccccc; float: left;">
 <a href="erd.jsp?tname=<%= tbl %>"><%= tbl %></a>
 <a href="javascript:toggleDiv('<%= id %>')"><img id="img-<%=id%>" align=top src="image/plus.gif"></a>
