@@ -28,7 +28,8 @@
 	<td>
 		<input type="radio" name="owner" value="mine" checked>Table
 		<input type="radio" name="owner" value="other">Synonym
-		<input type="radio" name="owner" value="both">Both
+		<input type="radio" name="owner" value="both">Table &amp; Synonym
+		<input type="radio" name="owner" value="dict">User Dictionary
 	</td>
 </tr>
 <tr>
