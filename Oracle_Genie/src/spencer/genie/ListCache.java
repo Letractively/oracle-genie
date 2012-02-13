@@ -1,5 +1,6 @@
 package spencer.genie;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -41,4 +42,7 @@ public class ListCache {
 		lists.clear();
 	}
 	
+	public Enumeration<String> getKeys() {
+		return lists.keys();
+	}
 }
