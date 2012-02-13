@@ -210,9 +210,7 @@ public class Connect implements HttpSessionBindingListener {
 
 	public void valueUnbound(HttpSessionBindingEvent arg0) {
 		printQueryLog();
-		QueryCache.getInstance().clearAll();
-		ListCache.getInstance().clearAll();
-		StringCache.getInstance().clearAll();
+		clearCache();
 		this.disconnect();
 	}
 	
@@ -231,9 +229,7 @@ public class Connect implements HttpSessionBindingListener {
 
 	private void loadData() {
 		
-		ListCache.getInstance().clearAll();
-		QueryCache.getInstance().clearAll();
-		StringCache.getInstance().clearAll();
+		clearCache();
 		
 		loadSchema();
 		loadTables();
@@ -627,6 +623,10 @@ public class Connect implements HttpSessionBindingListener {
 //		return colName;
 //	}
 
+	public ArrayList<String> getPrimaryKeys(String tname)  {
+		return getPrimaryKeys(null, tname);
+	}
+	
 	public ArrayList<String> getPrimaryKeys(String catalog, String tname)  {
 		ArrayList pk = null;
 		String colName = "";
@@ -744,7 +744,7 @@ public class Connect implements HttpSessionBindingListener {
 
 	public String getPrimaryKeyName(String owner, String tname) {
 		String qry = "SELECT CONSTRAINT_NAME FROM ALL_CONSTRAINTS WHERE OWNER='" +
-				owner + "' AND TABLE_NAME='" + tname + "' AND CONSTRAINT_TYPE = 'P'";
+				owner.toUpperCase() + "' AND TABLE_NAME='" + tname + "' AND CONSTRAINT_TYPE = 'P'";
 		
 		return queryOne(qry);
 	}
@@ -896,6 +896,9 @@ public class Connect implements HttpSessionBindingListener {
        			fk.rConstraintName = rs.getString("R_CONSTRAINT_NAME");
        			fk.deleteRule = rs.getString("DELETE_RULE");
        			fk.rTableName = getTableNameByPrimaryKey(fk.rConstraintName);
+       			if (fk.rTableName != null && fk.rTableName.indexOf(".")>0) {
+       				fk.rTableName = fk.rTableName.substring(fk.rTableName.indexOf(".")+1);
+       			}
 
        			list.add(fk);
        		}
@@ -949,7 +952,9 @@ public class Connect implements HttpSessionBindingListener {
 	}
 
 	public List<String> getReferencedTables(String owner, String tname) {
-		if (owner == null) return getReferencedTables(tname);
+		if (owner == null || owner.equalsIgnoreCase(this.getSchemaName())) {
+			return getReferencedTables(tname);
+		}
 		
 		String pkName = getPrimaryKeyName(owner, tname);
 		
@@ -1334,10 +1339,18 @@ public class Connect implements HttpSessionBindingListener {
 		
 		return false;
 	}
-	
+
+	public List<TableCol> getTableDetail(String tname) throws SQLException {
+		String owner = null;
+		if (tname.contains(".")) {
+			String[] temp = tname.split("\\.");
+			owner = temp[0];
+			tname = temp[1];
+		}		
+		return getTableDetail(owner, tname);
+	}
+
 	public List<TableCol> getTableDetail(String owner, String tname) throws SQLException {
-		List<TableCol> list = new ArrayList<TableCol>();
-		
 		if (owner==null) {
 			// see if the table is users
 			if (tables.contains(tname)) {
@@ -1355,6 +1368,11 @@ public class Connect implements HttpSessionBindingListener {
 		if (owner==null) {
 			return getTableDetail2(owner, tname);
 		}
+
+		List<TableCol> list = TableDetailCache.getInstance().get(owner, tname); 
+		if (list != null ) return list;
+		
+		list = new ArrayList<TableCol>();
 		
 		Statement stmt = conn.createStatement();
 		String qry = "SELECT * FROM ALL_TAB_COLUMNS WHERE OWNER='" + owner.toUpperCase() + "' AND TABLE_NAME='" + tname + "' ORDER BY column_id";
@@ -1374,8 +1392,10 @@ public class Connect implements HttpSessionBindingListener {
 			int scale = rs1.getInt("DATA_SCALE");
 			int nullable = rs1.getString("NULLABLE").equals("Y")?1:0;
 			
-			String colDef = rs1.getString("DATA_DEFAULT");
+/*			String colDef = rs1.getString("DATA_DEFAULT");
 			if (colDef==null) colDef="";
+*/
+			String colDef="";
 			
 			String dType = dataType.toLowerCase();
 			
@@ -1405,18 +1425,22 @@ public class Connect implements HttpSessionBindingListener {
 		rs1.close();
 		stmt.close();
 		
+		TableDetailCache.getInstance().add(owner, tname, list);
 		return list;
 	}
 
 
-	public List<TableCol> getTableDetail2(String catalog, String tname) throws SQLException {
-		List<TableCol> list = new ArrayList<TableCol>();
+	public List<TableCol> getTableDetail2(String owner, String tname) throws SQLException {
+		List<TableCol> list = TableDetailCache.getInstance().get(owner, tname); 
+		if (list != null ) return list;
+		
+		list = new ArrayList<TableCol>();
 
 		DatabaseMetaData dbm = conn.getMetaData();
-		ResultSet rs1 = dbm.getColumns(catalog,"%",tname,"%");
+		ResultSet rs1 = dbm.getColumns(owner,"%",tname,"%");
 
 		// primary key
-		ArrayList<String> pk = getPrimaryKeys(catalog, tname);
+		ArrayList<String> pk = getPrimaryKeys(owner, tname);
 		
 		//System.out.println("Detail for " + table);
 		while (rs1.next()){
@@ -1456,15 +1480,18 @@ public class Connect implements HttpSessionBindingListener {
 		}
 		
 		rs1.close();
+		
+		TableDetailCache.getInstance().add(owner, tname, list);
 		return list;
 	}
 	
 	public List<String[]> queryMultiCol(String qry, int cols) {
 		
-//		List<String> list = ListCache.getInstance().getListObject(qry);
-//		if (list != null) return list;
+		List<String[]> list = ListCache2.getInstance().getListObject(qry);
+		if (list != null) return list;
 		
-		List<String[]>list = new ArrayList<String[]>();
+//		List<String[]>list = new ArrayList<String[]>();
+		list = new ArrayList<String[]>();
 		try {
        		Statement stmt = conn.createStatement();
        		ResultSet rs = stmt.executeQuery(qry);	
@@ -1484,7 +1511,7 @@ public class Connect implements HttpSessionBindingListener {
              message = e.getMessage();
  		}
 		
-//		ListCache.getInstance().addList(qry, list);
+		ListCache2.getInstance().addList(qry, list);
 		return list;
 	}
 	
@@ -1503,5 +1530,13 @@ public class Connect implements HttpSessionBindingListener {
 		}
 		
 		return "";
+	}
+	
+	public void clearCache() {
+		QueryCache.getInstance().clearAll();
+		ListCache.getInstance().clearAll();
+		ListCache2.getInstance().clearAll();
+		StringCache.getInstance().clearAll();
+		TableDetailCache.getInstance().clearAll();
 	}
 }
