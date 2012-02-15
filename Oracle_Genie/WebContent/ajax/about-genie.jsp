@@ -13,6 +13,6 @@ Please download the latest version here:<br/>
 <a href="http://code.google.com/p/oracle-genie/">http://code.google.com/p/oracle-genie/</a>
 <br/><br/>
 
-Feb. 13, 2012<br/>
+Feb. 15, 2012<br/>
 Spencer Hwang - the creator of Genie<br/>
 <a href="mailto:spencer.hwang@gmail.com">spencer.hwang@gmail.com</a>
