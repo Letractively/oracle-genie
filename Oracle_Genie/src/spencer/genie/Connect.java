@@ -19,6 +19,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -56,6 +57,12 @@ public class Connect implements HttpSessionBindingListener {
 	private HashMap<String, ArrayList<String>> pkMap;
 	private Stack<String> history;
 	
+	public QueryCache queryCache;
+	public ListCache listCache;
+	public ListCache2 listCache2;
+	public StringCache stringCache;
+	public TableDetailCache tableDetailCache; 
+
 	/**
 	 * Constructor
 	 * 
@@ -97,6 +104,12 @@ public class Connect implements HttpSessionBindingListener {
        		this.schemaName = userName;
 //       		System.out.println("this.schemaName=" + this.schemaName);
 
+            queryCache = QueryCache.getInstance(urlString);
+            listCache = ListCache.getInstance(urlString);
+            listCache2 = ListCache2.getInstance(urlString);
+            stringCache = StringCache.getInstance(urlString);
+            tableDetailCache = TableDetailCache.getInstance(urlString);
+
             loadData();
         }
         catch (Exception e)
@@ -127,6 +140,7 @@ public class Connect implements HttpSessionBindingListener {
         }
     	
     	conn = null;
+		clearCache();
     }
     
     /**
@@ -1210,7 +1224,7 @@ public class Connect implements HttpSessionBindingListener {
 	}
 
 	public String queryOne(String qry) {
-		String res = StringCache.getInstance().get(qry);
+		String res = stringCache.get(qry);
 		if (res != null) return res;
 		
 		try {
@@ -1227,13 +1241,13 @@ public class Connect implements HttpSessionBindingListener {
              System.err.println ("queryOne - " + qry);
              message = e.getMessage();
  		}
-		StringCache.getInstance().add(qry, res);
+		stringCache.add(qry, res);
 		return res;
 	}
 	
 	public List<String> queryMulti(String qry) {
 		
-		List<String> list = ListCache.getInstance().getListObject(qry);
+		List<String> list = listCache.getListObject(qry);
 		if (list != null) return list;
 		
 		list = new ArrayList<String>();
@@ -1253,7 +1267,7 @@ public class Connect implements HttpSessionBindingListener {
              message = e.getMessage();
  		}
 		
-		ListCache.getInstance().addList(qry, list);
+		listCache.addList(qry, list);
 		return list;
 	}
 
@@ -1369,7 +1383,7 @@ public class Connect implements HttpSessionBindingListener {
 			return getTableDetail2(owner, tname);
 		}
 
-		List<TableCol> list = TableDetailCache.getInstance().get(owner, tname); 
+		List<TableCol> list = tableDetailCache.get(owner, tname); 
 		if (list != null ) return list;
 		
 		list = new ArrayList<TableCol>();
@@ -1425,13 +1439,13 @@ public class Connect implements HttpSessionBindingListener {
 		rs1.close();
 		stmt.close();
 		
-		TableDetailCache.getInstance().add(owner, tname, list);
+		tableDetailCache.add(owner, tname, list);
 		return list;
 	}
 
 
 	public List<TableCol> getTableDetail2(String owner, String tname) throws SQLException {
-		List<TableCol> list = TableDetailCache.getInstance().get(owner, tname); 
+		List<TableCol> list = tableDetailCache.get(owner, tname); 
 		if (list != null ) return list;
 		
 		list = new ArrayList<TableCol>();
@@ -1481,13 +1495,13 @@ public class Connect implements HttpSessionBindingListener {
 		
 		rs1.close();
 		
-		TableDetailCache.getInstance().add(owner, tname, list);
+		tableDetailCache.add(owner, tname, list);
 		return list;
 	}
 	
 	public List<String[]> queryMultiCol(String qry, int cols) {
 		
-		List<String[]> list = ListCache2.getInstance().getListObject(qry);
+		List<String[]> list = listCache2.getListObject(qry);
 		if (list != null) return list;
 		
 //		List<String[]>list = new ArrayList<String[]>();
@@ -1511,7 +1525,7 @@ public class Connect implements HttpSessionBindingListener {
              message = e.getMessage();
  		}
 		
-		ListCache2.getInstance().addList(qry, list);
+		listCache2.addList(qry, list);
 		return list;
 	}
 	
@@ -1533,10 +1547,10 @@ public class Connect implements HttpSessionBindingListener {
 	}
 	
 	public void clearCache() {
-		QueryCache.getInstance().clearAll();
-		ListCache.getInstance().clearAll();
-		ListCache2.getInstance().clearAll();
-		StringCache.getInstance().clearAll();
-		TableDetailCache.getInstance().clearAll();
+		if (queryCache!=null) queryCache.clearAll();
+		if (listCache!=null) listCache.clearAll();
+		if (listCache2!=null) listCache2.clearAll();
+		if (stringCache!=null) stringCache.clearAll();
+		if (tableDetailCache!=null) tableDetailCache.clearAll();
 	}
 }
