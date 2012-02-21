@@ -19,6 +19,7 @@
 	list.add("Sequence");
 	list.add("DB link");
 	list.add("User role priv");
+	list.add("User sys priv");
 	list.add("Invalid Objects");
 	list.add("Oracle Version");
 %>
