@@ -21,6 +21,8 @@
 		qry = "SELECT * FROM USER_DB_LINKS ORDER BY 1";
 	else if (tool.equalsIgnoreCase("User role priv")) 
 		qry = "SELECT * FROM USER_ROLE_PRIVS";
+	else if (tool.equalsIgnoreCase("User sys priv")) 
+		qry = "SELECT * FROM USER_SYS_PRIVS";
 	else if (tool.equalsIgnoreCase("search program")) 
 		qry = "SELECT * FROM USER_SOURCE WHERE lower(text) like lower('%[Search Keyword (ex: insert into TABLE )]%')";
 	else if (tool.equalsIgnoreCase("invalid objects")) 
