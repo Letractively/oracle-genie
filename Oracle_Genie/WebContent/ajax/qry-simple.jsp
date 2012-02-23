@@ -25,6 +25,7 @@
 
 	String sortColumn = request.getParameter("sortColumn");
 	String sortDirection = request.getParameter("sortDirection");
+	String main = request.getParameter("main");
 	
 	if (sql==null) sql = "SELECT * FROM TABLE";
 	sql = sql.trim();
@@ -170,7 +171,14 @@ Found: <%= filteredCount %>
 <% } %>
 
 <% } %>
-<table id="table-<%= id %>" border=1 class="gridBody">
+
+<%
+	String tableClass ="gridBody";
+	if (main != null) tableClass = "gridBodyBOLD";
+
+%>
+
+<table id="table-<%= id %>" border=1 class="<%= tableClass %>">
 <tr>
 
 <%
@@ -268,10 +276,12 @@ Found: <%= filteredCount %>
 				String keyValue = val;
 				boolean isLinked = false;
 				String linkUrl = "";
+				String dialogUrl = "";
 				String linkImage = "image/view.png";
 				if (lTable != null  && dLink) {
 					isLinked = true;
 					linkUrl = "ajax/fk-lookup.jsp?table=" + lTable + "&key=" + Util.encodeUrl(keyValue);
+					dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
 				} else if (val != null && val.startsWith("BLOB ")) {
 					isLinked = true;
 					String tpkName = cn.getPrimaryKeyName(tbl);
@@ -289,7 +299,9 @@ Found: <%= filteredCount %>
 */
 %>
 <td class="<%= rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
-<%= (val!=null && isLinked?"<a class='inspect' href='" + linkUrl  + "'><img border=0 src='" + linkImage + "'></a>":"")%>
+<%-- <%= (val!=null && isLinked?"<a class='inspect' href='" + linkUrl  + "'><img border=0 src='" + linkImage + "'></a>":"")%>
+ --%>
+<%= (val!=null && isLinked?"<a href='Javascript:showDialog(" + dialogUrl + ")'><img border=0 src='" + linkImage + "'></a>":"")%>
 </td>
 <%
 		}
@@ -329,13 +341,12 @@ for (int i=0; i<fkLinkTab.size(); i++) {
 	String fsql = cn.getPKLinkSql(ft, keyValue);
 	id = Util.getId();
 %>
-
 <div id="div-fkk-<%=id %>">
 <br/>
 <a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" align=middle src="image/plus.gif"></a>
 &nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle title="<%=fsql%>"/></a>
 (<%= tname %>.<%=fc.toLowerCase() %>)
-&nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')">x</a>
+&nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
 <div style="display: none;" id="mode-<%=id%>">hide</div>
 <div style="display: none;" id="hide-<%=id%>"></div>
