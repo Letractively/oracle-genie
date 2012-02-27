@@ -48,6 +48,7 @@ function loadTable(tName) {
 }
 
 function globalSearch(keyword) {
+	keyword = keyword.trim();
 	saveForNavigation();
 	$("#inner-result1").html("<img src='image/loading.gif'/>");
 
@@ -332,7 +333,7 @@ function runQuery(catalog,tab) {
     	checkProgress();
     	$("#progressDiv").show();
     	
-    	$("#searchResult").html("Searching...");
+    	$("#searchResult").html("Searching...  <a href='javascript:skipCurrent()'>skip current table</a>");
 		$("#searchResult").append("<div id='wait'><img src='image/loading.gif'/></div>");
 		$.ajax({
 			type: 'POST',
@@ -467,3 +468,16 @@ function runQuery(catalog,tab) {
 		}
     	
     }
+    
+    function skipCurrent() {
+		$.ajax({
+			type: 'POST',
+			url: "ajax/skip-search.jsp",
+			data: $("#form0").serialize(),
+			success: function(data){
+				checkProgress();
+//				readySearch();
+			}
+		});	
+    }
+    
