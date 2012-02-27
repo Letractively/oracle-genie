@@ -144,7 +144,7 @@
 <% if (q.getRecordCount() > 1) { %>
 
 <% if (pgNo>1) { %>
-<a href="Javascript:gotoPage(<%=id%>, <%= pgNo - 1%>)"><img border=0 src="image/prev.png" align="bottom"></a>
+<a href="Javascript:gotoPage(<%=id%>, <%= pgNo - 1%>)"><img border=0 src="image/prev.png" border=0 align="bottom"></a>
 <% } %>
 
 <% if (totalPage > 1) { %>
@@ -152,7 +152,7 @@ Page: <b><%= pgNo %></b> of <%= totalPage %>
 <% } %>
 
 <% if (q.getTotalPage(linesPerPage) > pgNo) { %>
-<a href="Javascript:gotoPage(<%=id%>, <%= pgNo + 1%>)"><img border=0 src="image/next.png" align="bottom"></a>
+<a href="Javascript:gotoPage(<%=id%>, <%= pgNo + 1%>)"><img border=0 src="image/next.png" border=0 align="bottom"></a>
 <% } %>
 
 Found: <%= filteredCount %>
@@ -166,8 +166,8 @@ Found: <%= filteredCount %>
 
 &nbsp;&nbsp;&nbsp;&nbsp;
 <% if (totalCount>=5) { %>
-<img src="image/view.png"><input id="search-<%=id%>" value="<%= searchValue %>" size=20 onChange="searchTable(<%=id%>,$(this).val())">
-<a href="Javascript:clearSearch(<%=id%>)"><img border="0" src="image/clear.gif"></a>
+<img src="image/view.png" border=0 ><input id="search-<%=id%>" value="<%= searchValue %>" size=20 onChange="searchTable(<%=id%>,$(this).val())">
+<a href="Javascript:clearSearch(<%=id%>)"><img border="0" border=0 src="image/clear.gif"></a>
 <% } %>
 
 <% } %>
@@ -343,8 +343,8 @@ for (int i=0; i<fkLinkTab.size(); i++) {
 %>
 <div id="div-fkk-<%=id %>">
 <br/>
-<a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" align=middle src="image/plus.gif"></a>
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle title="<%=fsql%>"/></a>
+<a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
+&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle border=0 title="<%=fsql%>"/></a>
 (<%= tname %>.<%=fc.toLowerCase() %>)
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
