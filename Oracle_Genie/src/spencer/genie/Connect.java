@@ -1561,6 +1561,7 @@ public class Connect implements HttpSessionBindingListener {
 	}
 	
 	public void createTable() throws SQLException {
+        conn.setReadOnly(false);
 		String stmt1 = 
 				"CREATE TABLE GENIE_PAGE (	"+
 				"PAGE_ID	VARCHAR2(100),"+
@@ -1599,5 +1600,6 @@ public class Connect implements HttpSessionBindingListener {
 		stmt.executeUpdate(sql);
 		
 		stmt.close();		
+        conn.setReadOnly(true);
 	}
 }
