@@ -15,6 +15,8 @@ public class ContentSearch {
 	private String caseType;
 
 	private static ContentSearch instance = null;
+	static String urlString = null;
+	
 	private static boolean running = false;
 	private static boolean skipTable = false;
 	private static String progressStr;
@@ -26,8 +28,9 @@ public class ContentSearch {
 	private ContentSearch() {
 	}
 	
-	public static ContentSearch getInstance() {
-		if (instance==null) {
+	public static ContentSearch getInstance(String urlStr) {
+		if (instance==null && urlString==null) {
+			urlString = urlStr;
 			instance = new ContentSearch();
 		}
 		return instance; 
