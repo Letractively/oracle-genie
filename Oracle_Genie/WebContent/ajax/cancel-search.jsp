@@ -17,6 +17,6 @@
 %>
 <%
 
-	ContentSearch cs = ContentSearch.getInstance();  
+	ContentSearch cs = cn.contentSearch;  
 	cs.cancel();
 %>

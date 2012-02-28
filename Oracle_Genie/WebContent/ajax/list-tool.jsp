@@ -15,6 +15,9 @@
 	list.add("Search Program");
 	list.add("");
 
+	list.add("User Defined Page");
+	list.add("");
+
 	list.add("Dictionary");
 	list.add("Sequence");
 	list.add("DB link");
