@@ -58,7 +58,7 @@
     <script src="script/jquery.js" type="text/javascript"></script>
 
     <script src="script/jquery.colorbox-min.js"></script>
-    <script src="script/query-methods.js" type="text/javascript"></script>
+    <script src="script/query-methods.js?20120301" type="text/javascript"></script>
 
     <link rel='stylesheet' type='text/css' href='css/style.css'>
     <link rel="stylesheet" href="css/colorbox.css" />
@@ -101,23 +101,43 @@
 
 	<div>
 	<a href="Javascript:copyPaste('SELECT');">SELECT</a>&nbsp;
-	<a href="Javascript:copyPaste('COUNT(*)');">COUNT(*)</a>&nbsp;
+	<a href="Javascript:copyPaste('*');">*</a>&nbsp;
 	<a href="Javascript:copyPaste('FROM');">FROM</a>&nbsp;
 	<a href="Javascript:copyPaste('WHERE');">WHERE</a>&nbsp;
 	<a href="Javascript:copyPaste('=');">=</a>&nbsp;
 	<a href="Javascript:copyPaste('LIKE');">LIKE</a>&nbsp;
+	<a href="Javascript:copyPaste('\'%\'');">'%'</a>&nbsp;
 	<a href="Javascript:copyPaste('IS');">IS</a>&nbsp;
 	<a href="Javascript:copyPaste('NOT');">NOT</a>&nbsp;
 	<a href="Javascript:copyPaste('NULL');">NULL</a>&nbsp;
 	<a href="Javascript:copyPaste('AND');">AND</a>&nbsp;
 	<a href="Javascript:copyPaste('OR');">OR</a>&nbsp;
 	<a href="Javascript:copyPaste('IN');">IN</a>&nbsp;
-	<a href="Javascript:copyPaste('()');">()</a>&nbsp;
+	<a href="Javascript:copyPaste('( )');">( )</a>&nbsp;
 	<a href="Javascript:copyPaste('EXISTS');">EXISTS</a>&nbsp;
-	<a href="Javascript:copyPaste('GROUP BY');">GROUP-BY</a>&nbsp;
-	<a href="Javascript:copyPaste('HAVING');">HAVING</a>&nbsp;
 	<a href="Javascript:copyPaste('ORDER BY');">ORDER-BY</a>&nbsp;
 	<a href="Javascript:copyPaste('DESC');">DESC</a>&nbsp;
+
+	<br/>
+	<a href="Javascript:copyPaste('LOWER( )');">LOWER( )</a>&nbsp;
+	<a href="Javascript:copyPaste('UPPER( )');">UPPER( )</a>&nbsp;
+	<a href="Javascript:copyPaste('SUBSTR( )');">SUBSTR( )</a>&nbsp;
+	<a href="Javascript:copyPaste('TRIM( )');">TRIM( )</a>&nbsp;
+	<a href="Javascript:copyPaste('LENGTH( )');">LENGTH( )</a>&nbsp;
+	&nbsp;&nbsp;&nbsp;
+	<a href="Javascript:copyPaste('TO_DATE( )');">TO_DATE( )</a>&nbsp;
+	<a href="Javascript:copyPaste('TO_NUMBER( )');">TO_NUMBER( )</a>&nbsp;
+	<a href="Javascript:copyPaste('TO_CHAR( )');">TO_CHAR( )</a>&nbsp;
+
+	<br/>
+	<a href="Javascript:copyPaste('GROUP BY');">GROUP-BY</a>&nbsp;
+	<a href="Javascript:copyPaste('HAVING');">HAVING</a>&nbsp;
+	<a href="Javascript:copyPaste('COUNT(*)');">COUNT(*)</a>&nbsp;
+	<a href="Javascript:copyPaste('SUM( )');">SUM( )</a>&nbsp;
+	<a href="Javascript:copyPaste('AVG( )');">AVG( )</a>&nbsp;
+	<a href="Javascript:copyPaste('MIN( )');">MIN( )</a>&nbsp;
+	<a href="Javascript:copyPaste('MAX( )');">MAX( )</a>&nbsp;
+	
 	</div>
 </div>
 <br clear="all"/>
