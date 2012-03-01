@@ -9,7 +9,7 @@
 
 <head>
 	<script src="script/jquery.js" type="text/javascript"></script>
-	<script src="script/main.js" type="text/javascript"></script>
+	<script src="script/main.js?20120301" type="text/javascript"></script>
 	<script type="text/javascript" src="script/shCore.js"></script>
 	<script type="text/javascript" src="script/shBrushSql.js"></script>
     <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
