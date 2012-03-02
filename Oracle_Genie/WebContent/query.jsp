@@ -23,7 +23,7 @@
 	String norun = request.getParameter("norun");
 	
 	int lineLength = Util.countLines(sql);
-	if (lineLength <3) lineLength = 3;
+	if (lineLength <3) lineLength = 4;
 	
 	cn.queryCache.removeQuery(sql);
 	Query q = new Query(cn, sql);
@@ -58,7 +58,7 @@
     <script src="script/jquery.js" type="text/javascript"></script>
 
     <script src="script/jquery.colorbox-min.js"></script>
-    <script src="script/query-methods.js?20120301" type="text/javascript"></script>
+    <script src="script/query-methods.js?20120302" type="text/javascript"></script>
 
     <link rel='stylesheet' type='text/css' href='css/style.css'>
     <link rel="stylesheet" href="css/colorbox.css" />
@@ -119,6 +119,7 @@
 	<a href="Javascript:copyPaste('DESC');">DESC</a>&nbsp;
 
 	<br/>
+	&nbsp;&nbsp;&nbsp;
 	<a href="Javascript:copyPaste('LOWER( )');">LOWER( )</a>&nbsp;
 	<a href="Javascript:copyPaste('UPPER( )');">UPPER( )</a>&nbsp;
 	<a href="Javascript:copyPaste('SUBSTR( )');">SUBSTR( )</a>&nbsp;
@@ -130,6 +131,7 @@
 	<a href="Javascript:copyPaste('TO_CHAR( )');">TO_CHAR( )</a>&nbsp;
 
 	<br/>
+	&nbsp;&nbsp;&nbsp;
 	<a href="Javascript:copyPaste('GROUP BY');">GROUP-BY</a>&nbsp;
 	<a href="Javascript:copyPaste('HAVING');">HAVING</a>&nbsp;
 	<a href="Javascript:copyPaste('COUNT(*)');">COUNT(*)</a>&nbsp;
@@ -143,7 +145,7 @@
 <br clear="all"/>
 
 <form name="form1" id="form1" method="post" action="query.jsp">
-<textarea id="sql" name="sql" cols=100 rows=<%= lineLength %>><%= sql %></textarea><br/>
+<textarea id="sql1" name="sql" cols=100 rows=<%= lineLength %>><%= sql %></textarea><br/>
 <input type="submit" value="Submit"/>
 &nbsp;
 <input type="button" value="Download" onClick="Javascript:download()"/>
