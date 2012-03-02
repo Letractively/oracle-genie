@@ -315,7 +315,13 @@ Found: <%= filteredCount %>
 </table>
 
 <% if (!showFKLink) return; %>
+<% if (fkLinkTab.size()<=0) return; 
 
+	id = Util.getId();
+%>
+
+<a href="Javascript:toggleDiv('img-<%=id%>','div-<%=id%>')"><img id="img-<%=id%>" src="image/minus.gif"></a>
+<div id="div-<%=id%>">
 <%
 for (int i=0; i<fkLinkTab.size(); i++) {
 	String ft = fkLinkTab.get(i);
@@ -354,3 +360,4 @@ for (int i=0; i<fkLinkTab.size(); i++) {
 </div>
 <% } %>
 
+</div>
