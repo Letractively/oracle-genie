@@ -240,6 +240,8 @@
 		} else if (mode == "hide") {
 			$("#modeHide-"+id).css("background-color", "yellow");
 			$("#modeHide-"+id).css("font-weight", "bold");
+
+			hideNullColumnTable(""+id);
 		}
 		
 	}
