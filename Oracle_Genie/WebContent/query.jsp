@@ -50,11 +50,12 @@
 	}
 //	System.out.println("XXX TBL=" + tbl);
 	
+	String title = sql;
 %>
 
 <html>
 <head> 
-	<title>Genie - Query</title>
+	<title><%= title %></title>
     <script src="script/jquery.js" type="text/javascript"></script>
 
     <script src="script/jquery.colorbox-min.js"></script>
