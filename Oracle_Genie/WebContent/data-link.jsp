@@ -83,6 +83,9 @@
 <a href="Javascript:showAllColumn()">Show All</a>
 &nbsp;&nbsp;
 <a id="showERD" href="Javascript:showERD('<%=table%>')">Show ERD</a>
+
+&nbsp;&nbsp;
+<a id="showERD" href="Javascript:newQry()">New Query</a>
 <br/><br/>
 
 <div id="tableList1" style="display: hidden; margin-left: 20px;">
