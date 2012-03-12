@@ -24,6 +24,7 @@
 	
 	int lineLength = Util.countLines(sql);
 	if (lineLength <3) lineLength = 4;
+	if (lineLength >50) lineLength = 50;
 	
 	cn.queryCache.removeQuery(sql);
 	Query q = new Query(cn, sql);

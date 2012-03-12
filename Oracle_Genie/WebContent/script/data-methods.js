@@ -392,3 +392,31 @@
     		$(this).children().removeClass('datahighlight');
     	});
     }
+
+	function newQry() {
+		var id = "id"+(new Date().getTime());
+		var temp ="<div id='" + id + "' title='Query' >"
+		$.ajax({
+			url: "ajax/dialog-qry.jsp",
+			success: function(data){
+				temp = temp + data + "</div>";
+				$("BODY").append(temp);
+				$("#"+id).dialog({ width: 700, height: 150 });
+				setHighlight();
+			}
+		});		
+	}
+
+	function doQry(id) {
+		var sql = $("#input-"+id).val();
+		$("#sql").val(sql);
+//		alert(sql);
+		$.ajax({
+			url: "ajax/qry-simple.jsp",
+			data: $("#form0").serialize(),
+			success: function(data){
+				$("#div-"+id).html(data);
+			}
+		});		
+	}
+	
