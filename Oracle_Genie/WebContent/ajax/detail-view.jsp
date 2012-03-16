@@ -109,3 +109,40 @@
 	}
 %>
 
+<br/>
+<%
+
+	List<String> refTrgs = cn.getReferencedTriggers(view);
+
+	if (refTrgs.size()>0) { 
+%>
+<b>Related Trigger</b>
+<a href="Javascript:toggleDiv('imgTrg','divTrg')"><img id="imgTrg" src="image/minus.gif"></a>
+<div id="divTrg">
+<table border=0>
+<td width=10>&nbsp;</td>
+<td valign=top>
+<%
+	int listSize = (refTrgs.size() / 3) + 1;
+	int cnt = 0;
+	for (int i=0; i<refTrgs.size(); i++) {
+		String refTrg = refTrgs.get(i);
+		cnt++;
+%>
+
+<% if ((cnt-1)>=listSize) { %>
+		</td><td valign=top>
+<%
+		cnt = 1;
+	} 
+%>
+
+		<a href="Javascript:loadPackage('<%= refTrg %>')"><%= refTrg %></a>&nbsp;&nbsp;<br/>		
+<% }
+%>
+</td>
+</table>
+</div>
+<%
+}
+%>
