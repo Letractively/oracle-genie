@@ -7,16 +7,6 @@
 	pageEncoding="utf-8"
 %>
 
-<head>
-	<script src="script/jquery.js" type="text/javascript"></script>
-	<script src="script/main.js?20120301" type="text/javascript"></script>
-	<script type="text/javascript" src="script/shCore.js"></script>
-	<script type="text/javascript" src="script/shBrushSql.js"></script>
-    <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
-    <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-    <link href="css/style.css" rel="stylesheet" type="text/css" />
-	<link rel="icon" type="image/png" href="image/Genie-icon.png">
-</head>
 <%
 	String name = request.getParameter("name");
 	String owner = request.getParameter("owner");
@@ -35,6 +25,26 @@
 		text += Util.escapeHtml(list.get(i));
 	}
 %>
+<html>
+<head>
+	<title>Source for <%= name %></title>
+	<script src="script/jquery.js" type="text/javascript"></script>
+	<script src="script/main.js?20120301" type="text/javascript"></script>
+	<script type="text/javascript" src="script/shCore.js"></script>
+	<script type="text/javascript" src="script/shBrushSql.js"></script>
+    <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
+    <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+	<link rel="icon" type="image/png" href="image/Genie-icon.png">
+</head>
+<body>
+
+
+<img src="image/icon_query.png" align="middle"/>
+<%= cn.getUrlString() %>
+
+<br/>
+
 <h2><%= name %></h2>
 
 <pre class='brush: sql'>
@@ -49,3 +59,5 @@ $(document).ready(function(){
 })
 </script>
 
+</body>
+</html>
