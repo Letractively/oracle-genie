@@ -119,7 +119,7 @@
 	<a href="Javascript:copyPaste('EXISTS');">EXISTS</a>&nbsp;
 	<a href="Javascript:copyPaste('ORDER BY');">ORDER-BY</a>&nbsp;
 	<a href="Javascript:copyPaste('DESC');">DESC</a>&nbsp;
-
+<!-- 
 	<br/>
 	&nbsp;&nbsp;&nbsp;
 	<a href="Javascript:copyPaste('LOWER( )');">LOWER( )</a>&nbsp;
@@ -132,7 +132,8 @@
 	<a href="Javascript:copyPaste('TO_NUMBER( )');">TO_NUMBER( )</a>&nbsp;
 	<a href="Javascript:copyPaste('TO_CHAR( )');">TO_CHAR( )</a>&nbsp;
 
-	<br/>
+ -->
+ 	<br/>
 	&nbsp;&nbsp;&nbsp;
 	<a href="Javascript:copyPaste('GROUP BY');">GROUP-BY</a>&nbsp;
 	<a href="Javascript:copyPaste('HAVING');">HAVING</a>&nbsp;
