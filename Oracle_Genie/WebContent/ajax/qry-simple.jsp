@@ -141,7 +141,7 @@
 <%-- <b><%= tname %></b> --%> 
 <%--<%= cn.getComment(tname) --%>
 
-<% if (q.getRecordCount() > 1) { %>
+<% if (q.getRecordCount() > 0) { %>
 
 <% if (pgNo>1) { %>
 <a href="Javascript:gotoPage(<%=id%>, <%= pgNo - 1%>)"><img border=0 src="image/prev.png" border=0 align="bottom"></a>
