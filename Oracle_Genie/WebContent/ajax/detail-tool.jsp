@@ -49,3 +49,7 @@
 <% if (tool.equalsIgnoreCase("user defined page")) { %>
 <jsp:include page="udp.jsp"/>
 <% } %>
+
+<% if (tool.equalsIgnoreCase("Schema Diff")) { %>
+<jsp:include page="schema-diff.jsp"/>
+<% } %>

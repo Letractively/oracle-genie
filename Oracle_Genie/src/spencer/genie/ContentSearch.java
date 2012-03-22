@@ -21,7 +21,7 @@ public class ContentSearch {
 	private static boolean skipTable = false;
 	private static String progressStr;
 	private int totalTableCount;
-	private int currentTaleIndex;
+	private int currentTableIndex;
 	private String currentTable;
 	private int currentRow;
 	
@@ -130,9 +130,9 @@ public class ContentSearch {
 
 		List<String> tlist = cn.queryMulti(qry);
 		totalTableCount = tlist.size();
-		currentTaleIndex = 0;
+		currentTableIndex = 0;
 		for (String tname : tlist) {
-			currentTaleIndex ++;
+			currentTableIndex ++;
 			currentTable = tname;
 			progressStr = tname + "<br/>" + progressStr;
 			String foundColumn = searchTable(tname);
@@ -213,13 +213,13 @@ public class ContentSearch {
 		int percent = 0;
 		
 		if (totalTableCount >0)
-			percent = (100 * currentTaleIndex) / totalTableCount;
+			percent = (100 * currentTableIndex) / totalTableCount;
 		
-		String status = "Processing " + currentTaleIndex + " of " + totalTableCount + "<br/>" +
+		String status = "Processing " + currentTableIndex + " of " + totalTableCount + "<br/>" +
 				currentTable + " " + currentRow + "<br/>";
 
 		if (!running)
-			status = "Finished " + currentTaleIndex + " of " + totalTableCount +
+			status = "Finished " + currentTableIndex + " of " + totalTableCount +
 				"<br/>";
 		
 		status += 
