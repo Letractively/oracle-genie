@@ -13,7 +13,8 @@
 	String sql = request.getParameter("sql");
 	String id = Util.getId();
 %>
-
+<%-- SQL = <%= sql %> id=<%= id %>
+ --%>
 <div id="sql-<%=id%>" style="display: none"><%= sql %></div>
 <div style="display: none;" id="hide-<%=id%>"></div>
 <div style="display: none;" id="sort-<%=id%>"></div>
