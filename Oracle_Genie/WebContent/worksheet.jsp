@@ -169,6 +169,7 @@
 	function doOpenQry(id) {
 		var sql = $("#sql-"+id).html();
 		$("#id").val(id);
+		$("#div-"+id).html("<img src='image/loading.gif'/>");
 		$.ajax({
 			url: "ajax/qry-simple.jsp",
 			data: $("#form0").serialize(),
