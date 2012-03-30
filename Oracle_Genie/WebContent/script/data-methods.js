@@ -416,6 +416,7 @@
 		$("#sql-"+id).html(sql);
 		$("#sql").val(sql);
 		$("#id").val(id);
+		$("#div-"+id).html("<img src='image/loading.gif'/>");
 //		alert(sql);
 		$.ajax({
 			url: "ajax/qry-simple.jsp",
