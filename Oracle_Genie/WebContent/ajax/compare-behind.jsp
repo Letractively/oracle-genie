@@ -14,13 +14,16 @@
 	String incl = request.getParameter("incl");
 	String excl = request.getParameter("excl");
 	
+	String sql = request.getParameter("text_sql");
+	
 	SchemaDiff sd = (SchemaDiff) session.getAttribute("SD");
 	if (sd== null) {
 		sd = new SchemaDiff(cn, cn2);
 		session.setAttribute("SD", sd);
 	}
-	
-	sd.startCompare(object, incl, excl);
+
+	if (sql !=null) object = "Q";
+	sd.startCompare(object, incl, excl, sql);
 %>
 
 <%= sd.getResult() %>

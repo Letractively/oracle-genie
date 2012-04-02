@@ -214,6 +214,8 @@ public class Connect implements HttpSessionBindingListener {
     public void printQueryLog() {
     	HashMap<String, QueryLog> map = this.getQueryHistory();
     	
+    	if (map == null) return;
+    	
     	Iterator iterator = map.values().iterator();
     	int idx = 0;
     	while  (iterator.hasNext()) {
@@ -1530,18 +1532,26 @@ public class Connect implements HttpSessionBindingListener {
 			if (list != null) return list;
 		}
 		
+		
 //		List<String[]>list = new ArrayList<String[]>();
 		list = new ArrayList<String[]>();
+		int cnt = 0;
 		try {
        		Statement stmt = conn.createStatement();
        		ResultSet rs = stmt.executeQuery(qry);	
 
+    		if (cols == 0) {
+    			cols = rs.getMetaData().getColumnCount();
+    		}
+    			
        		while (rs.next()) {
        			String res[] = new String[cols+1];
        			
        			for (int i=1; i<=cols;i++)
        				res[i] = rs.getString(i);
        			list.add(res);
+       			cnt++;
+       			if (cnt >= 10000) break;
        		}
        		
        		rs.close();
