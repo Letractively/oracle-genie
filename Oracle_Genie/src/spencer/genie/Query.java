@@ -3,6 +3,7 @@ package spencer.genie;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -57,6 +58,17 @@ public class Query {
 			String targetQry = processQuery(q2);
 //			System.out.println("NEW QUERY: " + targetQry);	
 			rs = stmt.executeQuery(targetQry);
+			
+/*			// metadata
+			ResultSetMetaData rsmdObj =rs.getMetaData();  
+            //getting number of columns retrieved from resultset  
+            int numColumns = rsmdObj .getColumnCount();  
+
+            // Get the column names; column indices start from 1  
+            for (int i=0; i<numColumns; i++) {  
+            	String tableName=rsmdObj.getTableName(i+1);              
+                System.out.println("tname=" +tableName);  
+            }  */
 			
 			qData = new QueryData();
 			qData.setColumns(rs);
