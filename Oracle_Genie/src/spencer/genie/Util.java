@@ -2,7 +2,9 @@ package spencer.genie;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -101,6 +103,40 @@ public class Util {
 	
 	public static List<String> getTables(String sql) {
 		List<String> tables = new ArrayList<String>();
+		Set<String> tbls = new HashSet<String>();
+
+		String temp=sql.replaceAll("[\n\r\t]", " ").toUpperCase();
+
+		String froms[] = temp.split(" FROM ");
+		
+		for (int i=1; i < froms.length; i++) {
+			String str = froms[i];
+			System.out.println(i + ": " + str);
+			if (str.startsWith("(")) continue;
+			
+			int idx = str.indexOf(" WHERE ");
+			if (idx > 0) str = str.substring(0, idx);
+
+			System.out.println("*** " + i + ": " + str);
+			
+			String a[] = str.split(",");
+			for (int j=0; j<a.length; j++) {
+				String tname = a[j].trim();
+				int x = tname.indexOf(" ");
+				if (x > 0) tname = tname.substring(0, x).trim();
+				System.out.println(j + "=" +tname);
+				
+				tbls.add(tname);
+			}			
+		}
+		
+		tables.addAll(tbls);
+		
+		return tables;
+	}
+	
+	public static List<String> _getTables(String sql) {
+		List<String> tables = new ArrayList<String>();
 
 		String temp=sql.replaceAll("[\n\r\t]", " ");
 		
@@ -120,10 +156,11 @@ public class Util {
 				if (x > 0) tname = tname.substring(0, x).trim();
 				System.out.println(i + "=" +tname);
 				
-				tables.add(tname);
+				if (!tname.startsWith("("))
+					tables.add(tname);
 			}
 		}
 		
 		return tables;
-	}
+	}	
 }
