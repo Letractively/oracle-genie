@@ -43,7 +43,11 @@ $(document).ready(function(){
 			} else {
 				stopShow();
 			}
-		}
+		},
+        error:function (jqXHR, textStatus, errorThrown){
+            alert(jqXHR.status);
+            alert(errorThrown);
+        }  
 	});	
 })
 
