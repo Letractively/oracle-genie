@@ -74,8 +74,7 @@ var doMode = 'copy';
 				$("#table-detail").slideDown();
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+            	alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
 	}
@@ -107,8 +106,7 @@ var doMode = 'copy';
 				$("#tableColumns").html(data);
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+            	alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
 	}
@@ -272,8 +270,7 @@ var doMode = 'copy';
 				reloadData();
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+            	alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
 	}	
@@ -281,6 +278,7 @@ var doMode = 'copy';
 	function reloadData() {
 		$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
 		
+		$('body').css('cursor', 'wait'); 
 		$.ajax({
 			type: 'POST',
 			url: "ajax/qry.jsp",
@@ -292,10 +290,10 @@ var doMode = 'copy';
 				hideIfAny();
 				
 				setHighlight();
+				$('body').css('cursor', 'default'); 
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+            	alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
 	}
@@ -383,8 +381,7 @@ function linkPk(tname, cname, value, backTable) {
 			$("#pkLink").html(data);
 		},
         error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
-            alert(errorThrown);
+        	alert(jqXHR.status + " " + errorThrown);
         }  
 	});		
 }
@@ -397,8 +394,7 @@ function backTolinkPk(tname, value) {
 			$("#pkLink").html(data);
 		},
         error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
-            alert(errorThrown);
+        	alert(jqXHR.status + " " + errorThrown);;
         }  
 	});		
 }
@@ -413,8 +409,7 @@ function showTables() {
 			$("#wait").remove();
 		},
         error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
-            alert(errorThrown);
+        	alert(jqXHR.status + " " + errorThrown);
         }  
 	});
 }
@@ -429,8 +424,7 @@ function showRelatedTables(tname) {
 			$("#wait").remove();
 		},
         error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
-            alert(errorThrown);
+        	alert(jqXHR.status + " " + errorThrown);hrown);
         }  
 	});
 }
@@ -461,8 +455,7 @@ function showERD(tname) {
 			$("#tableList1").slideDown();
 		},
         error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
-            alert(errorThrown);
+        	alert(jqXHR.status + " " + errorThrown);
         }  
 	});
 }
@@ -474,8 +467,7 @@ function loadERD(tname) {
 			$("#ERD").html(data);
 		},
         error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
-            alert(errorThrown);
+        	alert(jqXHR.status + " " + errorThrown);
         }  
 	});
 }
@@ -545,8 +537,7 @@ function showDialog(table, key) {
 			setHighlight();
 		},
         error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
-            alert(errorThrown);
+        	alert(jqXHR.status + " " + errorThrown);
         }  
 	});		
 }
