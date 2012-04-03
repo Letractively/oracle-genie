@@ -61,7 +61,6 @@ var doMode = 'copy';
 	}	
 	
 	function showTable(tbl) {
-		
 		if (tbl == "") return;
 		
 		$("#table-detail").append("<div id='wait'><img src='image/loading.gif'/></div>");
@@ -424,7 +423,7 @@ function showRelatedTables(tname) {
 			$("#wait").remove();
 		},
         error:function (jqXHR, textStatus, errorThrown){
-        	alert(jqXHR.status + " " + errorThrown);hrown);
+        	alert(jqXHR.status + " " + errorThrown);
         }  
 	});
 }
