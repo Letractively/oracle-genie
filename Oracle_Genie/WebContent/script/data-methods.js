@@ -61,8 +61,7 @@
 				$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
 		
@@ -219,6 +218,7 @@
 		$("#sortColumn").val($("#sort-"+id).val());
 		$("#sortDirection").val($("#sortdir-"+id).val());
 
+		$('body').css('cursor', 'wait'); 
 		$.ajax({
 			type: 'POST',
 			url: "ajax/qry-simple.jsp",
@@ -229,10 +229,10 @@
 				hideIfAny(id);
 				
 				setHighlight();
+				$('body').css('cursor', 'default'); 
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
 	}
@@ -339,8 +339,7 @@
 				$("#tableList1").slideDown();
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});
 	}
@@ -352,8 +351,7 @@
 				$("#ERD").html(data);
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});
 	}
@@ -391,8 +389,7 @@
 				setHighlight();
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});		
 	}
@@ -429,8 +426,7 @@
 				setHighlight();
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});		
 	}
@@ -450,8 +446,7 @@
 				setHighlight();
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});		
 	}
@@ -475,15 +470,14 @@
 		$("#div-"+id).html("<img src='image/loading.gif'/>");
 //		alert(sql);
 		$.ajax({
-			url: "ajax/qry-simple.jsp",
+			url: "ajax/qry-work.jsp",
 			data: $("#form0").serialize(),
 			success: function(data){
 				$("#div-"+id).html(data);
 				setHighlight();
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});		
 	}
