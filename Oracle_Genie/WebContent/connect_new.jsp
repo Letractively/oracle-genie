@@ -45,8 +45,7 @@ $(document).ready(function(){
 			}
 		},
         error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
-            alert(errorThrown);
+        	alert(jqXHR.status + " " + errorThrown);
         }  
 	});	
 })
