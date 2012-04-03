@@ -154,13 +154,15 @@ Found: <%= filteredCount %>
  --%>
 <div id="help-<%= id %>" style="float: left; display: block;" >
 &nbsp; &nbsp;
-<a id="modeHide-<%=id%>" href="Javascript:setColumnMode(<%=id%>,'hide')">Hide Column</a>
-<a href="Javascript:showAllColumnTable('table-<%=id%>')">Show All Column</a>&nbsp;
+<a id="modeHide-<%=id%>" href="Javascript:setColumnMode(<%=id%>,'hide')">Hide</a>
+<a href="Javascript:showAllColumnTable('table-<%=id%>')">Show All</a>&nbsp;
+<% if (totalCount>=2) { %>
 <a id="modeSort-<%=id%>" href="Javascript:setColumnMode(<%=id%>,'sort')">Sort</a>
+<% } %>
 
 &nbsp;&nbsp;&nbsp;&nbsp;
 <% if (totalCount>=5) { %>
-<img src="image/view.png" border=0 ><input id="search-<%=id%>" value="<%= searchValue %>" size=20 onChange="searchTable(<%=id%>,$(this).val())">
+<img src="image/view.png" border=0 ><input id="search-<%=id%>" value="<%= searchValue %>" size=15 onChange="searchTable(<%=id%>,$(this).val())">
 <a href="Javascript:clearSearch(<%=id%>)"><img border="0" border=0 src="image/clear.gif"></a>
 <% } %>
 </div>
