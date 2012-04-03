@@ -31,8 +31,8 @@
     <link rel="stylesheet" href="css/colorbox.css" />
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
 
-	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/base/jquery-ui.css" type="text/css" media="all" />
-	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/jquery-ui.min.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js" type="text/javascript"></script>
     
 </head> 
 
@@ -175,7 +175,11 @@
 				$("BODY").append(temp);
 				$("#"+id).dialog({ width: 700, height: 400 });
 				setHighlight();
-			}
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status);
+                alert(errorThrown);
+            }  
 		});
 	}    
 	
@@ -195,7 +199,11 @@
 				$("#"+id).dialog("option", "position", [200 + idx*50, 200 + idx*50]);
 				//alert($("#"+id + " > table[0]").height());
 				setHighlight();
-			}
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status);
+                alert(errorThrown);
+            }  
 		});
 	}    
 	
@@ -208,7 +216,11 @@
 			success: function(data){
 				$("#div-"+id).html(data);
 				setHighlight();
-			}
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status);
+                alert(errorThrown);
+            }  
 		});		
 	}	
 	
@@ -239,7 +251,11 @@
 			url: gotoUrl,
 			success: function(data){
 				$("#inner-helper").html(data);
-			}
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status);
+                alert(errorThrown);
+            }  
 		});
 		
 		$("#" + select).css("font-weight", "bold");
@@ -267,7 +283,11 @@
 			url: gotoUrl,
 			success: function(data){
 				$("#inner-helper").html(data);
-			}
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status);
+                alert(errorThrown);
+            }  
 		});
 		
 	}
@@ -280,7 +300,11 @@
 			url: "ajax/detail-help-table.jsp?table=" + tableName + "&t=" + (new Date().getTime()),
 			success: function(data){
 				$("#inner-detail").html(data);
-			}
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status);
+                alert(errorThrown);
+            }  
 		});	
 	}
 
@@ -292,7 +316,11 @@
 			url: "ajax/detail-help-table.jsp?table=" + tableName + "&t=" + (new Date().getTime()),
 			success: function(data){
 				$("#inner-detail").html(data);
-			}
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status);
+                alert(errorThrown);
+            }  
 		});	
 	}
 	

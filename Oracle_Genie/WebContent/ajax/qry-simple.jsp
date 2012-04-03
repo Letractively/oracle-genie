@@ -130,6 +130,7 @@
 
 <% if (q.getRecordCount() > 0) { %>
 
+<div style="float: left;">
 <% if (pgNo>1) { %>
 <a href="Javascript:gotoPage(<%=id%>, <%= pgNo - 1%>)"><img border=0 src="image/prev.png" border=0 align="bottom"></a>
 <% } %>
@@ -147,6 +148,12 @@ Found: <%= filteredCount %>
 (of <%= totalCount %>)
 <% } %>
 
+</div>
+
+<%-- <a style="float: left;" href="Javascript:showHelp(<%=id%>)">+</a>
+ --%>
+<div id="help-<%= id %>" style="float: left; display: block;" >
+&nbsp; &nbsp;
 <a id="modeHide-<%=id%>" href="Javascript:setColumnMode(<%=id%>,'hide')">Hide Column</a>
 <a href="Javascript:showAllColumnTable('table-<%=id%>')">Show All Column</a>&nbsp;
 <a id="modeSort-<%=id%>" href="Javascript:setColumnMode(<%=id%>,'sort')">Sort</a>
@@ -156,7 +163,8 @@ Found: <%= filteredCount %>
 <img src="image/view.png" border=0 ><input id="search-<%=id%>" value="<%= searchValue %>" size=20 onChange="searchTable(<%=id%>,$(this).val())">
 <a href="Javascript:clearSearch(<%=id%>)"><img border="0" border=0 src="image/clear.gif"></a>
 <% } %>
-
+</div>
+<br clear="all"/>
 <% } %>
 
 <%
