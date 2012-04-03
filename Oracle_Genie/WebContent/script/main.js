@@ -11,8 +11,7 @@ function loadSchema(sName) {
 			CATALOG = catName;
 		},
         error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
-            alert(errorThrown);
+            alert(jqXHR.status + " " + errorThrown);
         }  
 	});	
 }
@@ -47,8 +46,7 @@ function loadTable(tName) {
 			
 		},
         error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
-            alert(errorThrown);
+            alert(jqXHR.status + " " + errorThrown);
         }  
 	});	
 	
@@ -66,8 +64,7 @@ function globalSearch(keyword) {
 			$("#inner-result1").html(data);
 		},
         error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
-            alert(errorThrown);
+            alert(jqXHR.status + " " + errorThrown);
         }  
 	});
 	
@@ -85,8 +82,7 @@ function loadView(vName) {
 			SyntaxHighlighter.all();
 		},
         error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
-            alert(errorThrown);
+            alert(jqXHR.status + " " + errorThrown);
         }  
 	});	
 	addHistory("<a href='Javascript:loadView(\""+vName+"\")'>" + vName + "</a>");
@@ -102,8 +98,7 @@ function loadPackage(pName) {
 			$("#inner-result1").html(data);
 		},
         error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
-            alert(errorThrown);
+            alert(jqXHR.status + " " + errorThrown);
         }  
 	});	
 	addHistory("<a href='Javascript:loadPackage(\""+pName+"\")'>" + pName + "</a>");
@@ -119,8 +114,7 @@ function loadSynonym(sName) {
 			$("#inner-result1").html(data);
 		},
         error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
-            alert(errorThrown);
+            alert(jqXHR.status + " " + errorThrown);
         }  
 	});	
 	addHistory("<a href='Javascript:loadSynonym(\""+sName+"\")'>" + sName + "</a>");
@@ -136,8 +130,7 @@ function loadTool(name) {
 			$("#inner-result1").html(data);
 		},
         error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
-            alert(errorThrown);
+            alert(jqXHR.status + " " + errorThrown);
         }  
 	});	
 	addHistory("<a href='Javascript:loadTool(\""+name+"\")'>" + name + "</a>");
@@ -153,8 +146,7 @@ function loadDba(name) {
 			$("#inner-result1").html(data);
 		},
         error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
-            alert(errorThrown);
+            alert(jqXHR.status + " " + errorThrown);
         }  
 	});	
 	addHistory("<a href='Javascript:loadDba(\""+name+"\")'>" + name + "</a>");
@@ -225,8 +217,7 @@ function runQuery(catalog,tab) {
 				//$("#" + divName).html(data);
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
 	}
@@ -286,8 +277,7 @@ function runQuery(catalog,tab) {
 				$("#inner-table").html(data);
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});
 		
@@ -323,8 +313,7 @@ function runQuery(catalog,tab) {
 				$("#inner-table").html(data);
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});
 		
@@ -350,8 +339,7 @@ function runQuery(catalog,tab) {
 				$("#inner-result1").html(data);
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});
 	}
@@ -395,8 +383,7 @@ function runQuery(catalog,tab) {
 				readySearch();
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
     	
@@ -420,8 +407,7 @@ function runQuery(catalog,tab) {
 //				alert('Search Cancelled');
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
     }    
@@ -443,8 +429,7 @@ function runQuery(catalog,tab) {
 					to2 = setTimeout("checkProgress()",1000);
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});	    	
     }	
@@ -484,8 +469,7 @@ function runQuery(catalog,tab) {
     			$("#paramQueryResult").html(data);
     		},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
     	});
     	
@@ -550,8 +534,7 @@ function runQuery(catalog,tab) {
 //				readySearch();
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
     }
@@ -565,8 +548,7 @@ function runQuery(catalog,tab) {
 				loadTool("User Defined Page");
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+                alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
     }
