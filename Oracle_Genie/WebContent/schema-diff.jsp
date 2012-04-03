@@ -58,8 +58,7 @@
 				setReady();
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+            	alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
     	
@@ -82,8 +81,7 @@
 					to2 = setTimeout("checkProgress()",1000);
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+            	alert(jqXHR.status + " " + errorThrown);
             }  
 		});	    	
     }
@@ -105,8 +103,7 @@
 		    	setReady();
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+            	alert(jqXHR.status + " " + errorThrown);
             }  
 		});	    	
 
@@ -149,8 +146,7 @@
 		    	setReady2();
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+            	alert(jqXHR.status + " " + errorThrown);
             }  
 		});	    	
 
@@ -170,8 +166,7 @@
 				setReady2();
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+            	alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
     	
