@@ -177,8 +177,7 @@
 				setHighlight();
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+            	alert(jqXHR.status + " " + errorThrown);
             }  
 		});
 	}    
@@ -201,29 +200,27 @@
 				setHighlight();
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+            	alert(jqXHR.status + " " + errorThrown);
             }  
 		});
 	}    
-	
+/*
 	function doOpenQry(id) {
 		var sql = $("#sql-"+id).html();
 		//$("#id").val(id);
 		$("#div-"+id).html("<img src='image/loading.gif'/>");
 		$.ajax({
-			url: "ajax/qry-simple.jsp?id=" + id  + "&sql="+ encodeURI(sql),
+			url: "ajax/qry-work.jsp?id=" + id  + "&sql="+ encodeURI(sql),
 			success: function(data){
 				$("#div-"+id).html(data);
 				setHighlight();
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+            	alert(jqXHR.status + " " + errorThrown);
             }  
 		});		
 	}	
-	
+*/	
 	function showHelp() {
 		$("#helper").slideToggle();
 	}	
@@ -253,8 +250,7 @@
 				$("#inner-helper").html(data);
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+            	alert(jqXHR.status + " " + errorThrown);
             }  
 		});
 		
@@ -285,8 +281,7 @@
 				$("#inner-helper").html(data);
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+            	alert(jqXHR.status + " " + errorThrown);
             }  
 		});
 		
@@ -302,8 +297,7 @@
 				$("#inner-detail").html(data);
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+            	alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
 	}
@@ -318,8 +312,7 @@
 				$("#inner-detail").html(data);
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status);
-                alert(errorThrown);
+            	alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
 	}
