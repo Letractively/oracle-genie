@@ -47,7 +47,8 @@
     <script src="script/jquery.js" type="text/javascript"></script>
 
     <script src="script/jquery.colorbox-min.js"></script>
-    <script src="script/query-methods.js?20120403" type="text/javascript"></script>
+    <script src="script/data-methods.js?20120404" type="text/javascript"></script>
+    <script src="script/query-methods.js?20120404" type="text/javascript"></script>
 
     <link rel='stylesheet' type='text/css' href='css/style.css'>
     <link rel="stylesheet" href="css/colorbox.css" />
