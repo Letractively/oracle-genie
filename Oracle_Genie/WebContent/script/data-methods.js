@@ -475,6 +475,7 @@
 			success: function(data){
 				$("#div-"+id).html(data);
 				setHighlight();
+				hideNullColumnTable(""+id);
 			},
             error:function (jqXHR, textStatus, errorThrown){
                 alert(jqXHR.status + " " + errorThrown);
