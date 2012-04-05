@@ -13,6 +13,7 @@ package spencer.genie;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -63,6 +64,8 @@ public class Connect implements HttpSessionBindingListener {
 	public StringCache stringCache;
 	public TableDetailCache tableDetailCache;
 	public ContentSearch contentSearch;
+	
+	private boolean workSheetTableCreated = false;
 
 	/**
 	 * Constructor
@@ -1632,4 +1635,72 @@ public class Connect implements HttpSessionBindingListener {
 		stmt.close();		
         conn.setReadOnly(true);
 	}
+
+	public void createTable4WorkSheet() {
+		String stmt1 = 
+				"CREATE TABLE GENIE_WORK_SHEET (	"+
+				"ID	VARCHAR2(100),"+
+				"SQL_STMTS	VARCHAR2(4000),"+
+				"COORDS		VARCHAR2(4000),"+
+				"UPDATED    DATE DEFAULT SYSDATE,"+
+				"PRIMARY KEY (ID) )";
+			
+		try {
+	        conn.setReadOnly(false);
+	        Statement stmt = conn.createStatement();
+	        stmt.execute(stmt1);
+	        stmt.close();
+		
+	        conn.setReadOnly(true);
+
+	        stmt.close();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+		} finally {
+			workSheetTableCreated = true;
+		}
+	}
+
+	public void saveWorkSheet(String name, String sqls, String coords) {
+		if (!workSheetTableCreated) createTable4WorkSheet();
+		try {
+	        conn.setReadOnly(false);
+
+	        Statement stmt = conn.createStatement();
+	        String sql = "DELETE FROM GENIE_WORK_SHEET WHERE ID='" + Util.escapeQuote(name) + "'";
+	        stmt.executeUpdate(sql);
+	        
+	        sql = "INSERT INTO GENIE_WORK_SHEET VALUES (?,?,?, SYSDATE)";
+	        PreparedStatement pstmt = conn.prepareStatement(sql);
+	        
+	        pstmt.setString(1, name);
+	        pstmt.setString(2, sqls);
+	        pstmt.setString(3, coords);
+	        pstmt.executeUpdate();
+	        
+	        conn.setReadOnly(true);
+
+	        stmt.close();
+	        pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteWorkSheet(String name) {
+		try {
+	        conn.setReadOnly(false);
+
+	        Statement stmt = conn.createStatement();
+	        String sql = "DELETE FROM GENIE_WORK_SHEET WHERE ID='" + Util.escapeQuote(name) + "'";
+	        stmt.executeUpdate(sql);
+//System.out.println(sql);	        
+	        conn.setReadOnly(true);
+
+	        stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
