@@ -285,7 +285,6 @@ var doMode = 'copy';
 			success: function(data){
 				$("#data-div").append(data);
 				$("#wait").remove();
-				$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
 				hideIfAny();
 				
 				setHighlight();

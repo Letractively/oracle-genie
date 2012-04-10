@@ -129,14 +129,11 @@
 <head> 
 	<title>Genie - Query</title>
     <link rel='stylesheet' type='text/css' href='css/style.css'>
-    <link rel="stylesheet" href="css/colorbox.css" />
-    <script src="script/jquery.js" type="text/javascript"></script>
-    <script src="script/jquery.colorbox-min.js"></script>
+    <script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="script/query-methods.js?20120301" type="text/javascript"></script>
     
     <script type="text/javascript">
 	$(document).ready(function() {
-		$(".inspect").colorbox({transition:"none", width:"800", height:"600"});
 		showTable('<%=tbl%>');
 	});	    
     </script>
