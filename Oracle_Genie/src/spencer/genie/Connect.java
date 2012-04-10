@@ -1709,6 +1709,16 @@ public class Connect implements HttpSessionBindingListener {
 		numRows = queryOne("SELECT NUM_ROWS FROM USER_TABLES WHERE TABLE_NAME ='" + tname + "'");
 
 		if (numRows==null) numRows = "";
+		else {
+			int n = Integer.parseInt(numRows);
+			if (n < 1000) {
+				numRows = numRows;
+			} else if (n < 1000000) {
+				numRows = Math.round(n /1000) + "K";
+			} else {
+				numRows = (Math.round(n /100000) / 10.0 )+ "M";
+			}
+		}
 		return numRows;
 	}
 }
