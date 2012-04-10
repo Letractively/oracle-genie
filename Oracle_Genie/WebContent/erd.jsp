@@ -136,7 +136,7 @@
 	String id = Util.getId();
 %>
 <div id="div-<%=id%>" style="margin-left: 20px; background-color: #ffffcc; width:220px; border: 1px solid #cccccc; float: left;">
-<a href="erd.jsp?tname=<%= rec.rTableName %>"><%= rec.rTableName %></a>
+<a href="erd.jsp?tname=<%= rec.rTableName %>"><%= rec.rTableName %></a> <%= cn.getTableRowCount(rec.rTableName) %>
 <a href="javascript:toggleDiv('<%= id %>')"><img id="img-<%=id%>" align=top src="image/plus.gif"></a>
 <a href="javascript:runQuery('<%= rec.rTableName %>')"><img src="image/view.png"></a>
 <a href="javascript:hideDiv('<%= id %>')">x</a>
@@ -174,7 +174,7 @@ for (TableCol t: list1) {
 %>
 
 <div id="mainDiv" style="margin-left: 60px; padding:4px; background-color: #99FFFF; width:240px; border: 2px solid #333333;">
-<b><%= tname %></b>
+<b><%= tname %></b> <%= cn.getTableRowCount(tname) %>
 <a href="javascript:toggleDiv('<%= id %>')"><img id="img-<%=id%>" align=top src="image/minus.gif"></a>
 <a href="javascript:runQuery('<%= tname %>')"><img src="image/view.png"></a>
 <div id="sub-<%=id%>" style="display: block;">
@@ -211,7 +211,7 @@ for (TableCol t: list) {
 %>
 
 <div id="div-<%=id%>" style="margin-left: 20px; background-color: #ffffcc; width:220px; border: 1px solid #cccccc; float: left;">
-<a href="erd.jsp?tname=<%= tbl %>"><%= tbl %></a>
+<a href="erd.jsp?tname=<%= tbl %>"><%= tbl %></a> <%= cn.getTableRowCount(tbl) %>
 <a href="javascript:toggleDiv('<%= id %>')"><img id="img-<%=id%>" align=top src="image/plus.gif"></a>
 <a href="javascript:runQuery('<%= tbl %>')"><img src="image/view.png"></a>
 <a href="javascript:hideDiv('<%= id %>')">x</a>

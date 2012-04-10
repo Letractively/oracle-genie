@@ -1702,5 +1702,13 @@ public class Connect implements HttpSessionBindingListener {
 			e.printStackTrace();
 		}
 	}
-	
+
+	public String getTableRowCount(String tname) {
+		String numRows = null;
+
+		numRows = queryOne("SELECT NUM_ROWS FROM USER_TABLES WHERE TABLE_NAME ='" + tname + "'");
+
+		if (numRows==null) numRows = "";
+		return numRows;
+	}
 }
