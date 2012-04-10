@@ -17,7 +17,7 @@
     <title>Slide Show</title>
     <link rel='stylesheet' type='text/css' href='css/style.css'> 
     <link rel='stylesheet' type='text/css' href='css/slideshow.css'> 
-    <script src="script/jquery.js" type="text/javascript"></script>
+    <script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 function slideSwitch() {
