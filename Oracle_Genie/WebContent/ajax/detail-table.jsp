@@ -143,7 +143,7 @@ Please select a Table to see the detail.
 <%
 	if (tabLink) {
 %>
-	<a href="Javascript:loadTable('<%= rTable %>')"><%= rTable %></a>
+	<a href="Javascript:loadTable('<%= rTable %>')"><%= rTable %></a> <%= cn.getTableRowCount(rTable) %>
 <%
 	} else {
 %>	
