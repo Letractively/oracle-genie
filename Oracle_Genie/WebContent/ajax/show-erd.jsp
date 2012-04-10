@@ -51,7 +51,7 @@
 <div>
 <% for (ForeignKey rec: fks) { %>
 
-<a href="javascript:loadERD('<%= rec.rTableName %>')"><%= rec.rTableName %></a><br/>
+<a href="javascript:loadERD('<%= rec.rTableName %>')"><%= rec.rTableName %></a> <%= cn.getTableRowCount(rec.rTableName) %><br/>
 
 <% } %>
 </div>
@@ -60,8 +60,8 @@
 <img style="float:left;" src="image/blue_arrow_left.png">
 
 <div id="mainDiv" style="background-color: #ffffcc; width:220px; height: 150px; overflow: auto; border: 1px solid #cccccc; float: left">
-<b><%= tname %></b>
-&nbsp;
+<b><%= tname %></b> 
+&nbsp;<%= cn.getTableRowCount(tname) %>
 <a href="Javascript:selectFromErd('<%=tname%>')"><img border=0 src="image/view.png" /></a>
 <br/>
 <hr>
@@ -78,7 +78,7 @@
 <%= colDisp %>
 </td>
 <td>
-<%= t.getTypeName() %>
+<%= t.getTypeName() %> 
 </td>
 </tr>
 <% } %>
@@ -91,7 +91,7 @@
 <div id="childDiv" style="background-color: #ffffcc; width:220px; height: 150px; overflow: auto; border: 1px solid #cccccc; float: left">
 <div>
 <% for (String t: refTabs) { %>
-<a href="javascript:loadERD('<%= t %>')"><%= t %></a><br/>
+<a href="javascript:loadERD('<%= t %>')"><%= t %></a> <%= cn.getTableRowCount(t) %><br/>
 <% } %>
 </div>
 </div>
