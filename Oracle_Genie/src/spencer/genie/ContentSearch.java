@@ -126,7 +126,7 @@ public class ContentSearch {
 		}
 
 		qry += "ORDER BY 1";
-		System.out.println("qry=" + qry);
+//		System.out.println("qry=" + qry);
 
 		List<String> tlist = cn.queryMulti(qry);
 		totalTableCount = tlist.size();

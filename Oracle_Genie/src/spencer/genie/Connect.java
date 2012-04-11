@@ -1162,7 +1162,7 @@ public class Connect implements HttpSessionBindingListener {
        			if(!rowner.equalsIgnoreCase(this.getSchemaName()))
        				rname = rowner + "." + rname;
 
-       			res += "<a href='javascript:loadTable(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;" + getTableRowCount(rname) + "<br/>";
+       			res += "<a href='javascript:loadTable(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;<span class='rowcountstyle'>" + getTableRowCount(rname) + "</span><br/>";
        		}
        		
        		rs.close();

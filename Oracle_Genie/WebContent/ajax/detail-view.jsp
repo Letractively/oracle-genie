@@ -84,7 +84,7 @@
 		String rOwner = lst.get(i)[2];
 %>
 	&nbsp;&nbsp;
-	<a href="javascript:loadTable('<%=tname%>');"><%=tname%></a> <%= cn.getTableRowCount(tname) %><br/>
+	<a href="javascript:loadTable('<%=tname%>');"><%=tname%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tname) %></span><br/>
 <%
 	}
 %>

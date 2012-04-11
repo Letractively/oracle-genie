@@ -122,7 +122,7 @@
 %>
 <div id="div-fkk-<%=id%>">
 <a style="margin-left: 70px;" href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
-(<%= 1 %> / <%= cn.getTableRowCount(ft) %>)
+(<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(ft) %>)
 &nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=fsql%>"/></a>
 (<%= table %>.<%= fc.toLowerCase() %>)
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')"><img src="image/clear.gif" border=0/></a>
@@ -145,7 +145,7 @@
 	id = Util.getId();
 %>
 
-<b><%= table %></b> (<%= 1 %> / <%= cn.getTableRowCount(table) %>)
+<b><%= table %></b> (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(table) %>)
 &nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 title="<%=sql%>"/></a>
 <%-- <%= sql %> --%>
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
@@ -225,7 +225,7 @@
 
 <div id="div-child-<%=id%>">
 <a style="margin-left: 70px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
-(<%= recCount %> / <%= cn.getTableRowCount(refTab) %>)
+(<span class="rowcountstyle"><%= recCount %></span> / <%= cn.getTableRowCount(refTab) %>)
 &nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle border=0 title="<%=refsql%>"/></a>
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-child-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= refsql%></div>

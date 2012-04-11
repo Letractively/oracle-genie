@@ -18,7 +18,7 @@
 		table = table.substring(idx+1);
 	}
 	
-	System.out.println("owner=" + owner);
+//	System.out.println("owner=" + owner);
 	
 	String catalog = null;
 	String tname = table;
@@ -51,7 +51,7 @@
 <div>
 <% for (ForeignKey rec: fks) { %>
 
-<a href="javascript:loadERD('<%= rec.rTableName %>')"><%= rec.rTableName %></a> <%= cn.getTableRowCount(rec.rTableName) %><br/>
+<a href="javascript:loadERD('<%= rec.rTableName %>')"><%= rec.rTableName %></a> <span class="rowcountstyle"><%= cn.getTableRowCount(rec.rTableName) %></span><br/>
 
 <% } %>
 </div>
@@ -61,7 +61,7 @@
 
 <div id="mainDiv" style="background-color: #ffffcc; width:220px; height: 150px; overflow: auto; border: 1px solid #cccccc; float: left">
 <b><%= tname %></b> 
-&nbsp;<%= cn.getTableRowCount(tname) %>
+&nbsp;<span class="rowcountstyle"><%= cn.getTableRowCount(tname) %></span>
 <a href="Javascript:selectFromErd('<%=tname%>')"><img border=0 src="image/view.png" /></a>
 <br/>
 <hr>
@@ -91,7 +91,7 @@
 <div id="childDiv" style="background-color: #ffffcc; width:220px; height: 150px; overflow: auto; border: 1px solid #cccccc; float: left">
 <div>
 <% for (String t: refTabs) { %>
-<a href="javascript:loadERD('<%= t %>')"><%= t %></a> <%= cn.getTableRowCount(t) %><br/>
+<a href="javascript:loadERD('<%= t %>')"><%= t %></a> <span class="rowcountstyle"><%= cn.getTableRowCount(t) %></span><br/>
 <% } %>
 </div>
 </div>
