@@ -50,7 +50,28 @@
 //	System.out.println("XXX TBL=" + tbl);
 %>
 
-SQL = <%= sql %>
+<html>
+<head>
+	<title>BLOB <%= table + "." + col %> </title>
+	<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
+	<script src="script/main.js?20120301" type="text/javascript"></script>
+	<script type="text/javascript" src="script/shCore.js"></script>
+	<script type="text/javascript" src="script/shBrushSql.js"></script>
+	<script type="text/javascript" src="script/shBrushXml.js"></script>
+    <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
+    <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+	<link rel="icon" type="image/png" href="image/Genie-icon.png">
+</head>
+<body>
+
+
+<img src="image/icon_query.png" align="middle"/>
+<%= cn.getUrlString() %>
+
+<br/>
+
+<h3><%= sql %></h3>
 
 <%
 	boolean numberCol[] = new boolean[500];
@@ -64,10 +85,20 @@ SQL = <%= sql %>
 		String val = q.getBlob(i);
 		String escaped = Util.escapeHtml(val);
 %>
-<pre>
+<pre class='brush: xml'>
 <%= escaped %>
 </pre>
 <%
 	}	
 %>
 
+<a href="javascript:window.close()">Close</a>
+
+<script type="text/javascript">
+$(document).ready(function(){
+     SyntaxHighlighter.all();
+})
+</script>
+
+</body>
+</html>

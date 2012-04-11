@@ -387,7 +387,7 @@ if (fkLinkTab.size()>0 && dLink && false) {
 					String tpkCol = cn.getConstraintCols(tpkName);
 					String tpkValue = q.getValue(tpkCol);
 					
-					linkUrl ="ajax/blob.jsp?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue);
+					linkUrl ="blob.jsp?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue);
 				}
 				
 				if (pkColIndex >0 && i == pkColIndex && false) {
@@ -398,7 +398,7 @@ if (fkLinkTab.size()>0 && dLink && false) {
 
 %>
 <td class="<%= rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
-<%= (val!=null && isLinked && !linkUrl.startsWith("Javascript")?"<a class='inspect' href=\"" + linkUrl  + "\"><img border=0 src='" + linkImage + "'></a>":"")%>
+<%= (val!=null && isLinked && !linkUrl.startsWith("Javascript")?"<a target=_blank href=\"" + linkUrl  + "\"><img border=0 src='" + linkImage + "'></a>":"")%>
 <%= (val!=null && isLinked && linkUrl.startsWith("Javascript")?"<a href=\"" + linkUrl  + "\"><img border=0 src='" + linkImage + "'></a>":"")%>
 </td>
 <%
