@@ -111,7 +111,7 @@ public class Util {
 		
 		for (int i=1; i < froms.length; i++) {
 			String str = froms[i];
-			System.out.println(i + ": " + str);
+			//System.out.println(i + ": " + str);
 			if (str.startsWith("(")) continue;
 			
 			int idx = str.indexOf(" WHERE ");
@@ -147,14 +147,14 @@ public class Util {
 			int idx2 = temp2.toUpperCase().indexOf(" WHERE ");
 			if (idx2 > 0) temp2 = temp2.substring(0, idx2);
 			
-			System.out.println("temp2=" +temp2);
+		//	System.out.println("temp2=" +temp2);
 			
 			String a[] = temp2.split(",");
 			for (int i=0; i<a.length; i++) {
 				String tname = a[i].trim();
 				int x = tname.indexOf(" ");
 				if (x > 0) tname = tname.substring(0, x).trim();
-				System.out.println(i + "=" +tname);
+			//	System.out.println(i + "=" +tname);
 				
 				if (!tname.startsWith("("))
 					tables.add(tname);

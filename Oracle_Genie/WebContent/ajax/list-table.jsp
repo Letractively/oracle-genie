@@ -26,18 +26,32 @@
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
 	String filter = request.getParameter("filter");
-
+	boolean hideEmpty = request.getParameter("hideEmpty") != null;
+	//hideEmpty = true;
+	
 	String qry = "SELECT TABLE_NAME, NUM_ROWS FROM USER_TABLES ORDER BY 1"; 	
 	//List<String> list = cn.queryMulti(qry);
 	List<String[]> list = cn.queryMultiCol(qry, 2, true);
 	
+	int totalCnt = list.size();
+	int selectedCnt = 0;
 	if (filter !=null) filter = filter.toUpperCase();
 	for (int i=0; i<list.size();i++) {
 		if (filter != null && !list.get(i)[1].contains(filter)) continue;
-		
-		
+		if (hideEmpty && getNumRows(list.get(i)[2]).equals("0")) continue;
+		selectedCnt ++;
+	}
+
 %>
-	<li><a href="javascript:loadTable('<%=list.get(i)[1]%>');"><%=list.get(i)[1]%></a> <%= getNumRows(list.get(i)[2]) %></li>
+Found <%= selectedCnt %> table(s).
+<br/><br/>
+<%	
+	if (filter !=null) filter = filter.toUpperCase();
+	for (int i=0; i<list.size();i++) {
+		if (filter != null && !list.get(i)[1].contains(filter)) continue;
+		if (hideEmpty && getNumRows(list.get(i)[2]).equals("0")) continue;
+%>
+	<li><a href="javascript:loadTable('<%=list.get(i)[1]%>');"><%=list.get(i)[1]%></a> <span class="rowcountstyle"><%= getNumRows(list.get(i)[2]) %></span></li>
 <% 
 	} 
 %>

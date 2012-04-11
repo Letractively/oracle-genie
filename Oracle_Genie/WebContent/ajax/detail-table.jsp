@@ -19,7 +19,7 @@
 		table = table.substring(idx+1);
 	}
 	
-	System.out.println("owner=" + owner);
+	//System.out.println("owner=" + owner);
 	
 	String catalog = null;
 	String tname = table;
@@ -43,7 +43,7 @@ Please select a Table to see the detail.
 	
 %>
 
-<h2>TABLE: <%= table %> &nbsp;&nbsp;<%= cn.getTableRowCount(table) %>
+<h2>TABLE: <%= table %> &nbsp;&nbsp;<span class="rowcountstyle"><%= cn.getTableRowCount(table) %></span>
 <a href="Javascript:runQuery('','<%=tname%>')"><img border=0 src="image/icon_query.png" title="query"></a>
 <a href="erd.jsp?tname=<%=tname%>" target="_blank"><img title="ERD" border=0 src="image/erd.gif"></a>
 </h2>
@@ -143,7 +143,7 @@ Please select a Table to see the detail.
 <%
 	if (tabLink) {
 %>
-	<a href="Javascript:loadTable('<%= rTable %>')"><%= rTable %></a> <%= cn.getTableRowCount(rTable) %>
+	<a href="Javascript:loadTable('<%= rTable %>')"><%= rTable %></a> <span class="rowcountstyle"><%= cn.getTableRowCount(rTable) %></span>
 <%
 	} else {
 %>	
@@ -208,7 +208,7 @@ Please select a Table to see the detail.
 	} 
 %>
 
-		<a href="Javascript:loadTable('<%= refTab %>')"><%= refTab %></a> <%= cn.getTableRowCount(refTab) %>&nbsp;&nbsp;<br/>		
+		<a href="Javascript:loadTable('<%= refTab %>')"><%= refTab %></a> <span class="rowcountstyle"><%= cn.getTableRowCount(refTab) %></span>&nbsp;&nbsp;<br/>		
 <% }
 %>
 </td>

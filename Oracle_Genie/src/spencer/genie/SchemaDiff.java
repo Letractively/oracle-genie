@@ -48,7 +48,7 @@ public class SchemaDiff {
 	}
 	
 	public void compareQuery(String sql) {
-		System.out.println(sql);
+//		System.out.println(sql);
 
 		List<String[]> c1 = cn1.queryMultiCol(sql, 0, false);
 		List<String[]> c2 = cn2.queryMultiCol(sql, 0, false);
@@ -90,7 +90,8 @@ public class SchemaDiff {
 		if (excl != null && !excl.equals("")) qry1 += " and table_name not like '%" + excl.toUpperCase() + "%'";
 		
 		qry1 += " order by table_name";
-System.out.println(qry1);
+//System.out.println(qry1);
+
 		List<String> t1 = cn1.queryMulti(qry1, false);
 		List<String> t2 = cn2.queryMulti(qry1, false);
 		
