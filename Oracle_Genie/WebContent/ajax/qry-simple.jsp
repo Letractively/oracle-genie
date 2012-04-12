@@ -285,7 +285,10 @@ Found: <%= filteredCount %>
 					String tpkCol = cn.getConstraintCols(tpkName);
 					String tpkValue = q.getValue(tpkCol);
 					
-					linkUrl ="ajax/blob.jsp?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue);
+//					linkUrl ="ajax/blob.jsp?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue);
+					String fname = q.getValue("filename");
+					linkUrl ="download?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue)+"&filename="+fname;
+					linkImage ="image/download.gif";
 				}
 /*				
 				if (pkColIndex >0 && i == pkColIndex) {
@@ -298,7 +301,8 @@ Found: <%= filteredCount %>
 <td class="<%= rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
 <%-- <%= (val!=null && isLinked?"<a class='inspect' href='" + linkUrl  + "'><img border=0 src='" + linkImage + "'></a>":"")%>
  --%>
-<%= (val!=null && isLinked?"<a href='Javascript:showDialog(" + dialogUrl + ")'><img border=0 src='" + linkImage + "'></a>":"")%>
+<%= (val!=null && isLinked && linkImage.equals("image/view.png")? "<a href='Javascript:showDialog(" + dialogUrl + ")'><img border=0 src='" + linkImage + "'></a>":"")%>
+<%= (val!=null && isLinked && linkImage.equals("image/download.gif")? "<a href='" + linkUrl + "' target=_blank><img border=0 src='" + linkImage + "'></a>":"")%>
 </td>
 <%
 		}

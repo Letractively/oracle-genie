@@ -90,6 +90,7 @@
 
 	boolean hasDataLink = false;
 	String tname = tbl;
+	if (tname==null) tname = "";
 	if (tname.indexOf(".") > 0) tname = tname.substring(tname.indexOf(".")+1);
 
 	// Foreign keys - For FK lookup
@@ -387,7 +388,11 @@ if (fkLinkTab.size()>0 && dLink && false) {
 					String tpkCol = cn.getConstraintCols(tpkName);
 					String tpkValue = q.getValue(tpkCol);
 					
-					linkUrl ="blob.jsp?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue);
+//					linkUrl ="blob.jsp?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue);
+					String fname = "unknown";
+					fname = q.getValue("filename");
+					linkUrl ="download?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue)+"&filename="+fname;
+					linkImage ="image/download.gif";
 				}
 				
 				if (pkColIndex >0 && i == pkColIndex && false) {
