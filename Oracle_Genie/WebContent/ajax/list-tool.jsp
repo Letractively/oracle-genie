@@ -23,10 +23,18 @@
 	list.add("Dictionary");
 	list.add("Sequence");
 	list.add("DB link");
+	list.add("Users");
 	list.add("User role priv");
 	list.add("User sys priv");
 	list.add("Invalid Objects");
 	list.add("Oracle Version");
+	list.add("");
+
+	list.add("Schema Size");
+	list.add("Large Tables");
+
+	list.add("");
+	list.add("Saved Query");
 %>
 <% 
 	if (filter !=null) filter = filter.toUpperCase();

@@ -94,6 +94,19 @@
 		});
 	}
 	
+	function hideEmpty() {
+		$("span ").each(function() {
+			var spanName = $(this).attr('id');
+			if (spanName != undefined && spanName.substring(0,7) == "rowcnt-") {
+				var id = spanName.substring(7);
+				var rowcnt = $("#"+spanName+".rowcountstyle").html();
+				//alert('hide ' + id + " " + rowcnt);
+				if (rowcnt == "0") hideDiv(id);
+			}
+		});
+	}
+	
+	
 	function runQuery(tab) {
 		var sList = "";
 		var form = "DIV_" + tab; 
@@ -117,8 +130,9 @@
 
 <h3>ERD</h3>
 
-<a href="Javascript:openAll()">Open All</a>
-<a href="Javascript:closeAll()">Close All</a>
+<a href="Javascript:openAll()">Open All</a>&nbsp;
+<a href="Javascript:closeAll()">Close All</a>&nbsp;
+<a href="Javascript:hideEmpty()">Hide Empty Table</a>
 <br/><br/>
 
 
@@ -136,7 +150,7 @@
 	String id = Util.getId();
 %>
 <div id="div-<%=id%>" style="margin-left: 20px; background-color: #ffffcc; width:220px; border: 1px solid #cccccc; float: left;">
-<a href="erd.jsp?tname=<%= rec.rTableName %>"><%= rec.rTableName %></a> <span class="rowcountstyle"><%= cn.getTableRowCount(rec.rTableName) %></span>
+<a href="erd.jsp?tname=<%= rec.rTableName %>"><%= rec.rTableName %></a> <span id="rowcnt-<%=id%>" class="rowcountstyle"><%= cn.getTableRowCount(rec.rTableName) %></span>
 <a href="javascript:toggleDiv('<%= id %>')"><img id="img-<%=id%>" align=top src="image/plus.gif"></a>
 <a href="javascript:runQuery('<%= rec.rTableName %>')"><img src="image/view.png"></a>
 <a href="javascript:hideDiv('<%= id %>')">x</a>
@@ -211,7 +225,7 @@ for (TableCol t: list) {
 %>
 
 <div id="div-<%=id%>" style="margin-left: 20px; background-color: #ffffcc; width:220px; border: 1px solid #cccccc; float: left;">
-<a href="erd.jsp?tname=<%= tbl %>"><%= tbl %></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span>
+<a href="erd.jsp?tname=<%= tbl %>"><%= tbl %></a> <span id="rowcnt-<%=id%>" class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span>
 <a href="javascript:toggleDiv('<%= id %>')"><img id="img-<%=id%>" align=top src="image/plus.gif"></a>
 <a href="javascript:runQuery('<%= tbl %>')"><img src="image/view.png"></a>
 <a href="javascript:hideDiv('<%= id %>')">x</a>
