@@ -136,7 +136,7 @@
 
 <% if (fkLinkTab.size() > 0) {%>
 	<img style="margin-left: 70px;" src="image/arrow_up.jpg"><br/>
-</div>
+</div><br/>
 <% } %>
 
 
