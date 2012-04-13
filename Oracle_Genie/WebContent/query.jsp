@@ -27,10 +27,14 @@
 	if (lineLength >50) lineLength = 50;
 	
 	cn.queryCache.removeQuery(sql);
-	Query q = new Query(cn, sql);
+	Query q = null;
+	
+	if (norun==null) {
+		q = new Query(cn, sql);
 
-	if (!q.isError())
-		cn.queryCache.addQuery(sql, q);
+		if (!q.isError())
+			cn.queryCache.addQuery(sql, q);
+	}
 	
 	// get table name
 	String tbl = null;
@@ -155,7 +159,7 @@
 <input type="hidden" id="dataLink" name="dataLink" value="1">
 </form>
 
-<%= q.getMessage() %>
+<%= q==null?"":q.getMessage() %>
 
 <%
 	if (norun!=null || !q.hasMetaData()) {

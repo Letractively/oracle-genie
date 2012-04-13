@@ -294,6 +294,7 @@ Rows/Page
 
 <%
 	int rowCnt = 0;
+	String pkValues = ""; 
 
 //System.out.println("pageNo=" + pgNo);
 //System.out.println("linesPerPage=" + linesPerPage);
@@ -315,6 +316,7 @@ Rows/Page
 			if (i==0) keyValue = v;
 			else keyValue = keyValue + "^" + v; 
 		}
+		pkValues = keyValue;
 		
 		String linkUrl = "ajax/pk-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
 		String linkUrlTree = "data-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
@@ -361,6 +363,7 @@ if (fkLinkTab.size()>0 && dLink && false) {
 
 				colIdx++;
 				String val = q.getValue(i);
+				String colTypeName = q.getColumnTypeName(i);
 				String valDisp = Util.escapeHtml(val);
 				if (val != null && val.endsWith(" 00:00:00")) valDisp = val.substring(0, val.length()-9);
 				if (val==null) valDisp = "<span class='nullstyle'>null</span>";
@@ -386,12 +389,26 @@ if (fkLinkTab.size()>0 && dLink && false) {
 					isLinked = true;
 					String tpkName = cn.getPrimaryKeyName(tbl);
 					String tpkCol = cn.getConstraintCols(tpkName);
-					String tpkValue = q.getValue(tpkCol);
+					//String tpkValue = q.getValue(tpkCol);
+					String tpkValue = pkValues;
 					
 //					linkUrl ="blob.jsp?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue);
 					String fname = "unknown";
 					fname = q.getValue("filename");
-					linkUrl ="download?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue)+"&filename="+fname;
+					linkUrl ="blob_download?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue)+"&filename="+fname;
+					linkImage ="image/download.gif";
+				} else if (colTypeName.equals("CLOB")) {
+					isLinked = true;
+					String tpkName = cn.getPrimaryKeyName(tbl);
+					String tpkCol = cn.getConstraintCols(tpkName);
+					String tpkValue = pkValues;
+					
+//					linkUrl ="blob.jsp?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue);
+					String fname = "download.txt";
+					if (val.startsWith("<?xml")) fname = "download.xml";
+					if (val.startsWith("<html")) fname = "download.html";
+					
+					linkUrl ="clob_download?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue)+"&filename="+fname;
 					linkImage ="image/download.gif";
 				}
 				

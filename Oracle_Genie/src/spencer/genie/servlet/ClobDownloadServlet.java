@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
+import java.sql.Clob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -19,7 +20,7 @@ import spencer.genie.Connect;
 import spencer.genie.OldQuery;
 import spencer.genie.Util;
 
-public class DownloadServlet extends HttpServlet {
+public class ClobDownloadServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest req,HttpServletResponse res) throws ServletException,IOException {
     	int counter = 0;
@@ -34,8 +35,10 @@ public class DownloadServlet extends HttpServlet {
     	String pkName = cn.getPrimaryKeyName(table);
     	String conCols = cn.getConstraintCols(pkName);
     	
-
-    	String sql = "SELECT " + col + " FROM " + table + " WHERE " + conCols + "='" + key +"'";
+    	String condition = Util.buildCondition(conCols, key);
+    	
+//    	String sql = "SELECT " + col + " FROM " + table + " WHERE " + conCols + "='" + key +"'";
+    	String sql = "SELECT " + col + " FROM " + table + " WHERE " + condition;
     	if (sql.endsWith(";")) sql = sql.substring(0, sql.length()-1);
     	sql = sql.replaceAll("&gt;",">").replace("&lt;","<");
     	
@@ -121,8 +124,8 @@ public class DownloadServlet extends HttpServlet {
 	    		int colType = q.getColumnType(i);
 	    		String val = q.getBlob(i);
 	
-	    		Blob blob1 = rs.getBlob(i);
-	    		InputStream in = new BufferedInputStream(blob1.getBinaryStream());
+	    		Clob blob1 = rs.getClob(i);
+	    		InputStream in = new BufferedInputStream(blob1.getAsciiStream());
 	    		os = res.getOutputStream();
 	    		int b = -1;
 	    		b = in.read();
