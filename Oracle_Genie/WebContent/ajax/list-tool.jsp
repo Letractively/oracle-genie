@@ -17,8 +17,8 @@
 	list.add("Schema Diff");
 	list.add("");
 
-	list.add("User Defined Page");
-	list.add("");
+//	list.add("User Defined Page");
+//	list.add("");
 
 	list.add("Dictionary");
 	list.add("Sequence");
