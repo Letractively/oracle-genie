@@ -31,6 +31,21 @@
 		qry = "SELECT owner, object_type, object_name, status FROM all_objects WHERE status != 'VALID' ORDER BY owner, object_type, object_name";
 	else if (tool.equalsIgnoreCase("oracle version"))
 		qry = "SELECT * FROM GV$VERSION";
+	else if (tool.equalsIgnoreCase("schema size"))
+		qry = "SELECT segment_type, round(sum(bytes)/1000000) as MB FROM USER_SEGMENTS group by  segment_type " +
+			"union all SELECT 'TOTAL SCHEMA SIZE', round(sum(bytes)/1000000) as MB FROM USER_SEGMENTS";
+	else if (tool.equalsIgnoreCase("large tables")) 
+		qry = "select table_name, round(bytes/1000000) MB from ( " +
+				"SELECT segment_name table_name, bytes " +
+				 "FROM user_segments WHERE segment_type = 'TABLE' UNION ALL " +
+				 "SELECT i.table_name, s.bytes FROM user_indexes i, user_segments s WHERE s.segment_name = i.index_name " +
+				 " AND   s.segment_type = 'INDEX' UNION ALL " +
+				 " SELECT l.table_name, s.bytes FROM user_lobs l, user_segments s  WHERE s.segment_name = l.segment_name " +
+				 " AND   s.segment_type = 'LOBSEGMENT' UNION ALL " +
+				 " SELECT l.table_name, s.bytes FROM user_lobs l, user_segments s WHERE s.segment_name = l.index_name " +
+				 " AND   s.segment_type = 'LOBINDEX' ) where bytes > [Size in MB (ex: 10)] * 1000000 order by 2 desc";
+	else if (tool.equalsIgnoreCase("users"))
+		qry = "SELECT * FROM ALL_USERS";
 %>
 <h2><%= tool %> &nbsp;&nbsp;</h2>
 
@@ -48,6 +63,10 @@
 
 <% if (tool.equalsIgnoreCase("user defined page")) { %>
 <jsp:include page="udp.jsp"/>
+<% } %>
+
+<% if (tool.equalsIgnoreCase("saved query")) { %>
+<jsp:include page="sq.jsp"/>
 <% } %>
 
 <% if (tool.equalsIgnoreCase("Schema Diff")) { %>

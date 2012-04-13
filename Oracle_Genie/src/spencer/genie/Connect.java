@@ -1636,6 +1636,27 @@ public class Connect implements HttpSessionBindingListener {
         conn.setReadOnly(true);
 	}
 
+	public void createTable2() throws SQLException {
+        conn.setReadOnly(false);
+		String stmt1 = 
+				"CREATE TABLE GENIE_SAVED_SQL (	"+
+				"ID	VARCHAR2(100),"+
+				"SQL_STMT	VARCHAR2(1000),"+
+				"TIMESTAMP DATE DEFAULT SYSDATE, " +
+				"PRIMARY KEY (ID) )";
+
+		Statement stmt = conn.createStatement();
+		stmt.execute(stmt1);
+		stmt.close();
+		
+		stmt = conn.createStatement();
+		String sql = "INSERT INTO GENIE_SAVED_SQL VALUES ('Demo','SELECT * FROM TAB', SYSDATE)";
+		stmt.executeUpdate(sql);
+
+		stmt.close();		
+        conn.setReadOnly(true);
+	}
+
 	public void createTable4WorkSheet() {
 		String stmt1 = 
 				"CREATE TABLE GENIE_WORK_SHEET (	"+
