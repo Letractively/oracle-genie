@@ -28,7 +28,7 @@
 	else if (tool.equalsIgnoreCase("table column")) 
 		qry = "SELECT TABLE_NAME, NUM_ROWS FROM USER_TABLES WHERE TABLE_NAME IN (SELECT TABLE_NAME FROM USER_TAB_COLS WHERE COLUMN_NAME = upper('[Column Name]')) ORDER BY 1";
 	else if (tool.equalsIgnoreCase("invalid objects")) 
-		qry = "SELECT owner, object_type, object_name, status FROM all_objects WHERE status != 'VALID' ORDER BY owner, object_type, object_name";
+		qry = "SELECT object_type, object_name, status FROM user_objects WHERE status != 'VALID' ORDER BY object_type, object_name";
 	else if (tool.equalsIgnoreCase("oracle version"))
 		qry = "SELECT * FROM GV$VERSION";
 	else if (tool.equalsIgnoreCase("schema size"))
