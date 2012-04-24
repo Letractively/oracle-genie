@@ -14,7 +14,10 @@
 	String sortDirection = request.getParameter("sortDirection");
 	String pageNo = request.getParameter("pageNo");
 	String dataLink = request.getParameter("dataLink");
-
+	
+	boolean preFormat = request.getParameter("preFormat") != null && request.getParameter("preFormat").equals("1");
+	//preFormat = true;
+	
 	boolean dLink = dataLink != null && dataLink.equals("1");  
 	
 	int pgNo = 1;
@@ -191,12 +194,7 @@
 	int filteredCount = q.getFilteredCount();
 	int totalPage = q.getTotalPage(linesPerPage);
 %>
-<% if (totalCount>0 && hasDataLink) { 
-		String txt = "Hide DataLink";
-		if (!dLink) txt = "Show DataLink"; 
-%>
-<a id="dataLinkText" href="Javascript:toggleDataLink()"><%= txt %></a>
-<% } %>
+
 
 <% if (pgNo>1) { %>
 <a href="Javascript:gotoPage(<%= pgNo - 1%>)"><img border=0 src="image/btn-prev.png" align="top"></a>
@@ -236,6 +234,24 @@ Rows/Page
 <input id="search" name="search" value="<%= searchValue %>" size=20 onChange="searchRecords($(this).val())">
 <a href="Javascript:clearSearch()"><img border="0" src="image/clear.gif"></a>
 <% } %>
+
+
+
+<% if (totalCount>0 && hasDataLink) { 
+		String txt = "DataLink";
+		if (!dLink) txt = "DataLink"; 
+%>
+<a id="dataLinkText" href="Javascript:toggleDataLink()"><%= txt %></a>
+<% } %>
+
+<% if (totalCount>0) { 
+		String txt = "Format";
+%>
+<a id="preFormatText" href="Javascript:togglePreFormat()"><%= txt %></a>
+<% } %>
+
+
+
 <table id="dataTable" border=1 class="gridBody">
 <tr>
 
@@ -370,8 +386,11 @@ if (fkLinkTab.size()>0 && dLink && false) {
 				if (val !=null && val.length() > 200) {
 					String id = Util.getId();
 					String id_x = Util.getId();
-					valDisp = valDisp.substring(0,200) + "<a id='"+id_x+"' href='Javascript:toggleText(" +id_x + "," +id +")'>...</a><span id='"+id+"' style='display: none;'>" + valDisp.substring(200) + "</span>";
+					valDisp = valDisp.substring(0,200) + "<a id='"+id_x+"' href='Javascript:toggleText2(" +id_x + "," +id +")'>...</a><span id='"+id+"' style='display: none;'>" + valDisp.substring(200) + "</span>";
 					
+					if (preFormat) valDisp = "<pre>" + val + "</pre>";			
+				} else {
+					if (preFormat) valDisp = "<pre>" + val + "</pre>";
 				}
 
 				String colName = q.getColumnLabel(i);
