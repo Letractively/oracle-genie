@@ -66,6 +66,7 @@ public class Connect implements HttpSessionBindingListener {
 	public ContentSearch contentSearch;
 	
 	private boolean workSheetTableCreated = false;
+	private String savedHistory = "";
 
 	/**
 	 * Constructor
@@ -1726,6 +1727,13 @@ public class Connect implements HttpSessionBindingListener {
 
 	public String getTableRowCount(String tname) {
 		String numRows = null;
+		
+		if (tname != null && tname.indexOf(".") > 0) {
+			int idx = tname.indexOf(".");
+			String owner = tname.substring(0, idx);
+			String tt = tname.substring(idx+1);
+			return getTableRowCount(owner, tt);
+		}
 
 		numRows = queryOne("SELECT NUM_ROWS FROM USER_TABLES WHERE TABLE_NAME ='" + tname + "'");
 
@@ -1742,4 +1750,39 @@ public class Connect implements HttpSessionBindingListener {
 		}
 		return numRows;
 	}
+	
+	public String getTableRowCount(String owner, String tname) {
+		String numRows = null;
+		
+		if (owner ==null || owner.equals("") || owner.equals(this.getSchemaName())) {
+			return getTableRowCount(tname);
+		}
+		
+		numRows = queryOne("SELECT NUM_ROWS FROM ALL_TABLES WHERE OWNER='" + owner + "' AND TABLE_NAME ='" + tname + "'");
+
+		if (numRows==null) numRows = "";
+		else {
+			int n = Integer.parseInt(numRows);
+			if (n < 1000) {
+				numRows = numRows;
+			} else if (n < 1000000) {
+				numRows = Math.round(n /1000) + "K";
+			} else {
+				numRows = (Math.round(n /100000) / 10.0 )+ "M";
+			}
+		}
+		return numRows;
+	}
+	
+	public String getAddedHistory() {
+		return savedHistory;
+	}
+	
+	public void addHistory(String value) {
+		
+		String newItem = "<li>" + value + "</li>"; 
+		savedHistory = savedHistory.replace(newItem,"");
+		savedHistory = newItem + savedHistory;
+	}
+
 }
