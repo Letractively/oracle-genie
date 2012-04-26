@@ -86,9 +86,9 @@
 	}
 	
 	// get table name
-	String tbl = null;
+	String tbl = Util.getMainTable(sql);
 	List<String> tbls = Util.getTables(sql); 
-	if (tbls.size()>0) tbl = tbls.get(0);
+//	if (tbls.size()>0) tbl = tbls.get(0);
 //	System.out.println("XXX TBL=" + tbl);
 
 	boolean hasDataLink = false;
@@ -164,7 +164,7 @@
 			}
 		}
 
-		if (tbls.size()==1) hasPK = true;
+		if (tbls.size()>=1) hasPK = true;
 		
 		// there should be other tables that has FK to this
 		List<String> refTabs = cn.getReferencedTables(tname);
@@ -194,7 +194,6 @@
 	int filteredCount = q.getFilteredCount();
 	int totalPage = q.getTotalPage(linesPerPage);
 %>
-
 
 <% if (pgNo>1) { %>
 <a href="Javascript:gotoPage(<%= pgNo - 1%>)"><img border=0 src="image/btn-prev.png" align="top"></a>
