@@ -88,7 +88,7 @@
 	// get table name
 	String tbl = Util.getMainTable(sql);
 	List<String> tbls = Util.getTables(sql); 
-//	if (tbls.size()>0) tbl = tbls.get(0);
+	if (tbls.size()>0) tbl = tbls.get(0);
 //	System.out.println("XXX TBL=" + tbl);
 
 	boolean hasDataLink = false;

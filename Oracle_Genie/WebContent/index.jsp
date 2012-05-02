@@ -129,7 +129,7 @@ function callserver() {
 <body>
 
 <table width=100% border=0>
-<td><img src="image/lamp.png"/></td>
+<td><img src="image/lamp.png" title="Version <%= Util.getVersionDate() %>"/></td>
 <td valign=bottom><h3><%= cn.getUrlString() %></h3></td>
 <td>
 &nbsp;
@@ -223,7 +223,7 @@ Please download the latest version here:<br/>
 <a href="http://code.google.com/p/oracle-genie/">http://code.google.com/p/oracle-genie/</a>
 <br/><br/>
 
-Apr. 26, 2012<br/>
+<%= Util.getVersionDate() %><br/>
 Spencer Hwang - the creator of Genie<br/>
 <a href="mailto:spencer.hwang@gmail.com">spencer.hwang@gmail.com</a>
 
