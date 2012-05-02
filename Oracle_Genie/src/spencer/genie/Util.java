@@ -188,5 +188,9 @@ public class Util {
 		}
 		
 		return tables;
-	}	
+	}
+	
+	public static String getVersionDate() {
+		return "May 2, 2012";
+	}
 }
