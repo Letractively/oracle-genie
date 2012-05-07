@@ -16,6 +16,10 @@
 <html>
 <head> 
 	<title><%= title %></title>
+
+	<meta name="description" content="Genie is an open-source, web based oracle database schema navigator." />
+	<meta name="keywords" content="Oracle Web Database OpenSource JDBC" />
+	<meta name="author" content="Spencer Hwang" />
 	
 	<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
 	<script src="script/main.js?20120301" type="text/javascript"></script>

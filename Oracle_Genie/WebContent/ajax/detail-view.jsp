@@ -88,9 +88,29 @@
 <%
 	}
 %>
-
-
 <br/>
+
+<b>Related View</b><br/>
+
+<%
+	qry = "SELECT REFERENCED_NAME, REFERENCED_OWNER FROM USER_DEPENDENCIES WHERE NAME='" + view +"' AND REFERENCED_TYPE='VIEW' ORDER BY REFERENCED_NAME";
+	if (owner != null)
+		qry = "SELECT REFERENCED_NAME, REFERENCED_OWNER FROM ALL_DEPENDENCIES WHERE OWNER='" + owner + "' AND NAME='" + view +"' AND REFERENCED_TYPE='VIEW' ORDER BY REFERENCED_NAME";
+
+	List<String[]> lst3 = cn.queryMultiCol(qry, 2);
+	
+	for (int i=0;i<lst3.size();i++) {
+		String tname = lst3.get(i)[1];
+		String rOwner = lst3.get(i)[2];
+%>
+	&nbsp;&nbsp;
+	<a href="javascript:loadView('<%=tname%>');"><%=tname%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tname) %></span><br/>
+<%
+	}
+%>
+<br/>
+
+
 <b>Related Program</b><br/>
 <%
 
