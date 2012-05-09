@@ -1,6 +1,6 @@
 <%@ page language="java" 
 	import="java.util.*" 
-	import="spencer.genie.Connect" 
+	import="spencer.genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -15,8 +15,8 @@
 <html>
   <head>
     <title>Slide Show</title>
-    <link rel='stylesheet' type='text/css' href='css/style.css'> 
-    <link rel='stylesheet' type='text/css' href='css/slideshow.css'> 
+    <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'> 
+    <link rel='stylesheet' type='text/css' href='css/slideshow.css?<%= Util.getScriptionVersion() %>'> 
     <script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">

@@ -88,7 +88,6 @@ Please select a Table to see the detail.
 </table>
 </form>
 
-
 <%
 	String pkName = cn.getPrimaryKeyName(tname);
 	if (pkName == null && owner != null) pkName = cn.getPrimaryKeyName(owner, tname);
@@ -105,6 +104,7 @@ Please select a Table to see the detail.
 	List<String> refViews = cn.getReferencedViews(tname);
 	List<String> refTrgs = cn.getReferencedTriggers(tname);
 	List<String> refIdx = cn.getIndexes(owner, tname);
+	List<String> refConst = cn.getConstraints(owner, tname);
 %>
 <hr>
 
@@ -162,7 +162,24 @@ Please select a Table to see the detail.
 } 
 %>
 
+<% 
+	if (refConst.size()>0) { 
+%>
+<b>Constraints</b><br/>
+<%
 
+	for (int i=0; i<refConst.size(); i++) {
+		String constName = refConst.get(i);
+%>
+	&nbsp;&nbsp;&nbsp;&nbsp;<%= constName %> 
+	<br/>
+<%
+	}
+%>
+<br/>
+<%
+	}
+%>
 
 <% 
 	if (refIdx.size()>0) { 
@@ -215,10 +232,10 @@ Please select a Table to see the detail.
 </td>
 </table>
 </div>
+<br/>
 <% }
 %>
 
-<br/>
 <% 
 	if (refViews.size()>0) { 
 %>
@@ -249,11 +266,12 @@ Please select a Table to see the detail.
 </td>
 </table>
 </div>
+<br/>
 <%
 	}
 %>
 
-<br/>
+
 <% 
 	if (refTrgs.size()>0) { 
 %>
@@ -284,10 +302,11 @@ Please select a Table to see the detail.
 </td>
 </table>
 </div>
+<br/>
 <%
 }
 %>
-<br/>
+
 <% 
 	if (refPkgs.size()>0) { 
 %>
