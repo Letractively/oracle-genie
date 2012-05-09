@@ -1068,6 +1068,30 @@ public class Connect implements HttpSessionBindingListener {
 		return list;
 	}
 	
+	public List<String> getConstraints(String owner, String tname) {
+		List<String> list = new ArrayList<String>();
+
+		if (owner == null) owner = this.getSchemaName().toUpperCase();
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT SEARCH_CONDITION FROM ALL_CONSTRAINTS WHERE OWNER='" + owner + "' AND TABLE_NAME='" + tname +"' AND constraint_type='C'");
+
+			while (rs.next()) {
+				String constName = rs.getString(1);
+				if (!constName.endsWith("IS NOT NULL"))
+					list.add(constName);
+       		}
+       		
+       		rs.close();
+       		stmt.close();
+		} catch (SQLException e) {
+             System.err.println ("14 Cannot connect to database server");
+             message = e.getMessage();
+ 		}
+		
+		return list;
+	}
+	
 	public List<String> getReferencedTriggers(String tname) {
 		List<String> list = new ArrayList<String>();
 
@@ -1592,6 +1616,9 @@ public class Connect implements HttpSessionBindingListener {
 		if (listCache2!=null) listCache2.clearAll();
 		if (stringCache!=null) stringCache.clearAll();
 		if (tableDetailCache!=null) tableDetailCache.clearAll();
+		
+		comment_tables.clear();
+		comments.clear();
 	}
 	
 	public void createTable() throws SQLException {

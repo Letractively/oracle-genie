@@ -22,9 +22,9 @@
 	<meta name="author" content="Spencer Hwang" />
 	
 	<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
-	<script src="script/main.js?20120301" type="text/javascript"></script>
+	<script src="script/main.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
 
-    <link rel='stylesheet' type='text/css' href='css/style.css'> 
+    <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'> 
 
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
 	

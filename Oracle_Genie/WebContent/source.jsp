@@ -29,12 +29,12 @@
 <head>
 	<title>Source for <%= name %></title>
 	<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
-	<script src="script/main.js?20120301" type="text/javascript"></script>
+	<script src="script/main.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
 	<script type="text/javascript" src="script/shCore.js"></script>
 	<script type="text/javascript" src="script/shBrushSql.js"></script>
     <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
     <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="css/style.css?<%= Util.getScriptionVersion() %>" rel="stylesheet" type="text/css" />
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
 </head>
 <body>

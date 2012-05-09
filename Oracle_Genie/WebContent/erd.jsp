@@ -28,11 +28,11 @@
 	if (catalog==null) catalog = cn.getSchemaName();
  */
 	if (owner==null) owner = cn.getSchemaName().toUpperCase();
-	System.out.println("owner=" + owner);
-	System.out.println("tname=" + tname);
+	//System.out.println("owner=" + owner);
+	//System.out.println("tname=" + tname);
 	
 	String pkName = cn.getPrimaryKeyName(owner, table);
-	System.out.println("pkName=" + pkName);
+	//System.out.println("pkName=" + pkName);
 	
 	ArrayList<String> pk = cn.getPrimaryKeys(owner, tname);
 	if (pkName == null && owner != null) pkName = cn.getPrimaryKeyName(owner, table);
@@ -53,9 +53,9 @@
 <head> 
 	<title>Genie - ERD</title>
     <script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
-    <script src="script/data-methods.js?20120302" type="text/javascript"></script>
+    <script src="script/data-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
 
-    <link rel='stylesheet' type='text/css' href='css/style.css'>
+    <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'>
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
     
 <script type="text/javascript">

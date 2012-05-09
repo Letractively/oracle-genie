@@ -1,7 +1,7 @@
 <%@ page language="java" 
 	import="java.util.*" 
 	import="java.sql.*" 
-	import="spencer.genie.Connect" 
+	import="spencer.genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -19,7 +19,7 @@
 <html>
   <head>
     <title>Genie</title>
-    <link rel='stylesheet' type='text/css' href='css/style.css'> 
+    <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'> 
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
   </head>
 
