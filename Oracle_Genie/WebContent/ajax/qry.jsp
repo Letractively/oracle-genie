@@ -446,7 +446,7 @@ if (fkLinkTab.size()>0 && dLink && false) {
 %>
 </tr>
 <%		if (q.hasData()) counter++;
-		if (counter >= 1000) break;
+		if (counter >= Def.MAX_ROWS) break;
 		
 //		if (!q.next()) break;
 	}
