@@ -72,3 +72,7 @@
 <% if (tool.equalsIgnoreCase("Schema Diff")) { %>
 <jsp:include page="schema-diff.jsp"/>
 <% } %>
+
+<% if (tool.equalsIgnoreCase("Preferenceses")) { %>
+<jsp:include page="pref.jsp"/>
+<% } %>

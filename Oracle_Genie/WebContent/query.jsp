@@ -31,7 +31,7 @@
 	
 	if (norun==null) {
 		q = new Query(cn, sql);
-
+//		System.out.println(cn.getUrlString() + " " + request.getRemoteAddr() + " " + (new Date()) + "\n" + sql);
 		if (!q.isError())
 			cn.queryCache.addQuery(sql, q);
 	}
@@ -81,8 +81,10 @@
 &nbsp;&nbsp;
 <%= cn.getUrlString() %>
 
+&nbsp;&nbsp;&nbsp;
+<!-- <a href="Javascript:newQry()">New Query</a>
 <br/><br/>
-
+ -->
 <a href="Javascript:toggleHelp()"><img  style="float: left" id="helpDivImage" border="0" src="image/minus.gif"></a>
 <div id="div-help" style="float: left">
 	<a id="showERD" href="Javascript:showERD('<%=tbl%>')">Show ERD</a>

@@ -35,6 +35,7 @@
 
 	list.add("");
 	list.add("Saved Query");
+	list.add("Preferenceses");
 %>
 <% 
 	if (filter !=null) filter = filter.toUpperCase();
