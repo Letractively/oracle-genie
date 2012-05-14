@@ -38,14 +38,17 @@ public class Query {
 	String message="";
 	int currentRow = 0;
 
-	int sortOrder[] = new int[Def.MAX_ROWS];
-	boolean hideRow[] = new boolean[Def.MAX_ROWS];
+	int sortOrder[];
+	boolean hideRow[];
 	boolean isError = false;
 	
 	public Query(Connect cn, String qry) {
 		this.cn = cn;
 		originalQry = qry;
-		
+
+		sortOrder = new int[cn.QRY_ROWS];
+		hideRow = new boolean[cn.QRY_ROWS];
+
 	    Date start = new Date();
 	    Connection conn = cn.getConnection();
 
@@ -74,7 +77,7 @@ public class Query {
 			qData.setColumns(rs);
 			qData.setData(rs);
 
-			for (int i=0; i<Def.MAX_ROWS; i++) {
+			for (int i=0; i<cn.QRY_ROWS; i++) {
 				sortOrder[i] = i;
 				hideRow[i] = false;
 			}
@@ -215,11 +218,11 @@ public class Query {
 	}
 	
 	public void sort(String col, String direction) {
-		int newOrder[] = new int[Def.MAX_ROWS];
+		int newOrder[] = new int[cn.QRY_ROWS];
 
 		boolean isReverse = direction.equals("1");
 		
-		for (int i=0; i<Def.MAX_ROWS; i++) newOrder[i] = 0;
+		for (int i=0; i<cn.QRY_ROWS; i++) newOrder[i] = 0;
 		
 		if (qData==null) {
 			System.err.println("qData is null");
@@ -279,11 +282,11 @@ public class Query {
 
 /*	
 	public void _sort(String col, String direction) {
-		int newOrder[] = new int[Def.MAX_ROWS];
+		int newOrder[] = new int[cn.QRY_ROWS];
 
 		boolean isReverse = direction.equals("1");
 		
-		for (int i=0; i<Def.MAX_ROWS; i++) newOrder[i] = 0;
+		for (int i=0; i<cn.QRY_ROWS; i++) newOrder[i] = 0;
 		
 		if (qData==null) {
 			System.err.println("qData is null");
@@ -423,7 +426,7 @@ public class Query {
 	}
 	
 	public void removeFilter() {
-		for (int i=0; i<Def.MAX_ROWS; i++) {
+		for (int i=0; i<cn.QRY_ROWS; i++) {
 //			sortOrder[i] = i;
 			hideRow[i] = false;
 		}
