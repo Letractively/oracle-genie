@@ -124,6 +124,7 @@ public class Connect implements HttpSessionBindingListener {
         catch (Exception e)
         {
             System.err.println ("3 Cannot connect to database server");
+            e.printStackTrace();
             message = e.getMessage();
         }
     }
@@ -149,7 +150,10 @@ public class Connect implements HttpSessionBindingListener {
                 conn.close ();
                 System.out.println ("Database connection terminated for " + urlString + " @" + (new Date()) + " " + ipAddress);
             }
-            	catch (Exception e) { /* ignore close errors */ }
+            catch (Exception e) { 
+            	/* ignore close errors */
+            	e.printStackTrace();
+            }
         }
     	
     	conn = null;
@@ -282,6 +286,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 		} catch (SQLException e) {
              System.err.println ("5 Cannot connect to database server");
+             e.printStackTrace();
              message = e.getMessage();
  		}
 	}
@@ -325,6 +330,7 @@ public class Connect implements HttpSessionBindingListener {
 
 		} catch (SQLException e) {
              System.err.println ("5 Cannot connect to database server");
+             e.printStackTrace();
              message = e.getMessage();
  		}
 	}
@@ -405,6 +411,7 @@ public class Connect implements HttpSessionBindingListener {
 
 		} catch (SQLException e) {
             System.err.println ("loadComment() - Cannot connect to database server");
+            e.printStackTrace();
             message = e.getMessage();
 		}
 		
@@ -426,6 +433,7 @@ public class Connect implements HttpSessionBindingListener {
 
 		} catch (SQLException e) {
             System.err.println ("2 Cannot connect to database server");
+            e.printStackTrace();
             message = e.getMessage();
 		}
 
@@ -518,6 +526,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 		} catch (SQLException e) {
              System.err.println ("15 Cannot connect to database server");
+             e.printStackTrace();
              message = e.getMessage();
  		}
 		
@@ -541,6 +550,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 		} catch (SQLException e) {
              System.err.println ("16 Cannot connect to database server");
+             e.printStackTrace();
              message = e.getMessage();
  		}
 		
@@ -574,6 +584,7 @@ public class Connect implements HttpSessionBindingListener {
 			}
 		} catch (SQLException e) {
             System.err.println ("4 Cannot connect to database server");
+            e.printStackTrace();
             message = e.getMessage();
 		}
 	}
@@ -596,6 +607,7 @@ public class Connect implements HttpSessionBindingListener {
 			stmt.close();
 		} catch (SQLException e) {
             System.err.println (e.toString());
+            e.printStackTrace();
 		}
 		
 		return res;
@@ -682,7 +694,7 @@ public class Connect implements HttpSessionBindingListener {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			e.printStackTrace();
 			return null;
 		}
 
@@ -710,6 +722,7 @@ public class Connect implements HttpSessionBindingListener {
 			
 		} catch (SQLException e) {
 			res = e.getMessage();
+			e.printStackTrace();
 		}
 		
 		return res;
@@ -1011,6 +1024,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 		} catch (SQLException e) {
              System.err.println ("10 Cannot connect to database server");
+             e.printStackTrace();
              message = e.getMessage();
  		}
 		
@@ -1035,6 +1049,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 		} catch (SQLException e) {
              System.err.println ("11 Cannot connect to database server");
+             e.printStackTrace();
              message = e.getMessage();
  		}
 		
@@ -1064,6 +1079,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 		} catch (SQLException e) {
              System.err.println ("13 Cannot connect to database server");
+             e.printStackTrace();
              message = e.getMessage();
  		}
 		
@@ -1088,6 +1104,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 		} catch (SQLException e) {
              System.err.println ("14 Cannot connect to database server");
+             e.printStackTrace();
              message = e.getMessage();
  		}
 		
@@ -1112,6 +1129,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 		} catch (SQLException e) {
              System.err.println ("12 Cannot connect to database server");
+             e.printStackTrace();
              message = e.getMessage();
  		}
 		
@@ -1139,6 +1157,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 		} catch (SQLException e) {
              System.err.println ("getIndexColumns - ");
+             e.printStackTrace();
              message = e.getMessage();
  		}
 		
@@ -1147,9 +1166,10 @@ public class Connect implements HttpSessionBindingListener {
 	
 	public String getDependencyPackage(String owner, String name) {
 		String res = "";
+		if (owner==null) owner = this.getSchemaName().toUpperCase();
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' AND NAME='" + name + "' AND REFERENCED_TYPE IN ('PACKAGE','FUNCTION','PROCEDURE','TYPE') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
+       		ResultSet rs = stmt.executeQuery("select distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' AND NAME='" + name + "' AND REFERENCED_TYPE IN ('PACKAGE','PACKAGE BODY','FUNCTION','PROCEDURE','TYPE') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
 
        		int count = 0;
        		while (rs.next()) {
@@ -1167,6 +1187,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 		} catch (SQLException e) {
              System.err.println ("9 Cannot connect to database server");
+             e.printStackTrace();
              message = e.getMessage();
  		}
 		
@@ -1175,6 +1196,7 @@ public class Connect implements HttpSessionBindingListener {
 
 	public String getDependencyTable(String owner, String name) {
 		String res = "";
+		if (owner==null) owner = this.getSchemaName().toUpperCase();
 		try {
        		Statement stmt = conn.createStatement();
        		ResultSet rs = stmt.executeQuery("select distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' and NAME='" + name + "' AND REFERENCED_TYPE IN ('TABLE') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
@@ -1196,6 +1218,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 		} catch (SQLException e) {
              System.err.println ("10 Cannot connect to database server");
+             e.printStackTrace();
              message = e.getMessage();
  		}
 		
@@ -1205,6 +1228,7 @@ public class Connect implements HttpSessionBindingListener {
 
 	public String getDependencyView(String owner, String name) {
 		String res = "";
+		if (owner==null) owner = this.getSchemaName().toUpperCase();
 		try {
        		Statement stmt = conn.createStatement();
        		ResultSet rs = stmt.executeQuery("select distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' AND NAME='" + name + "' AND REFERENCED_TYPE IN ('VIEW') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
@@ -1226,6 +1250,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 		} catch (SQLException e) {
              System.err.println ("getDependencyView - Cannot connect to database server");
+             e.printStackTrace();
              message = e.getMessage();
  		}
 		
@@ -1235,6 +1260,7 @@ public class Connect implements HttpSessionBindingListener {
 
 	public String getDependencySynonym(String owner, String name) {
 		String res = "";
+		if (owner==null) owner = this.getSchemaName().toUpperCase();
 		try {
        		Statement stmt = conn.createStatement();
        		ResultSet rs = stmt.executeQuery("select distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' and NAME='" + name + "' AND REFERENCED_TYPE IN ('SYNONYM') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
@@ -1256,6 +1282,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 		} catch (SQLException e) {
              System.err.println ("getDependencySynonym - Cannot connect to database server");
+             e.printStackTrace();
              message = e.getMessage();
  		}
 		
@@ -1278,6 +1305,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 		} catch (SQLException e) {
              System.err.println ("queryOne - " + qry);
+             e.printStackTrace();
              message = e.getMessage();
  		}
 		stringCache.add(qry, res);
@@ -1315,6 +1343,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 		} catch (SQLException e) {
              System.err.println ("queryMulti - " + qry);
+             e.printStackTrace();
              message = e.getMessage();
  		}
 		
@@ -1588,6 +1617,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 		} catch (SQLException e) {
              System.err.println ("queryMultiCol - " + qry);
+             e.printStackTrace();
              message = e.getMessage();
  		}
 		
@@ -1706,7 +1736,7 @@ public class Connect implements HttpSessionBindingListener {
 
 	        stmt.close();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		} finally {
 			workSheetTableCreated = true;
 		}
