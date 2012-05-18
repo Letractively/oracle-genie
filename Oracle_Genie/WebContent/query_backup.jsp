@@ -355,7 +355,7 @@ if (fkLinkTab.size()>0) {
 %>
 </tr>
 <%		counter++;
-		if (counter >= Def.MAX_ROWS) break;
+//		if (counter >= Def.MAX_ROWS) break;
 		
 		if (!rs.next()) break;
 	}

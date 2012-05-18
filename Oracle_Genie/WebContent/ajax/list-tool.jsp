@@ -17,8 +17,8 @@
 	list.add("Schema Diff");
 	list.add("");
 
-//	list.add("User Defined Page");
-//	list.add("");
+	list.add("User Defined Page");
+	list.add("");
 
 	list.add("Dictionary");
 	list.add("Sequence");
@@ -35,7 +35,7 @@
 
 	list.add("");
 	list.add("Saved Query");
-	list.add("Preferenceses");
+//	list.add("Preferenceses");
 %>
 <% 
 	if (filter !=null) filter = filter.toUpperCase();

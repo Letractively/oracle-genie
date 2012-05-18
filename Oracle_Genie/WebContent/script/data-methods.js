@@ -288,7 +288,7 @@
 
 	function hideIfAny(id) {
 		var hiddenCols = $("#hide-" + id).val();
-		if (hiddenCols != '') {
+		if (hiddenCols!=undefined && hiddenCols != '') {
 			var cols = hiddenCols.split(",");
 			for(var i = 0;i<cols.length;i++){
 				hideColumn(id, cols[i]);
