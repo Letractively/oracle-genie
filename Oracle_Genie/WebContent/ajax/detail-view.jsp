@@ -28,6 +28,8 @@
 %>
 <h2>VIEW: <%= view %> &nbsp;&nbsp;<a href="Javascript:runQuery('<%=catalog%>','<%=view%>')"><img border=0 src="image/icon_query.png" title="query"></a></h2>
 
+<%= owner==null?cn.getComment(view):cn.getSynTableComment(owner, view) %><br/>
+
 <table id="TABLE_<%=view%>" width=640 border=0>
 <tr>
 	<th></th>
@@ -35,8 +37,7 @@
 	<th bgcolor=#ccccff>Type</th>
 	<th bgcolor=#ccccff>Null</th>
 	<th bgcolor=#ccccff>Default</th>
-<!-- 	<th bgcolor=#ccccff>Remarks</th>
- -->
+ 	<th bgcolor=#ccccff>Comments</th>
  </tr>
 
 <%	
@@ -54,8 +55,8 @@
 	<td><%= rec.getTypeName() %></td>
 	<td><%= rec.getNullable()==0?"N":"" %></td>
 	<td><%= rec.getDefaults() %></td>
-<!-- 	<td></td>
- --></tr>
+ 	<td><%= owner==null?cn.getComment(view, rec.getName()):cn.getSynColumnComment(owner, view, rec.getName()) %></td>
+</tr>
 
 <%
 	}
@@ -65,69 +66,13 @@
 <hr>
 
 <b>Definition</b> 
-<pre class='brush: sql'>
+<a href="Javascript:toggleDiv('imgDef','divDef')"><img id="imgDef" src="image/minus.gif"></a>
+<div id="divDef">
+<pre>
 <%= text %>
 </pre>
+</div>
 <hr>
-
-<b>Related Table</b><br/>
-
-<%
-	qry = "SELECT REFERENCED_NAME, REFERENCED_OWNER FROM USER_DEPENDENCIES WHERE NAME='" + view +"' AND REFERENCED_TYPE='TABLE' ORDER BY REFERENCED_NAME";
-	if (owner != null)
-		qry = "SELECT REFERENCED_NAME, REFERENCED_OWNER FROM ALL_DEPENDENCIES WHERE OWNER='" + owner + "' AND NAME='" + view +"' AND REFERENCED_TYPE='TABLE' ORDER BY REFERENCED_NAME";
-
-	List<String[]> lst = cn.queryMultiCol(qry, 2);
-	
-	for (int i=0;i<lst.size();i++) {
-		String tname = lst.get(i)[1];
-		String rOwner = lst.get(i)[2];
-%>
-	&nbsp;&nbsp;
-	<a href="javascript:loadTable('<%=tname%>');"><%=tname%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tname) %></span><br/>
-<%
-	}
-%>
-<br/>
-
-<b>Related View</b><br/>
-
-<%
-	qry = "SELECT REFERENCED_NAME, REFERENCED_OWNER FROM USER_DEPENDENCIES WHERE NAME='" + view +"' AND REFERENCED_TYPE='VIEW' ORDER BY REFERENCED_NAME";
-	if (owner != null)
-		qry = "SELECT REFERENCED_NAME, REFERENCED_OWNER FROM ALL_DEPENDENCIES WHERE OWNER='" + owner + "' AND NAME='" + view +"' AND REFERENCED_TYPE='VIEW' ORDER BY REFERENCED_NAME";
-
-	List<String[]> lst3 = cn.queryMultiCol(qry, 2);
-	
-	for (int i=0;i<lst3.size();i++) {
-		String tname = lst3.get(i)[1];
-		String rOwner = lst3.get(i)[2];
-%>
-	&nbsp;&nbsp;
-	<a href="javascript:loadView('<%=tname%>');"><%=tname%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tname) %></span><br/>
-<%
-	}
-%>
-<br/>
-
-
-<b>Related Program</b><br/>
-<%
-
-	qry = "SELECT REFERENCED_NAME, REFERENCED_OWNER FROM USER_DEPENDENCIES WHERE NAME='" + view +"' AND REFERENCED_TYPE='PACKAGE' ORDER BY REFERENCED_NAME";
-	if (owner != null)
-		qry = "SELECT REFERENCED_NAME, REFERENCED_OWNER FROM ALL_DEPENDENCIES WHERE OWNER = '" + owner + "' AND NAME='" + view +"' AND REFERENCED_TYPE='PACKAGE' ORDER BY REFERENCED_NAME";
-
-	List<String[]> list2 = cn.queryMultiCol(qry, 2);
-	for (int i=0;i<list2.size();i++) {
-		String tname = list2.get(i)[1];
-		String rOwner = list2.get(i)[2];
-%>
-	&nbsp;&nbsp;
-	<a href="javascript:loadPackage('<%=tname%>');"><%=tname%></a><br/>
-<%
-	}
-%>
 
 <br/>
 <%
@@ -166,3 +111,24 @@
 <%
 }
 %>
+
+<b>Dependencies</b>
+
+<table>
+<tr>
+	<td>&nbsp;</td>
+	<td bgcolor=#ccccff>Program</td>
+	<td bgcolor=#ccccff>Table</td>
+	<td bgcolor=#ccccff>View</td>
+	<td bgcolor=#ccccff>Synonym</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td valign=top><%= cn.getDependencyPackage(owner, view) %></td>
+	<td valign=top><%= cn.getDependencyTable(owner, view) %></td>
+	<td valign=top><%= cn.getDependencyView(owner, view) %></td>
+	<td valign=top><%= cn.getDependencySynonym(owner, view) %></td>
+</tr>
+</table>
+<br/>
+

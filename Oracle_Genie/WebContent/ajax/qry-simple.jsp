@@ -15,7 +15,7 @@
 	
 	String dataLink = request.getParameter("dataLink");
 	boolean dLink = (dataLink != null && dataLink.equals("1"));
-	dLink = true;
+	//dLink = true;
 
 	String showFK = request.getParameter("showFK");
 	boolean showFKLink = (showFK != null && showFK.equals("1"));  
@@ -239,7 +239,7 @@ Found: <%= filteredCount %>
 <tr class="simplehighlight">
 
 <%
-	if (hasPK && q.hasData() /*&& dLink */) {
+	if (hasPK && q.hasData() && dLink) {
 		String keyValue = null;
 	
 		for (int i=0;q.hasData() && i<pkColList.size(); i++) {

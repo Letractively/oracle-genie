@@ -253,6 +253,12 @@ for (TableCol t: list1) {
 <% } %>
 </div>
 
+    <script type="text/javascript">
+    $(document).ready(function(){
+    	openAll();
+      });
+    </script>
+
 
 </body>
 </html>
