@@ -18,6 +18,7 @@ public class SecurityFilter implements Filter {
 			"test/", 
 			"login.jsp", 
 			"login_cpas.jsp", 
+			"monitor.jsp", 
 			"ping.jsp",
 			"remove-cookie.jsp",
 			"connect_new.jsp", 

@@ -153,6 +153,10 @@ PMRS
 <li style="margin-left: 20px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS', 'pmrs_client')">pmrs_client@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS</a></li>
 <br/>
 
+PPL
+<li style="margin-left: 20px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1521/WE8MSWIN', 'client_54')">client_54@jdbc:oracle:thin:@s-ora-002.cpas.com:1521/WE8MSWIN</a></li>
+<br/>
+
 RKLARGUS
 <li style="margin-left: 20px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/RKLARGUS', 'client_55')">client_55@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/RKLARGUS</a></li>
 <li style="margin-left: 20px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/RKLARGUS', 'client_55_sit')">client_55_sit@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/RKLARGUS</a></li>

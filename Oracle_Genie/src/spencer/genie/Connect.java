@@ -58,7 +58,7 @@ public class Connect implements HttpSessionBindingListener {
 	private HashMap<String, String> queryResult;
 	private HashMap<String, QueryLog> queryLog;
 	private HashMap<String, ArrayList<String>> pkMap;
-	private Stack<String> history;
+//	private Stack<String> history;
 	
 	public QueryCache queryCache;
 	public ListCache listCache;
@@ -84,7 +84,7 @@ public class Connect implements HttpSessionBindingListener {
     	queryResult = new HashMap<String, String>();
     	pkMap = new HashMap<String, ArrayList<String>>();
     	
-    	history = new Stack<String>();
+//    	history = new Stack<String>();
     	
     	this.ipAddress = ipAddress;
         try
@@ -145,6 +145,7 @@ public class Connect implements HttpSessionBindingListener {
      * close the connection
      */
     public void disconnect() {
+		GenieManager.getInstance().removeSession(this);
     	if (conn != null)	{
     		try {
                 conn.close ();
@@ -188,6 +189,10 @@ public class Connect implements HttpSessionBindingListener {
     	return urlString;
     }
 
+    public String getIPAddress() {
+    	return ipAddress;
+    }
+    
     public String getSchemaName() {
     	return this.schemaName;
     }
@@ -238,7 +243,6 @@ public class Connect implements HttpSessionBindingListener {
     
 	public void valueBound(HttpSessionBindingEvent arg0) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void valueUnbound(HttpSessionBindingEvent arg0) {
