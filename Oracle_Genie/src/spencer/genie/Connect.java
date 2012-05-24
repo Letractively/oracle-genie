@@ -1096,10 +1096,10 @@ public class Connect implements HttpSessionBindingListener {
 		if (owner == null) owner = this.getSchemaName().toUpperCase();
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT SEARCH_CONDITION FROM ALL_CONSTRAINTS WHERE OWNER='" + owner + "' AND TABLE_NAME='" + tname +"' AND constraint_type='C'");
+			ResultSet rs = stmt.executeQuery("SELECT CONSTRAINT_NAME, SEARCH_CONDITION FROM ALL_CONSTRAINTS WHERE OWNER='" + owner + "' AND TABLE_NAME='" + tname +"' AND constraint_type='C'");
 
 			while (rs.next()) {
-				String constName = rs.getString(1);
+				String constName = rs.getString(1)+ " " + rs.getString(2);
 				if (!constName.endsWith("IS NOT NULL"))
 					list.add(constName);
        		}
@@ -1490,10 +1490,9 @@ public class Connect implements HttpSessionBindingListener {
 			int scale = rs1.getInt("DATA_SCALE");
 			int nullable = rs1.getString("NULLABLE").equals("Y")?1:0;
 			
-/*			String colDef = rs1.getString("DATA_DEFAULT");
+			String colDef = rs1.getString("DATA_DEFAULT");
 			if (colDef==null) colDef="";
-*/
-			String colDef="";
+//			String colDef="??";
 			
 			String dType = dataType.toLowerCase();
 			
