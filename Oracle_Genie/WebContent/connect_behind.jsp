@@ -1,7 +1,7 @@
 <%@ page language="java" 
 	import="java.util.*" 
 	import="java.util.Date" 
-	import="spencer.genie.Connect" 
+	import="spencer.genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -44,6 +44,7 @@
 		// you're connected.
 		// assign the Connect object to session
 		session.setAttribute("CN", cn);
+		GenieManager.getInstance().addSession(cn);
 	
 		// get cookie
 		String oldUrls = getCookie(request, "url");
