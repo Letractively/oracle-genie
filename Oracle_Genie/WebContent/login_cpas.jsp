@@ -10,6 +10,7 @@
 	session.removeAttribute("CN");
 
 	String cookieName = "url";
+	String email = "";
 	Cookie cookies [] = request.getCookies ();
 	Cookie myCookie = null;
 	if (cookies != null) {
@@ -19,6 +20,12 @@
 				break;
 			}
 		}	
+		for (int i = 0; i < cookies.length; i++) {
+			if (cookies [i].getName().equals ("email")) {
+				email = cookies[i].getValue();
+				break;
+			}
+		}
 	}
 	
 	String cookieUrls = "";
@@ -79,6 +86,10 @@
     <tr>
     	<td>Password</td>
     	<td><input name="password" type="password"/></td>
+    </tr>
+    <tr>
+    	<td>Your Email</td>
+    	<td><input name="email" id="email" value="<%= email %>"/> Genie will send you email.</td>
     </tr>
     </table>
     <input type="submit" value="Connect"/>
