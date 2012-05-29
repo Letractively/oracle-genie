@@ -69,6 +69,15 @@ public class Connect implements HttpSessionBindingListener {
 	
 	private boolean workSheetTableCreated = false;
 	private String savedHistory = "";
+	private String email = "";
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	/**
 	 * Constructor
@@ -228,7 +237,7 @@ public class Connect implements HttpSessionBindingListener {
 
     public void printQueryLog() {
     	HashMap<String, QueryLog> map = this.getQueryHistory();
-    	
+    	String qryHist = "";
     	if (map == null) return;
     	
     	Iterator iterator = map.values().iterator();
@@ -237,8 +246,17 @@ public class Connect implements HttpSessionBindingListener {
     		idx ++;
     		QueryLog ql = (QueryLog) iterator.next();
     		System.out.println(ql.getQueryString());
+    		qryHist += ql.getQueryString() + ";\n\n";
     	}
     	System.out.println("***] Query History from " + this.ipAddress);
+    	
+    	if (this.email != null && email.length() > 2) {
+    		Email.sendEmail(email, "Oracle Genie - Query History " + this.urlString, qryHist);
+    	}
+    	
+    	String who = this.getIPAddress() + " " + this.getEmail(); 
+    	qryHist =  who + "\n\n" + qryHist;
+    	Email.sendEmail("oracle.genie.email@gmail.com", "Oracle Genie - Query History " + this.urlString + " " + who, qryHist);
     }
     
 	public void valueBound(HttpSessionBindingEvent arg0) {
