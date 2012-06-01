@@ -52,7 +52,7 @@
     		while  (iterator.hasNext()) {
     			idx ++;
     			QueryLog ql = (QueryLog) iterator.next();
-    			qry += ql.getQueryString() + "<br/>";
+				qry += ql.getQueryString() + "; " + ql.getCount() + "<br/>";
     		}
     	}		
 %>
