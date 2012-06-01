@@ -253,13 +253,13 @@ public class Connect implements HttpSessionBindingListener {
     	}
     	System.out.println("***] Query History from " + this.ipAddress);
     	
-    	if (this.email != null && email.length() > 2) {
-    		Email.sendEmail(email, "Oracle Genie - Query History " + this.urlString, qryHist);
-    	}
-
    		String who = this.getIPAddress() + " " + this.getEmail(); 
    		qryHist =  url + "\n" + who + "\n\n" + qryHist;
    		Email.sendEmail("oracle.genie.email@gmail.com", "Oracle Genie - Query History " + this.urlString + " " + who, qryHist);
+
+   		if (this.email != null && email.length() > 2) {
+    		Email.sendEmail(email, "Oracle Genie - Query History " + this.urlString, qryHist);
+    	}
     }
     
 	public void valueBound(HttpSessionBindingEvent arg0) {
