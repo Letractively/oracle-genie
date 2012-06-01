@@ -89,7 +89,7 @@
     </tr>
     <tr>
     	<td>Your Email</td>
-    	<td><input name="email" id="email" value="<%= email %>"/> Genie will send you email.</td>
+    	<td><input name="email" id="email" value="<%= email %>"/> Genie will send query logs by email.</td>
     </tr>
     </table>
     <input type="submit" value="Connect"/>
