@@ -9,9 +9,6 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	String ptype = request.getParameter("ptype");
 	
-//	String qry = "SELECT PROCESS, NAME, SECLABEL, SUBTYPE, DESCR, RKEY, LOGFLAG FROM CPAS_PROCESS WHERE TYPE = '" + ptype + "' ORDER BY POSITION"; 	
-//	List<String[]> list = cn.queryMultiCol(qry, 7, false);
-
 	String qry = "SELECT * FROM CPAS_PROCESS WHERE TYPE = '" + ptype + "' ORDER BY POSITION";
 	Query q = new Query(cn, qry, false);
 	

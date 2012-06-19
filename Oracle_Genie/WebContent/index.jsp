@@ -130,7 +130,8 @@ function callserver() {
 
 <table width=100% border=0>
 <td><img src="image/cpas.jpg" title="Version <%= Util.getVersionDate() %>"/></td>
-<td valign=bottom><h3><%= cn.getUrlString() %></h3></td>
+<td><h2 style="color: blue;">CPAS Genie</h2></td>
+<td><h3><%= cn.getUrlString() %></h3></td>
 <td>
 &nbsp;
 <%--
@@ -149,10 +150,14 @@ Database
 <a href="query.jsp" target="_blank">Query</a> |
 <a href="worksheet.jsp" target="_blank">Work Sheet</a> |
 <a href="javascript:queryHistory()">History</a> |
-<a href="javascript:showCPAS()">CPAS</a> |
 <a href="javascript:clearCache()">Clear Cache</a> |
 <a href='Javascript:aboutGenie()'>About Genie</a> |
 <a href="logout.jsp">Log out</a>
+<br/>
+CPAS 
+<a href="cpas-treeview.jsp" target=_blank>Treeview</a> |
+<a href="cpas-process.jsp" target=_blank>Process</a> |
+<a href="javascript:showCPAS()">CPAS Catalogs</a>
 </td>
 <td align=right>
 <b>Search</b> <input id="globalSearch" style="width: 160px;"/>

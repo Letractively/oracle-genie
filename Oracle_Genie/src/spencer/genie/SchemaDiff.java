@@ -50,8 +50,8 @@ public class SchemaDiff {
 	public void compareQuery(String sql) {
 //		System.out.println(sql);
 
-		List<String[]> c1 = cn1.queryMultiCol(sql, 0, false);
-		List<String[]> c2 = cn2.queryMultiCol(sql, 0, false);
+		List<String[]> c1 = cn1.query(sql, false);
+		List<String[]> c2 = cn2.query(sql, false);
 		
 		boolean diff = false;
 
@@ -109,8 +109,8 @@ public class SchemaDiff {
 			String qry2 = "SELECT column_id, column_name, data_type, data_length, data_precision, data_scale, nullable " +
 					"FROM user_tab_cols where table_name= '" + tname + "' order by column_id";
 			
-			List<String[]> c1 = cn1.queryMultiCol(qry2, 7, false);
-			List<String[]> c2 = cn2.queryMultiCol(qry2, 7, false);
+			List<String[]> c1 = cn1.query(qry2, false);
+			List<String[]> c2 = cn2.query(qry2, false);
 			
 			boolean diff = false;
 			if (c1.size() != c2.size()) {
@@ -168,8 +168,8 @@ public class SchemaDiff {
 			String qry2 = "SELECT text " +
 					"FROM user_views where VIEW_NAME= '" + tname + "'";
 			
-			List<String[]> c1 = cn1.queryMultiCol(qry2, 1, false);
-			List<String[]> c2 = cn2.queryMultiCol(qry2, 1, false);
+			List<String[]> c1 = cn1.query(qry2, false);
+			List<String[]> c2 = cn2.query(qry2, false);
 			
 			boolean diff = false;
 			if (c1.size() != c2.size()) {
@@ -227,8 +227,8 @@ public class SchemaDiff {
 			String qry2 = "SELECT table_name " +
 					"FROM user_synonyms where synonym_name = '" + tname + "'";
 			
-			List<String[]> c1 = cn1.queryMultiCol(qry2, 1, false);
-			List<String[]> c2 = cn2.queryMultiCol(qry2, 1, false);
+			List<String[]> c1 = cn1.query(qry2, false);
+			List<String[]> c2 = cn2.query(qry2, false);
 			
 			boolean diff = false;
 			if (c1.size() != c2.size()) {
@@ -286,8 +286,8 @@ public class SchemaDiff {
 			//addProgress(tname);
 			String qry2 = "SELECT text FROM USER_SOURCE WHERE name='" + tname + "' ORDER BY type, line";
 			
-			List<String[]> c1 = cn1.queryMultiCol(qry2, 1, false);
-			List<String[]> c2 = cn2.queryMultiCol(qry2, 1, false);
+			List<String[]> c1 = cn1.query(qry2, false);
+			List<String[]> c2 = cn2.query(qry2, false);
 			
 			boolean diff = false;
 			if (c1.size() != c2.size()) {
@@ -350,8 +350,8 @@ public class SchemaDiff {
 			//addProgress(tname);
 			String qry2 = "SELECT text FROM USER_SOURCE WHERE name='" + tname + "' ORDER BY type, line";
 			
-			List<String[]> c1 = cn1.queryMultiCol(qry2, 1, false);
-			List<String[]> c2 = cn2.queryMultiCol(qry2, 1, false);
+			List<String[]> c1 = cn1.query(qry2, false);
+			List<String[]> c2 = cn2.query(qry2, false);
 			
 			boolean diff = false;
 			if (c1.size() != c2.size()) {

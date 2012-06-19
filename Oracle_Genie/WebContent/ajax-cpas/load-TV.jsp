@@ -21,6 +21,8 @@
 %>
 <b><%= name %></b>
 <a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=sql%>"/></a>
+<a href="Javascript:openAll();">Open All</a>
+<a href="Javascript:closeAll();">Close All</a>
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
 
 <br/><br/>
@@ -31,7 +33,7 @@
 	String qry = "SELECT caption, treekey, actionid, sortorder, itemid, parentid, image, (select count(*) from TREEVIEW where sdi=A.sdi and parentid=A.itemid) as cnt " +
 		"FROM TREEVIEW A WHERE SDI = '" + sdi + 
 		"' and parentid=" + parentid + " order by sortorder";
-	List<String[]> list = cn.queryMultiCol(qry, 8, true);
+	List<String[]> list = cn.query(qry);
 
 	int totalCnt = list.size();
 %>

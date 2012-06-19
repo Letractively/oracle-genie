@@ -17,25 +17,6 @@ public class CpasUtil {
 
 	public CpasUtil(Connect cn) {
 		this.cn = cn;
-/*		
-		String qry = "SELECT TNAME, CNAME, CODE, CAPT FROM CPAS_TABLE_COL WHERE TNAME IN (" +
-				"SELECT TNAME FROM CPAS_TABLE A WHERE EXISTS (SELECT 1 FROM TAB WHERE TNAME=A.TNAME) " +
-				") AND (CODE IS NOT NULL OR CAPT IS NOT NULL) ";
-		
-		List<String[]> list = cn.queryMultiCol(qry, 4);
-		
-		for (String[] row : list) {
-			String tname = row[1];
-			String cname = row[2];
-			String code = row[3];
-			String capt = row[4];
-		
-			htCode.put(tname + "." + cname, code);
-			htCapt.put(tname + "." + cname, capt);
-			hsTable.add(tname);
-//			System.out.println(tname + "," + cname + "," + code);
-		}
-*/
 		
 		for (String ex: exceptions) {
 			int idx = ex.indexOf(".");
@@ -79,7 +60,7 @@ public class CpasUtil {
 		}
 
 		String qry = "SELECT SOURCE, SELECTSTMT FROM CPAS_CODE WHERE GRUP='" + grup + "'";
-		List<String[]> list = cn.queryMultiCol(qry, 2);
+		List<String[]> list = cn.query(qry);
 		
 		if (list.size()<1) return null;
 		String source = list.get(0)[1];
@@ -103,7 +84,7 @@ public class CpasUtil {
 		if (value==null || value.equals("")) return null;
 		
 		String qry = "SELECT SOURCE, SELECTSTMT FROM CPAS_CODE WHERE GRUP='" + grup + "'";
-		List<String[]> list = cn.queryMultiCol(qry, 2);
+		List<String[]> list = cn.query(qry);
 		
 		if (list.size()<1) return null;
 		String source = list.get(0)[1];
@@ -191,7 +172,7 @@ public class CpasUtil {
 		int idx = qry.indexOf(" ORDER BY ");
 		if (idx > 0) qry = qry.substring(0, idx);
 		
-		List<String[]> list = cn.queryMultiCol(qry, 2);
+		List<String[]> list = cn.query(qry);
 		if (list.size()<1) return null;
 
 		for (int i=0; i<list.size();i++) {
@@ -213,7 +194,7 @@ public class CpasUtil {
 		String qry = "SELECT TNAME, CNAME, CODE, CAPT FROM CPAS_TABLE_COL WHERE TNAME = '" + tname + "' " +
 				" AND (CODE IS NOT NULL OR CAPT IS NOT NULL)";
 		
-		List<String[]> list = cn.queryMultiCol(qry, 4);
+		List<String[]> list = cn.query(qry);
 		
 		for (String[] row : list) {
 			String cname = row[2];
