@@ -31,7 +31,7 @@
 	
 	String qry = "SELECT TABLE_NAME, NUM_ROWS FROM USER_TABLES ORDER BY 1"; 	
 	//List<String> list = cn.queryMulti(qry);
-	List<String[]> list = cn.queryMultiCol(qry, 2, true);
+	List<String[]> list = cn.query(qry, true);
 	
 	int totalCnt = list.size();
 	int selectedCnt = 0;

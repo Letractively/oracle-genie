@@ -149,11 +149,15 @@ function loadEventView(process, event) {
 	<table width=100% border=0>
 		<td><img src="image/cpas.jpg"
 			title="Version <%=Util.getVersionDate()%>" /></td>
-		<td valign=bottom><h3><%=cn.getUrlString()%></h3></td>
+		<td><h2 style="color: blue;">CPAS Process</h2></td>
 		<td>&nbsp;</td>
 
-		<td></td>
-		<td align=right><h2 style="color: blue;">CPAS Process</h2></td>
+		<td>
+		<a href="index.jsp">Home</a> |
+<a href="query.jsp" target="_blank">Query</a> |
+<a href="cpas-treeview.jsp" target="_blank">CPAS TreeView</a> 
+		</td>
+		<td align=right><h3><%=cn.getUrlString()%></h3></td>
 	</table>
 
 	<table border=0 cellspacing=0>

@@ -9,11 +9,6 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	String process = request.getParameter("process");
 	String event = request.getParameter("event");
-/*
-	String qry = "SELECT POSITION, TYPE, CAPTION, SECLABEL, SDI, UDATA, TREEKEY FROM CPAS_PROCESS_EVENT_VIEW WHERE PROCESS = '" + process + 
-			"' AND EVENT='" + event + "' ORDER BY POSITION"; 	
-	List<String[]> list = cn.queryMultiCol(qry, 7, true);
-*/
 	String qry = "SELECT * FROM CPAS_PROCESS_EVENT_VIEW WHERE PROCESS = '" + process + 
 			"' AND EVENT='" + event + "' ORDER BY POSITION"; 	
 	Query q = new Query(cn, qry, false);

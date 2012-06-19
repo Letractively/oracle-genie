@@ -115,7 +115,9 @@ function loadTV(sdi) {
 		url: "ajax-cpas/load-TV.jsp?sdi=" + sdi + "&t=" + (new Date().getTime()),
 		success: function(data){
 			$("#inner-tv").html(data);
-			openAll();
+			for (i=1; i>0;) {
+				i = openAll();
+			}
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -167,29 +169,74 @@ function toggleChild(sdi, parentid){
 	}
 }
 
+function openChild(sdi, parentid){
+	var imgsrc = $("#img-"+parentid).attr("src");
+	if (imgsrc.indexOf("plus.gif") >0 ) {
+		imgsrc=imgsrc.replace("plus","minus");
+		$("#img-"+parentid).attr("src", imgsrc);
+	} else {
+		return 0;
+	}
+	var divName = "div-" + sdi + "-" + parentid;
+	$("#"+divName).show();
+	
+	var html = $("#"+divName).html();
+	if (html=='') {
+		loadChildTV(sdi, parentid, divName)
+	}
+	return 1;
+}
+
+function closeChild(sdi, parentid){
+	var imgsrc = $("#img-"+parentid).attr("src");
+	if (imgsrc.indexOf("plus.gif") >0 ) {
+		return;
+	} else {
+		imgsrc=imgsrc.replace("minus","plus");
+		$("#img-"+parentid).attr("src", imgsrc);
+	}
+	var divName = "div-" + sdi + "-" + parentid;
+	$("#"+divName).hide();
+}
+
 function openAll() {
+	var cnt = 0;
 	$("img.toggle").each(function(index) {
 		var id = $(this).attr('id').substring(4);
-		
-	    //alert(id);
-		toggleChild(selectedSdi, id);
+		cnt += openChild(selectedSdi, id);
+	});
+	
+	//alert(cnt);
+	return cnt;
+}
+
+function closeAll() {
+	$("img.toggle").each(function(index) {
+		var id = $(this).attr('id').substring(4);
+		closeChild(selectedSdi, id);
 	});
 	
 }
+
 </script>
 
 </head>
 
 <body>
 
+
 	<table width=100% border=0>
 		<td><img src="image/cpas.jpg"
 			title="Version <%=Util.getVersionDate()%>" /></td>
-		<td valign=bottom><h3><%=cn.getUrlString()%></h3></td>
+		<td><h2 style="color: blue;">CPAS Tree View</h2></td>
 		<td>&nbsp;</td>
 
-		<td></td>
-		<td align=right><h2 style="color: blue;">CPAS Tree View</h2></td>
+		<td>
+<a href="index.jsp">Home</a> |
+<a href="query.jsp" target="_blank">Query</a> |
+<a href="cpas-process.jsp" target="_blank">CPAS Process</a> 
+		</td>
+		<td align=right><h3><%=cn.getUrlString()%></h3></td>
 	</table>
 
 	<table border=0 cellspacing=0>

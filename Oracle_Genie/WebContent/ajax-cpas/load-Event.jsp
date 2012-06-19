@@ -9,9 +9,6 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	String process = request.getParameter("process");
 
-//	String qry = "SELECT EVENT, NAME, POSITION, ACTION, UPARAM, SECLABEL, LOG, RKEY, DUE FROM CPAS_PROCESS_EVENT WHERE PROCESS = '" + process + "' ORDER BY POSITION"; 	
-//	List<String[]> list = cn.queryMultiCol(qry, 9, true);
-
 	String qry = "SELECT * FROM CPAS_PROCESS_EVENT WHERE PROCESS = '" + process + "' ORDER BY POSITION"; 
 	
 	Query q = new Query(cn, qry, false);

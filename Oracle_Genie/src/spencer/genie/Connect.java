@@ -1555,7 +1555,7 @@ public class Connect implements HttpSessionBindingListener {
 		tableDetailCache.add(owner, tname, list);
 		return list;
 	}
-
+/*
 	public List<String[]> queryMultiCol(String qry, int cols) {
 		return queryMultiCol(qry, cols, true);
 	}
@@ -1601,6 +1601,7 @@ public class Connect implements HttpSessionBindingListener {
 		if (useCache) listCache2.addList(qry, list);
 		return list;
 	}
+*/
 	
 	public String getRefConstraintCols(String master, String detail) {
 		// get master table's PK name
@@ -1866,4 +1867,49 @@ public class Connect implements HttpSessionBindingListener {
 	public Date getLastDate() {
 		return this.lastDate;
 	}
+	
+	public List<String[]> query(String qry) {
+		return query(qry, true);
+	}
+	
+	public List<String[]> query(String qry, boolean useCache) {
+		
+		List<String[]> list = null;
+		if (useCache) {
+			list = listCache2.getListObject(qry);
+			if (list != null) return list;
+		}
+		
+		
+//		List<String[]>list = new ArrayList<String[]>();
+		list = new ArrayList<String[]>();
+		int cnt = 0;
+		try {
+       		Statement stmt = conn.createStatement();
+       		ResultSet rs = stmt.executeQuery(qry);	
+
+    		int cols = rs.getMetaData().getColumnCount();
+    			
+       		while (rs.next()) {
+       			String res[] = new String[cols+1];
+       			
+       			for (int i=1; i<=cols;i++)
+       				res[i] = rs.getString(i);
+       			list.add(res);
+       			cnt++;
+       			if (cnt >= 10000) break;
+       		}
+       		
+       		rs.close();
+       		stmt.close();
+		} catch (SQLException e) {
+             System.err.println ("query - " + qry);
+             e.printStackTrace();
+             message = e.getMessage();
+ 		}
+		
+		if (useCache) listCache2.addList(qry, list);
+		return list;
+	}
+	
 }

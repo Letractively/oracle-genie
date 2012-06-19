@@ -8,13 +8,12 @@
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
 	
-String qry = "SELECT TYPE, NAME FROM CPAS_PROCESSTYPE ORDER BY ORDERBY"; 	
-//String qry = "SELECT TAB, NAME FROM CPAS_TAB ORDER BY ORDERBY"; 	
-	List<String[]> list = cn.queryMultiCol(qry, 2, true);
-	
+	String qry = "SELECT TYPE, NAME FROM CPAS_PROCESSTYPE ORDER BY ORDERBY"; 	
+	//String qry = "SELECT TAB, NAME FROM CPAS_TAB ORDER BY ORDERBY"; 	
+	List<String[]> list = cn.query(qry);
 	if (list.size()==0) {
 		qry = "SELECT TAB, NAME FROM CPAS_TAB ORDER BY ORDERBY"; 	
-		list = cn.queryMultiCol(qry, 2, true);
+		list = cn.query(qry);
 	}
 	
 	int totalCnt = list.size();

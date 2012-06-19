@@ -9,7 +9,7 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	
 	String qry = "SELECT SDI, NAME FROM CPAS_SDI WHERE ORDERBY > 0 ORDER BY NAME"; 	
-	List<String[]> list = cn.queryMultiCol(qry, 2, true);
+	List<String[]> list = cn.query(qry);
 	
 	int totalCnt = list.size();
 
