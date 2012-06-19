@@ -35,9 +35,8 @@
 
 <table border=1>
 <tr>
-	<th>IP Address</th>
-	<th>Email</th>
-	<th>Database</th>
+	<th>Database / User</th>
+	<th>Hist</th>
 	<th>Count</th>
 	<th>Queries</th>
 </tr>
@@ -55,11 +54,17 @@
 				qry += ql.getQueryString() + "; " + ql.getCount() + "<br/>";
     		}
     	}		
+    	String savedHistory = cn.getAddedHistory();
 %>
 <tr>
-	<td><%= cn.getIPAddress() %></td>
-	<td><%= cn.getEmail() %></td>
-	<td><%= cn.getUrlString() %></td>
+	<td>
+		<%= cn.getUrlString() %><br/>
+		IP: <%= cn.getIPAddress() %><br/>
+		Email: <%= cn.getEmail() %><br/>
+		Login Date: <%= cn.getLoginDate() %><br/>
+		Last Date: <%= cn.getLastDate() %><br/>
+	</td>
+	<td><%= savedHistory %></td>
 	<td><%= map.size() %></td>
 	<td><%= qry %></td>
 </tr>

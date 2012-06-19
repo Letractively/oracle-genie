@@ -16,6 +16,7 @@
 	List<String> refTabs = cn.getReferencedTables(table);
 
 	String sql = cn.getPKLinkSql(table, key);
+	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nDatalink " + sql);
 /*
 	Query q = cn.queryCache.getQueryObject(sql);
 	if (q==null) {

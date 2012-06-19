@@ -18,6 +18,7 @@
 		owner = name.substring(0, idx);
 		name = name.substring(idx+1);
 	}
+	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nPackage: " + name);
 	
 	if (owner==null) owner = cn.getSchemaName().toUpperCase();
 	
@@ -44,7 +45,7 @@
 	if (list.size()>0) { 
 %>
 <b>Procedures</b>
-<table border=0 width=100%>
+<table border=0>
 <td width=10>&nbsp;</td>
 <td valign=top>
 <%

@@ -43,6 +43,7 @@ function loadTable(tName) {
 		url: "ajax/detail-table.jsp?table=" + tableName + "&t=" + (new Date().getTime()),
 		success: function(data){
 			$("#inner-result1").html(data);
+		   	setHighlight();
 			//alert(data);
 			//$("body").css("cursor", "auto");
 			
@@ -81,7 +82,8 @@ function loadView(vName) {
 		url: "ajax/detail-view.jsp?view=" + vName + "&t=" + (new Date().getTime()),
 		success: function(data){
 			$("#inner-result1").html(data);
-			SyntaxHighlighter.all();
+//			SyntaxHighlighter.all();
+		   	setHighlight();
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -114,6 +116,7 @@ function loadSynonym(sName) {
 		url: "ajax/detail-synonym.jsp?name=" + sName + "&t=" + (new Date().getTime()),
 		success: function(data){
 			$("#inner-result1").html(data);
+		   	setHighlight();
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -436,7 +439,7 @@ function runQuery(catalog,tab) {
 		});	    	
     }	
 
-    function openQuery(divId) {
+    function openQueryForm(divId) {
     	var sql = $("#"+divId).html();
     	$("#sql").val(sql);
     	$("#form_qry").submit();

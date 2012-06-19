@@ -69,8 +69,9 @@
   </head>
   
   <body>
+	<img src="http://www.cpas.com/images/layout_01.jpg">
   <img src="image/genie2.jpg" title="Version <%= Util.getVersionDate() %>"/>
-    <h2>Welcome to Oracle Genie.</h2>
+    <h2>Welcome to CPAS Genie.</h2>
 
 <b>Connect to database</b>
 	<form action="connect_new.jsp" method="POST">
@@ -117,5 +118,94 @@
 %>
 </div>
 
+<br/><hr>
+<b>CPAS Databases:</b><br/>
+<div style="margin: 20px; padding:5px; width:600px; height:300px; overflow: scroll; border: 1px solid #666666;">
+
+ACTRA
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.CPAS.COM:1521/ACTRA', 'cpasdba')">cpasdba@jdbc:oracle:thin:@s-ora-004.CPAS.COM:1521/ACTRA</a></li>
+<br/>
+
+AIARC
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1521/AIARC', 'aiarc')">aiarc@jdbc:oracle:thin:@s-ora-002.cpas.com:1521/AIARC</a></li>
+<br/>
+
+APA
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.CPAS.COM:1526/APA', 'apa_client')">apa_client@jdbc:oracle:thin:@s-ora-006.CPAS.COM:1526/APA</a></li>
+<br/>
+
+BALTIMOR
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR', 'client_55bld')">client_55bld@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR</a></li>
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR', 'client_55blt')">client_55blt@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR</a></li>
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR', 'client_55blm')">client_55blm@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR</a></li>
+<br/>
+
+CAPITAL
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAPITAL', 'test_capital')">test_capital@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAPITAL</a></li>
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAPITAL', 'prd_capital')">prd_capital@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAPITAL</a></li>
+<br/>
+
+CCCERA
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.cpas.com:1521/CCCERA', 'client_54_dev')">client_54_dev@jdbc:oracle:thin:@s-ora-004.cpas.com:1521/CCCERA</a></li>
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.cpas.com:1521/CCCERA', 'client_54_prd')">client_54_prd@jdbc:oracle:thin:@s-ora-004.cpas.com:1521/CCCERA</a></li>
+<br/>
+
+CIBC
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1521/IMPTEST', 'cpasdba')">cpasdba@jdbc:oracle:thin:@S-ORA-003.cpas.com:1521/IMPTEST</a></li>
+<br/>
+
+COR
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.CPAS.COM:1526/COR', 'cor_client_577')">cor_client_577@jdbc:oracle:thin:@s-ora-006.CPAS.COM:1526/COR</a></li>
+<br/>
+
+DALLAS
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/DALLAS', 'client_55dl')">client_55dl@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/DALLAS</a></li>
+<br/>
+
+GOODYEAR
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/GOODYEAR', 'gy_client')">gy_client@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/GOODYEAR</a></li>
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.cpas.com:1526/GOODYEAR', 'gy_client')">gy_client@jdbc:oracle:thin:@s-ora-006.cpas.com:1526/GOODYEAR</a></li>
+<br/>
+
+KCERA
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.cpas.com:1521/KCERA', 'client_55kcd')">client_55kcd@jdbc:oracle:thin:@s-ora-004.cpas.com:1521/KCERA</a></li>
+<br/>
+
+MCERA
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA', 'client_55mc')">client_55mc@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA</a></li>
+<br/>
+
+MERCED
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED', 'CLIENT_55MD')">CLIENT_55MD@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED</a></li>
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED', 'CLIENT_55MDT')">CLIENT_55MDT@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED</a></li>
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED', 'CLIENT_55MDM')">CLIENT_55MDM@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED</a></li>
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED', 'CLIENT_55MDC')">CLIENT_55MDC@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED</a></li>
+<br/>
+
+PEPP
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PEPP', 'test_pepp')">test_pepp@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PEPP</a></li>
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PEPP', 'prd_pepp')">prd_pepp@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PEPP</a></li>
+<br/>
+
+PMRS
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS', 'pmrs_client')">pmrs_client@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS</a></li>
+<br/>
+
+PPL
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1521/WE8MSWIN', 'client_54')">client_54@jdbc:oracle:thin:@s-ora-002.cpas.com:1521/WE8MSWIN</a></li>
+<br/>
+
+RKLARGUS
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/RKLARGUS', 'client_55')">client_55@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/RKLARGUS</a></li>
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/RKLARGUS', 'client_55_sit')">client_55_sit@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/RKLARGUS</a></li>
+<br/>
+</div>
+
+<br/>
+Please contact Spencer Hwang(<a href="mailto:spencerh@cpas.com">spencerh@cpas.com</a>) to add more database locations.
+
+</div>
+
+<br/><br/><br/><br/><br/>
   </body>
 </html>

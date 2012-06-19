@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -191,10 +193,18 @@ public class Util {
 	}
 	
 	public static String getVersionDate() {
-		return "May 29, 2012";
+		return "June 18, 2012";
 	}
 
 	public static String getScriptionVersion() {
-		return "20120529";
+		return "20120618";
 	}
+
+	public static String getIpAddress(HttpServletRequest request) {
+		String ipAddress = request.getRemoteAddr();
+		if (ipAddress.equals("127.0.0.1")) ipAddress=request.getHeader("X-Forwarded-For");
+		
+		return ipAddress;
+	}
+
 }

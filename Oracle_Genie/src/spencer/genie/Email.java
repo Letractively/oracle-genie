@@ -71,7 +71,7 @@ public class Email {
 	        MimeMessage msg = new MimeMessage(session);
 //	        msg.setFrom();
 	        try {
-				msg.setFrom(new InternetAddress(username, "Oracle Genie"));
+				msg.setFrom(new InternetAddress(username, "CPAS Genie"));
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

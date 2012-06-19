@@ -22,21 +22,17 @@
 	<meta name="author" content="Spencer Hwang" />
 	
 	<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
-	<script src="script/main.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
-
-    <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'> 
-
-	<link rel="icon" type="image/png" href="image/Genie-icon.png">
-	
-	<link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.18.custom.css" type="text/css"/>
 	<script src="script/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
-	
+    <script src="script/genie.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
 <%--
-	<script type="text/javascript" src="script/shCore.js"></script>
-	<script type="text/javascript" src="script/shBrushSql.js"></script>
-    <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+    <script src="script/data-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
+	<script src="script/main.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
+    <script src="script/query-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
 --%>
-    
+	<link rel="icon" type="image/png" href="image/Genie-icon.png">
+	<link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.18.custom.css" type="text/css"/>
+    <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'> 
+	
 <script type="text/javascript">
 var CATALOG="";
 var to;
@@ -133,7 +129,7 @@ function callserver() {
 <body>
 
 <table width=100% border=0>
-<td><img src="image/lamp.png" title="Version <%= Util.getVersionDate() %>"/></td>
+<td><img src="image/cpas.jpg" title="Version <%= Util.getVersionDate() %>"/></td>
 <td valign=bottom><h3><%= cn.getUrlString() %></h3></td>
 <td>
 &nbsp;
@@ -153,6 +149,7 @@ Database
 <a href="query.jsp" target="_blank">Query</a> |
 <a href="worksheet.jsp" target="_blank">Work Sheet</a> |
 <a href="javascript:queryHistory()">History</a> |
+<a href="javascript:showCPAS()">CPAS</a> |
 <a href="javascript:clearCache()">Clear Cache</a> |
 <a href='Javascript:aboutGenie()'>About Genie</a> |
 <a href="logout.jsp">Log out</a>
@@ -211,19 +208,19 @@ Database
 <input name="norun" type="hidden" value="YES"/>
 </form>
 
-<div id="dialog-modal" title="About Oracle Genie" style="display:none; background: #ffffff;">
+<div id="dialog-modal" title="About CPAS Genie" style="display:none; background: #ffffff;">
 <img src="image/genie2.jpg" align="center" />
 <br/>
-Thanks for using Oracle Genie.<br/>
+Thanks for using CPAS Genie.<br/>
 
-Genie is open-source web-based tool for Oracle database.<br/>
+CPAS Genie is for CPAS Oracle database.<br/>
 Genie will help you navigate through database objects and their relationships.<br/> 
 
 <br/>
 If you have any question or suggestion, please feel free to contact me.
 <br/><br/>
 
-Please download the latest version here:<br/>
+Please download the latest community version here:<br/>
 <a href="http://code.google.com/p/oracle-genie/">http://code.google.com/p/oracle-genie/</a>
 <br/><br/>
 
@@ -232,6 +229,6 @@ Spencer Hwang - the creator of Genie<br/>
 <a href="mailto:spencer.hwang@gmail.com">spencer.hwang@gmail.com</a>
 
 </div>
-	
+
 </body>
 </html>

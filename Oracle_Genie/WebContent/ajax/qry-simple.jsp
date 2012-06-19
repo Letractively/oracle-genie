@@ -8,6 +8,7 @@
 %>
 
 <%
+	boolean cpas = true;
 	int counter = 0;
 	String sql = request.getParameter("sql");
 	String id = request.getParameter("id");
@@ -44,7 +45,7 @@
 		QueryCache.getInstance().addQuery(sql, q);
 	}
 */
-	Query q = new Query(cn, sql);
+	Query q = new Query(cn, sql, false);
 
 	if (q.isError()) {
 %>
@@ -215,10 +216,19 @@ Found: <%= filteredCount %>
 				else
 					extraImage = "<img src='image/sort-descending.png'>";
 			}
+			
+			String colDisp = colName.toLowerCase();
+			String cpasDisp = "";
+			if (cpas) {
+				String capt = cn.getCpasCodeCapt(tname, colName);
+				if (capt != null) 
+					cpasDisp += "<br/> &gt;  <span class='cpas'>" + capt + "</span>";
+			}			
+			
 %>
 <th class="headerRow"><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
-	href="Javascript:setColumn(<%= id %>, '<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colName.toLowerCase()%></a>
-	<%= extraImage %>
+	href="Javascript:setColumn(<%= id %>, '<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colDisp%></a>
+	<%= extraImage %><%= cpasDisp %>
 </th>
 <%
 	} 
@@ -315,6 +325,11 @@ Found: <%= filteredCount %>
 					linkImage = "image/link.gif";
 				}
 */
+if (cpas) {
+	String code = cn.getCpasCodeValue(tname, colName, val, q);
+	if (code!=null)	valDisp += "<br/> &gt; <span class='cpas'>" + code + "</span>";
+}
+
 %>
 <td class="<%= rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
 <%-- <%= (val!=null && isLinked?"<a class='inspect' href='" + linkUrl  + "'><img border=0 src='" + linkImage + "'></a>":"")%>

@@ -16,6 +16,7 @@
 	String dataLink = request.getParameter("dataLink");
 	
 	boolean preFormat = request.getParameter("preFormat") != null && request.getParameter("preFormat").equals("1");
+	boolean cpas = request.getParameter("cpas") != null && request.getParameter("cpas").equals("1");
 	//preFormat = true;
 	
 	boolean dLink = dataLink != null && dataLink.equals("1");  
@@ -51,7 +52,7 @@
 	String norun = request.getParameter("norun");
 	
 	Connect cn = (Connect) session.getAttribute("CN");
-//	System.out.println(request.getRemoteAddr()+": " + sql +";");
+//	System.out.println(Util.getIpAddress(request)+": " + sql +";");
 	
 	int lineLength = Util.countLines(sql);
 	if (lineLength <5) lineLength = 5;
@@ -249,6 +250,9 @@ Rows/Page
 <a id="preFormatText" href="Javascript:togglePreFormat()"><%= txt %></a>
 <% } %>
 
+<% if (totalCount>0 && cn.hasCpas(tname)) { %> 
+&nbsp;<a id="cpas" href="Javascript:toggleCpas()"><img src="image/cpas.jpg" title="Toggle CPAS Code Value"></a>
+<% } %>
 
 
 <table id="dataTable" border=1 class="gridBody">
@@ -295,11 +299,18 @@ Rows/Page
 				else
 					extraImage = "<img src='image/sort-descending.png'>";
 			}
-			
+		
+			String colDisp = colName.toLowerCase();
+			String cpasDisp = "";
+			if (cpas) {
+				String capt = cn.getCpasCodeCapt(tname, colName);
+				if (capt != null) 
+					cpasDisp += "<br/> &gt;  <span class='cpas'>" + capt + "</span>";
+			}			
 %>
 <th class="headerRow"><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
-	href="Javascript:doAction('<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><b><%=colName.toLowerCase()%></b></a>
-	<%= extraImage %>
+	href="Javascript:doAction('<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><b><%=colDisp%></b></a>
+	<%= extraImage %><%= cpasDisp %>
 </th>
 <%
 	} 
@@ -436,6 +447,10 @@ if (fkLinkTab.size()>0 && dLink && false) {
 					linkImage = "image/link.gif";
 				}
 
+				if (cpas) {
+					String code = cn.getCpasCodeValue(tname, colName, val, q);
+					if (code!=null)	valDisp += "<br/> &gt; <span class='cpas'>" + code + "</span>";
+				}
 %>
 <td class="<%= rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
 <%= (val!=null && isLinked && !linkUrl.startsWith("Javascript")?"<a target=_blank href=\"" + linkUrl  + "\"><img border=0 src='" + linkImage + "'></a>":"")%>

@@ -56,7 +56,7 @@ Found in <%= tables.size() %> table(s).<br/><br/>
 %>
 &nbsp;&nbsp;<%= tname %>
 <div style="display:none;" id="qry-<%=i%>"><%= qry %></div>
-<a href="Javascript:openQuery('<%= "qry-" + i %>')"><img src="image/view.png"></a>
+<a href="Javascript:openQueryForm('<%= "qry-" + i %>')"><img src="image/view.png"></a>
 
 <br/>
 <% } %>
