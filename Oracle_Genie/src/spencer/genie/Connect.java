@@ -71,15 +71,11 @@ public class Connect implements HttpSessionBindingListener {
 	private String savedHistory = "";
 	private String email = "";
 	private String url = "";
+
+	private CpasUtil cu=null;
+	private Date loginDate; 
+	private Date lastDate; 
 	
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
 	/**
 	 * Constructor
 	 * 
@@ -93,6 +89,8 @@ public class Connect implements HttpSessionBindingListener {
     	//pkColumn = new Hashtable<String, String>();
     	queryResult = new HashMap<String, String>();
     	pkMap = new HashMap<String, ArrayList<String>>();
+    	loginDate = new Date();
+    	lastDate = new Date();
     	
 //    	history = new Stack<String>();
     	
@@ -254,12 +252,12 @@ public class Connect implements HttpSessionBindingListener {
     	System.out.println("***] Query History from " + this.ipAddress);
     	
    		String who = this.getIPAddress() + " " + this.getEmail(); 
-   		qryHist =  url + "\n" + who + "\n\n" + qryHist;
-   		Email.sendEmail("oracle.genie.email@gmail.com", "Oracle Genie - Query History " + this.urlString + " " + who, qryHist);
-
    		if (this.email != null && email.length() > 2) {
-    		Email.sendEmail(email, "Oracle Genie - Query History " + this.urlString, qryHist);
+    		Email.sendEmail(email, "CPAS Genie - Query History " + this.urlString, qryHist);
     	}
+
+   		qryHist =  url + "\n" + who + "\n\n" + qryHist + "\n\n" + this.getAddedHistory();
+   		Email.sendEmail("oracle.genie.email@gmail.com", "CPAS Genie - Query History " + this.urlString + " " + who, qryHist);
     }
     
 	public void valueBound(HttpSessionBindingEvent arg0) {
@@ -291,10 +289,11 @@ public class Connect implements HttpSessionBindingListener {
 		
 		loadSchema();
 		loadTables();
-		loadComments();
 		loadConstraints();
 		loadPrimaryKeys();
 		loadForeignKeys();
+		
+        cu = new CpasUtil(this);
 	}
 
 	private void loadSchema() {
@@ -463,54 +462,6 @@ public class Connect implements HttpSessionBindingListener {
 		}
 
 		comment_tables.add(tname);
-	}
-	
-	private void loadComments() {
-		comments.clear();
-/* late binding
-		// column comments
-		try {
-       		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select * from USER_COL_COMMENTS");	
-
-	   		while (rs.next()) {
-	   			String tab = rs.getString(1);
-	   			String col = rs.getString(2);
-	   			String comment = rs.getString(3);
-	   			
-	   			String key = tab + "." + col;
-	   			if (comment != null && key != null) comments.put(key, comment);
-	   			//System.out.println( key + ", " + comment);           		
-	   		}
-	   		rs.close();
-	   		stmt.close();
-
-		} catch (SQLException e) {
-            System.err.println ("1 Cannot connect to database server");
-            message = e.getMessage();
-		}
-		
-		// table comments
-		try {
-       		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select * from USER_TAB_COMMENTS");	
-
-	   		while (rs.next()) {
-	   			String tab = rs.getString(1);
-	   			//String type = rs.getString(2);
-	   			String comment = rs.getString(3);
-	   			
-	   			if (comment != null && tab != null) comments.put(tab, comment);
-	       		//System.out.println( tab + ", " + comment);       		
-	   		}
-	   		rs.close();
-	   		stmt.close();
-
-		} catch (SQLException e) {
-            System.err.println ("2 Cannot connect to database server");
-            message = e.getMessage();
-		}
-*/
 	}
 	
 	// get table comments
@@ -769,6 +720,7 @@ public class Connect implements HttpSessionBindingListener {
 	}
 */	
 	public void addQueryHistory(String qry, int cnt) {
+		lastDate = new Date();
 		if (cnt < 1) return;
 		QueryLog ql = new QueryLog(qry, cnt);
 		queryLog.put(qry, ql);
@@ -1674,8 +1626,8 @@ public class Connect implements HttpSessionBindingListener {
 		if (stringCache!=null) stringCache.clearAll();
 		if (tableDetailCache!=null) tableDetailCache.clearAll();
 		
-		comment_tables.clear();
-		comments.clear();
+		if (comment_tables!=null) comment_tables.clear();
+		if (comments!=null) comments.clear();
 	}
 	
 	public void createTable() throws SQLException {
@@ -1867,6 +1819,8 @@ public class Connect implements HttpSessionBindingListener {
 		String newItem = "<li>" + value + "</li>"; 
 		savedHistory = savedHistory.replace(newItem,"");
 		savedHistory = newItem + savedHistory;
+		
+		lastDate = new Date();
 	}
 
 	public String getUrl() {
@@ -1877,4 +1831,39 @@ public class Connect implements HttpSessionBindingListener {
 		this.url = url;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getCpasCodeValue(String tname, String cname, String code, Query q) {
+		return cu.getCodeValue(tname, cname, code, q);
+	}
+	
+	public String getCpasCodeCapt(String tname, String cname) {
+		return cu.getCodeCapt(tname, cname);
+	}
+	
+	public String getCpasComment(String tname) {
+		return cu.getCpasComment(tname);
+	}
+	
+	public String getCpasCodeGrup(String tname, String cname) {
+		return cu.getCodeGrup(tname, cname);
+	}
+	
+	public boolean hasCpas(String tname) {
+		return cu.hasTable(tname);
+	}
+	
+	public Date getLoginDate() {
+		return this.loginDate;
+	}
+
+	public Date getLastDate() {
+		return this.lastDate;
+	}
 }

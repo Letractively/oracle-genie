@@ -522,6 +522,14 @@ function togglePreFormat() {
 	reloadData();
 }
 
+function toggleCpas() {
+	var v = $("#cpas").val();
+	v = (v=="1"?"0":"1");
+	$("#cpas").val(v);
+//	alert(v);
+	reloadData();
+}
+
 function toggleText(arg1, arg2) {
 	$('#'+arg1).toggle();
 	$('#'+arg2).toggle();

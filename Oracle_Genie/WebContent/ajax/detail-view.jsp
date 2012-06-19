@@ -18,6 +18,7 @@
 		owner = view.substring(0, idx);
 		view = view.substring(idx+1);
 	}
+	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nView: " + view);
 	
 	String catalog = cn.getSchemaName();
 
@@ -25,37 +26,59 @@
 	if (owner != null) 
 		qry = "SELECT TEXT FROM ALL_VIEWS WHERE OWNER='" + owner + "' AND VIEW_NAME='" + view +"'"; 
 	String text = cn.queryOne(qry);
+	
+	boolean hasCpas = cn.hasCpas(view);
+	String cpasComment = cn.getCpasComment(view);
 %>
 <h2>VIEW: <%= view %> &nbsp;&nbsp;<a href="Javascript:runQuery('<%=catalog%>','<%=view%>')"><img border=0 src="image/icon_query.png" title="query"></a></h2>
 
-<%= owner==null?cn.getComment(view):cn.getSynTableComment(owner, view) %><br/>
+<%= owner==null?cn.getComment(view):cn.getSynTableComment(owner, view) %> <span class="cpas"><%= cpasComment %></span><br/>
 
-<table id="TABLE_<%=view%>" width=640 border=0>
+<table id="dataTable" border=1 class="gridBody" style="margin-left: 10px;">
 <tr>
-	<th></th>
-	<th bgcolor=#ccccff>Column Name</th>
-	<th bgcolor=#ccccff>Type</th>
-	<th bgcolor=#ccccff>Null</th>
-	<th bgcolor=#ccccff>Default</th>
- 	<th bgcolor=#ccccff>Comments</th>
+	<th class="headerRow">Column Name</th>
+	<th class="headerRow">Type</th>
+	<th class="headerRow">Null</th>
+	<th class="headerRow">Default</th>
+ 	<th class="headerRow">Comments</th>
+ <% if (hasCpas) { %>	
+	<th class="headerRow">CPAS</th>
+<% } %>	
  </tr>
 
 <%	
 	List<TableCol> list = cn.getTableDetail(owner, view);
+	int rowCnt = 0;
 	for (int i=0;i<list.size();i++) {
 		TableCol rec = list.get(i);
 		
 		// check if primary key
 		String col_disp = rec.getName().toLowerCase();
 		if (rec.isPrimaryKey()) col_disp = "<span class='primary-key'>" + col_disp + "</span>";
+		
+		String capt = cn.getCpasCodeCapt(view, rec.getName());
+		if (capt == null) capt = "";
+		
+		String grup = cn.getCpasCodeGrup(view, rec.getName());
+		if (grup == null || grup.equals("_")) grup = "";
+		
+		if (grup != null && !grup.equals("")) {
+			grup = " -&gt; <a href=\"javascript:showDialog('CPAS_CODE','"+grup+"')\">" + grup + "</a>";
+		}
+
+		rowCnt++;
+		String rowClass = "oddRow";
+		if (rowCnt%2 == 0) rowClass = "evenRow";		
 %>
-<tr>
-	<td>&nbsp;</td>
-	<td><%= col_disp %></td>
-	<td><%= rec.getTypeName() %></td>
-	<td><%= rec.getNullable()==0?"N":"" %></td>
-	<td><%= rec.getDefaults() %></td>
- 	<td><%= owner==null?cn.getComment(view, rec.getName()):cn.getSynColumnComment(owner, view, rec.getName()) %></td>
+<tr class="simplehighlight">
+	<td class="<%= rowClass%>"><%= col_disp %></td>
+	<td class="<%= rowClass%>"><%= rec.getTypeName() %></td>
+	<td class="<%= rowClass%>"><%= rec.getNullable()==0?"N":"" %></td>
+	<td class="<%= rowClass%>"><%= rec.getDefaults() %></td>
+ 	<td class="<%= rowClass%>"><%= owner==null?cn.getComment(view, rec.getName()):cn.getSynColumnComment(owner, view, rec.getName()) %></td>
+<% if (hasCpas) { %>	
+	<td class="<%= rowClass%>"><span class="cpas"><%= capt %></span> <%= grup %></td>
+<% } %>	
 </tr>
 
 <%

@@ -7,9 +7,7 @@
 	pageEncoding="utf-8"
 %>
 
-
 <%
-
 	Connect cn = (Connect) session.getAttribute("CN");
 	
 	int counter = 0;
@@ -22,7 +20,7 @@
 	if (sql==null) sql = "SELECT * FROM TAB";
 	sql = sql.trim();
 	if (sql.endsWith(";")) sql = sql.substring(0, sql.length()-1);
-	if (sql.endsWith("/")) sql = sql.substring(0, sql.length()-1);
+//	if (sql.endsWith("/")) sql = sql.substring(0, sql.length()-1);
 	sql = sql.replaceAll("&gt;",">").replace("&lt;","<");
 	
 	String norun = request.getParameter("norun");
@@ -36,7 +34,7 @@
 	
 	if (norun==null) {
 		q = new Query(cn, sql, maxRow);
-		System.out.println(cn.getUrlString() + " " + request.getRemoteAddr() + " " + (new Date()) + "\n" + sql);
+		System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nQuery: " + sql);
 		if (q.isError()) System.out.println("Error: " + q.getMessage());
 		else System.out.println("Count: " + q.getRecordCount());
 
@@ -177,6 +175,7 @@ Up to
 <input type="hidden" id="rowsPerPage" name="rowsPerPage" value="20">
 <input type="hidden" id="dataLink" name="dataLink" value="1">
 <input type="hidden" id="preFormat" name="preFormat" value="0">
+<input type="hidden" id="cpas" name="cpas" value="0">
 </form>
 
 <%= q==null?"":q.getMessage() %>

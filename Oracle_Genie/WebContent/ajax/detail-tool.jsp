@@ -26,7 +26,7 @@
 	else if (tool.equalsIgnoreCase("search program")) 
 		qry = "SELECT * FROM USER_SOURCE WHERE lower(text) like lower('%[Search Keyword (ex: insert into TABLE )]%')";
 	else if (tool.equalsIgnoreCase("table column")) 
-		qry = "SELECT TABLE_NAME, NUM_ROWS FROM USER_TABLES WHERE TABLE_NAME IN (SELECT TABLE_NAME FROM USER_TAB_COLS WHERE COLUMN_NAME = upper('[Column Name]')) ORDER BY 1";
+		qry = "SELECT OWNER, TABLE_NAME, NUM_ROWS FROM ALL_TABLES WHERE TABLE_NAME IN (SELECT TABLE_NAME FROM ALL_TAB_COLS WHERE COLUMN_NAME = upper('[Column Name]')) ORDER BY 1";
 	else if (tool.equalsIgnoreCase("invalid objects")) 
 		qry = "SELECT object_type, object_name, status FROM user_objects WHERE status != 'VALID' ORDER BY object_type, object_name";
 	else if (tool.equalsIgnoreCase("oracle version"))
@@ -46,6 +46,7 @@
 				 " AND   s.segment_type = 'LOBINDEX' ) where bytes > [Size in MB (ex: 10)] * 1000000 order by 2 desc";
 	else if (tool.equalsIgnoreCase("users"))
 		qry = "SELECT * FROM ALL_USERS";
+
 %>
 <h2><%= tool %> &nbsp;&nbsp;</h2>
 

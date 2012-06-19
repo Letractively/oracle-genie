@@ -47,10 +47,18 @@ public class Query {
 	boolean lastSortAsc = true;
 
 	public Query(Connect cn, String qry) {
-		this(cn, qry, 1000);
+		this(cn, qry, 1000, true);
+	}
+
+	public Query(Connect cn, String qry, boolean saveHistory) {
+		this(cn, qry, 1000, saveHistory);
 	}
 
 	public Query(Connect cn, String qry, int maxRow) {
+		this(cn, qry, maxRow, true);
+	}
+	
+	public Query(Connect cn, String qry, int maxRow, boolean saveHistory) {
 		this.cn = cn;
 		originalQry = qry;
 		MAX_ROW = maxRow;
@@ -94,7 +102,7 @@ public class Query {
 			rs.close();
 			stmt.close();
 
-		    cn.addQueryHistory(originalQry, qData.rows.size());
+		    if (saveHistory) cn.addQueryHistory(originalQry, qData.rows.size());
 
 		} catch (SQLException e) {
 			message = e.getMessage();
@@ -198,7 +206,7 @@ public class Query {
 	public String getValue(String colName) {
 		if (qData==null) return"";
 		int colIndex = qData.getColumnIndex(colName);
-		
+		if (colIndex <0) return "";
 		return getValue(colIndex);
 	}
 

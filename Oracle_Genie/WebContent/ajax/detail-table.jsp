@@ -19,6 +19,7 @@
 		table = table.substring(idx+1);
 	}
 	
+	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nTable: " + table);
 	//System.out.println("owner=" + owner);
 	
 	String catalog = null;
@@ -41,6 +42,8 @@ Please select a Table to see the detail.
 		return;
 	}
 	
+	boolean hasCpas = cn.hasCpas(tname);
+	String cpasComment = cn.getCpasComment(table);
 %>
 
 <h2>TABLE: <%= table %> &nbsp;&nbsp;<span class="rowcountstyle"><%= cn.getTableRowCount(owner, table) %></span>
@@ -48,38 +51,58 @@ Please select a Table to see the detail.
 <a href="erd.jsp?tname=<%=tname%>" target="_blank"><img title="ERD" border=0 src="image/erd.gif"></a>
 </h2>
 
-<%= owner==null?cn.getComment(tname):cn.getSynTableComment(owner, tname) %><br/>
+<%= owner==null?cn.getComment(tname):cn.getSynTableComment(owner, tname) %> <span class="cpas"><%= cpasComment %></span><br/>
 
 <div id="<%= divName %>">
 <form id="<%= formName %>">
 <input name="table" type="hidden" value="<%= table %>"/>
 <input name="query" type="hidden" value=""/>
-<table id="TABLE_<%=tname%>" width=640 border=0>
+<table id="dataTable" border=1 class="gridBody" style="margin-left: 10px;">
 <tr>
-	<th></th>
-	<th bgcolor=#ccccff>Column Name</th>
-	<th bgcolor=#ccccff>Type</th>
-	<th bgcolor=#ccccff>Null</th>
-	<th bgcolor=#ccccff>Default</th>
-	<th bgcolor=#ccccff>Comments</th>
+	<th class="headerRow">Column Name</th>
+	<th class="headerRow">Type</th>
+	<th class="headerRow">Null</th>
+	<th class="headerRow">Default</th>
+	<th class="headerRow">Comments</th>
+<% if (hasCpas) { %>	
+	<th class="headerRow">CPAS</th>
+<% } %>	
 </tr>
 
 <%	
 	List<TableCol> list = cn.getTableDetail(owner, tname);
+	int rowCnt = 0;
 	for (int i=0;i<list.size();i++) {
 		TableCol rec = list.get(i);
 		
 		// check if primary key
 		String col_disp = rec.getName();
 		if (rec.isPrimaryKey()) col_disp = "<span class='primary-key'>" + col_disp + "</span>";
+		
+		String capt = cn.getCpasCodeCapt(tname, rec.getName());
+		if (capt == null) capt = "";
+		
+		String grup = cn.getCpasCodeGrup(tname, rec.getName());
+		if (grup == null || grup.equals("_")) grup = "";
+		
+		if (grup != null && !grup.equals("")) {
+			grup = " -&gt; <a href=\"javascript:showDialog('CPAS_CODE','"+grup+"')\">" + grup + "</a>";
+		}
+		
+		rowCnt++;
+		String rowClass = "oddRow";
+		if (rowCnt%2 == 0) rowClass = "evenRow";		
 %>
-<tr>
-	<td>&nbsp;</td>
-	<td><%= col_disp.toLowerCase() %></td>
-	<td><%= rec.getTypeName() %></td>
-	<td><%= rec.getNullable()==0?"N":"" %></td>
-	<td><%= rec.getDefaults() %></td>
-	<td><%= owner==null?cn.getComment(tname, rec.getName()):cn.getSynColumnComment(owner, tname, rec.getName()) %></td>
+<tr class="simplehighlight">
+	<td class="<%= rowClass%>"><%= col_disp.toLowerCase() %></td>
+	<td class="<%= rowClass%>"><%= rec.getTypeName() %></td>
+	<td class="<%= rowClass%>"><%= rec.getNullable()==0?"N":"" %></td>
+	<td class="<%= rowClass%>"><%= rec.getDefaults() %></td>
+	<td class="<%= rowClass%>"><%= owner==null?cn.getComment(tname, rec.getName()):cn.getSynColumnComment(owner, tname, rec.getName()) %></td>
+<% if (hasCpas) { %>	
+	<td class="<%= rowClass%>"><span class="cpas"><%= capt %></span> <%= grup %></td>
+<% } %>	
+
 </tr>
 
 <%

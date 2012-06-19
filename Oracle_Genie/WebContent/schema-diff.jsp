@@ -19,7 +19,7 @@
 	String username = request.getParameter("username");
 	String password = request.getParameter("password");
 	
-	Connect cn2 = new Connect(url, username, password, request.getRemoteAddr(), false);	
+	Connect cn2 = new Connect(url, username, password, Util.getIpAddress(request), false);	
 	
 	boolean connected = cn2.isConnected();
 	

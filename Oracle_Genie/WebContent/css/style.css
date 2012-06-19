@@ -241,3 +241,7 @@ html.busy, html.busy * {
 #inner-detail {
 	margin: 5px;
 }
+
+.cpas {
+    color: green;
+}
