@@ -128,6 +128,7 @@ public class Util {
 				if (x > 0) tname = tname.substring(0, x).trim();
 				//System.out.println(j + "=" +tname);
 				
+				if (tname.endsWith(")")) tname = tname.substring(0, tname.length()-1);
 				tbls.add(tname);
 			}			
 		}
@@ -184,8 +185,9 @@ public class Util {
 				if (x > 0) tname = tname.substring(0, x).trim();
 			//	System.out.println(i + "=" +tname);
 				
-				if (!tname.startsWith("("))
+				if (!tname.startsWith("(")) {
 					tables.add(tname);
+				}
 			}
 		}
 		
@@ -193,11 +195,11 @@ public class Util {
 	}
 	
 	public static String getVersionDate() {
-		return "June 19, 2012";
+		return "June 20, 2012";
 	}
 
 	public static String getScriptionVersion() {
-		return "20120619";
+		return "20120620";
 	}
 
 	public static String getIpAddress(HttpServletRequest request) {

@@ -384,6 +384,7 @@ for (int i=0; i<fkLinkTab.size(); i++) {
 <div id="div-fkk-<%=id %>">
 <br/>
 <a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
+<span class="cpas"><%= cn.getCpasComment(ft) %></span>
 &nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle border=0 title="<%=fsql%>"/></a>
 (<%= tname %>.<%=fc.toLowerCase() %>)
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')"><img src="image/clear.gif" border=0/></a>

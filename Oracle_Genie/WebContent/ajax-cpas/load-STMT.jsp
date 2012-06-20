@@ -44,7 +44,7 @@
 			{"MY", " Display rows"},
 			{"","<hr>"},
 
-			{"DS", "Primary Browser Select Statement"},
+			{"DS", "Secondary Browser Select Statement"},
 			{"DC", " Caption"},
 			{"DT", " Layout name"},
 			{"DI", " Insert statement"},

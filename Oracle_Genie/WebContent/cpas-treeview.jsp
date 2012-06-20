@@ -32,6 +32,12 @@
 	href='css/style.css?<%=Util.getScriptionVersion()%>'>
 
 <style>
+.selected { 
+    background-color: yellow;
+    font-weight: bold;
+//    border:  1px solid #2F557B;
+}
+ 
 #outer-sdi {
     background-color: #FFFFFF;
     border: 1px solid #999999;
@@ -101,6 +107,12 @@ function loadSdi() {
 		url: "ajax-cpas/load-sdi.jsp?t=" + (new Date().getTime()),
 		success: function(data){
 			$("#inner-sdi").html(data);
+			$('#inner-sdi a').click( function(e) {
+			    //Remove the selected class from all of the links
+			    $('#inner-sdi a.selected').removeClass('selected');
+			    //Add the selected class to the current link
+			    $(this).addClass('selected');
+			});
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -115,9 +127,13 @@ function loadTV(sdi) {
 		url: "ajax-cpas/load-TV.jsp?sdi=" + sdi + "&t=" + (new Date().getTime()),
 		success: function(data){
 			$("#inner-tv").html(data);
-			for (i=1; i>0;) {
-				i = openAll();
-			}
+			openAll();
+			$('#inner-tv a').click( function(e) {
+			    //Remove the selected class from all of the links
+			    $('#inner-tv a.selected').removeClass('selected');
+			    //Add the selected class to the current link
+			    $(this).addClass('selected');
+			});
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -130,6 +146,14 @@ function loadChildTV(sdi, parentid, divName) {
 		url: "ajax-cpas/load-TV.jsp?sdi=" + sdi + "&parentid=" + parentid,
 		success: function(data){
 			$("#"+divName).html(data);
+			$('#inner-tv a').click( function(e) {
+			    //Remove the selected class from all of the links
+			    $('#inner-tv a.selected').removeClass('selected');
+			    //Add the selected class to the current link
+			    $(this).addClass('selected');
+			});
+
+
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);

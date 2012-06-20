@@ -49,6 +49,7 @@
 //	System.out.println("XXX TBL=" + tbl);
 	
 	String title = sql;
+	if (title.length() > 100) title = title.substring(0,100) + " ...";
 %>
 
 <html>
