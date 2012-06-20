@@ -32,6 +32,13 @@
 	href='css/style.css?<%=Util.getScriptionVersion()%>'>
 
 <style>
+
+.selected { 
+    background-color: yellow;
+    font-weight: bold;
+//    border:  1px solid #2F557B;
+}
+
 #outer-ptype {
     background-color: #FFFFFF;
     border: 1px solid #999999;
@@ -91,6 +98,12 @@ function loadPtype() {
 		success: function(data){
 			$("#inner-ptype").html(data);
 			setHighlight();
+			$('#inner-ptype a').click( function(e) {
+			    //Remove the selected class from all of the links
+			    $('#inner-ptype a.selected').removeClass('selected');
+			    //Add the selected class to the current link
+			    $(this).addClass('selected');
+			});
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -106,6 +119,12 @@ function loadProcess(ptype) {
 		success: function(data){
 			$("#inner-process").html(data);
 			setHighlight();
+			$('#inner-process a').click( function(e) {
+			    //Remove the selected class from all of the links
+			    $('#inner-process a.selected').removeClass('selected');
+			    //Add the selected class to the current link
+			    $(this).addClass('selected');
+			});
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -120,6 +139,12 @@ function loadEvent(process) {
 		success: function(data){
 			$("#inner-event").html(data);
 			setHighlight();
+			$('#inner-event a').click( function(e) {
+			    //Remove the selected class from all of the links
+			    $('#inner-event a.selected').removeClass('selected');
+			    //Add the selected class to the current link
+			    $(this).addClass('selected');
+			});
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -133,6 +158,13 @@ function loadEventView(process, event) {
 		success: function(data){
 			$("#inner-eventview").html(data);
 			setHighlight();
+			$('#inner-eventview a').click( function(e) {
+			    //Remove the selected class from all of the links
+			    $('#inner-eventview a.selected').removeClass('selected');
+			    //Add the selected class to the current link
+			    $(this).addClass('selected');
+			});
+			
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
