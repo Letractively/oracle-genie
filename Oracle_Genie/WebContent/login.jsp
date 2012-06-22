@@ -141,6 +141,7 @@ BALTIMOR
 <br/>
 
 BMO
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1521/SSGQA', 'client_54')">client_54@jdbc:oracle:thin:@s-ora-002.cpas.com:1521/SSGQA</a></li>
 <li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/BMO', 'client_54_qa')">client_54_qa@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/BMO</a></li>
 <br/>
 

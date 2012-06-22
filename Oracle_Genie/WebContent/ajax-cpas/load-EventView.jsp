@@ -58,7 +58,12 @@
 	id = Util.getId();
 %>
 <a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openSimulator()">Simulator</a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
+<form id="formSimul" target="_blank" action="cpas-simul.jsp">
+<input name="sdi" type="hidden" value="<%=sdi%>"/>
+<input name="treekey" type="hidden" value="<%=tv%>"/>
+</form>
 	
 <% } %>
 	</td>
@@ -68,3 +73,4 @@
 	} 
 %>
 </table>
+

@@ -208,5 +208,28 @@ public class CpasUtil {
 		}
 		hsTableLoaded.add(tname);
 	}
+	
+	public String getQryReplaced(String qry) {
+		// get the maximum sessionid
+		String sid = cn.queryOne("SELECT MAX(SESSIONID) FROM CONNSESSION", false);
+		String clnt = cn.queryOne("SELECT tagcvalue FROM CONNSESSION_DATA WHERE SESSIONID = " + sid + " AND tagname='CLNT'");
+		String mkey = cn.queryOne("SELECT tagcvalue FROM CONNSESSION_DATA WHERE SESSIONID = " + sid + " AND tagname='MKEY'");
+		String plan = cn.queryOne("SELECT tagcvalue FROM CONNSESSION_DATA WHERE SESSIONID = " + sid + " AND tagname='PLAN'");
+		String personid = cn.queryOne("SELECT tagnvalue FROM CONNSESSION_DATA WHERE SESSIONID = " + sid + " AND tagname='PERSONID'");
+		
+		String q=qry;
+		q = q.replaceAll(":S.CLNT", "'" + clnt + "'");
+		q = q.replaceAll(":S.MKEY", "'" + mkey + "'");
+		q = q.replaceAll(":S.PLAN", "'" + plan + "'");
+		q = q.replaceAll(":S.PERSONID", "'" + personid + "'");
+		
+		return q;
+	}
+	
+	public String getColumnCaption(String tname, String cname) {
+		String caption = cn.queryOne("SELECT CAPT FROM CPAS_TABLE_COL WHERE TNAME='" + tname + "' AND CNAME='" + cname + "'");
+		
+		return caption;
+	}
 }
 

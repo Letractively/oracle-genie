@@ -242,12 +242,15 @@ function closeAll() {
 	
 }
 
+function openSimulator() {
+	$("#formSimul").submit();
+}
+
 </script>
 
 </head>
 
 <body>
-
 
 	<table width=100% border=0>
 		<td><img src="image/cpas.jpg"

@@ -239,6 +239,8 @@ public class Connect implements HttpSessionBindingListener {
     	String qryHist = "";
     	if (map == null || map.size()==0) return;
     	
+    	if (url.indexOf("8888")>0) return; // local test
+    	
     	Iterator iterator = map.values().iterator();
     	int idx = 0;
     	while  (iterator.hasNext()) {
@@ -1869,10 +1871,14 @@ public class Connect implements HttpSessionBindingListener {
 	}
 	
 	public List<String[]> query(String qry) {
-		return query(qry, true);
+		return query(qry, 1000, true);
 	}
-	
+
 	public List<String[]> query(String qry, boolean useCache) {
+		return query(qry, 1000, useCache);
+	}
+
+	public List<String[]> query(String qry, int maxCount, boolean useCache) {
 		
 		List<String[]> list = null;
 		if (useCache) {
@@ -1897,7 +1903,7 @@ public class Connect implements HttpSessionBindingListener {
        				res[i] = rs.getString(i);
        			list.add(res);
        			cnt++;
-       			if (cnt >= 10000) break;
+       			if (cnt >= maxCount) break;
        		}
        		
        		rs.close();
@@ -1911,5 +1917,8 @@ public class Connect implements HttpSessionBindingListener {
 		if (useCache) listCache2.addList(qry, list);
 		return list;
 	}
-	
+
+	public CpasUtil getCpasUtil() {
+		return cu;
+	}
 }
