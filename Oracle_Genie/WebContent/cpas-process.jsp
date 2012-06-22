@@ -172,6 +172,10 @@ function loadEventView(process, event) {
 	});	
 }	
 
+function openSimulator() {
+	$("#formSimul").submit();
+}
+
 </script>
 
 </head>
