@@ -133,12 +133,12 @@ if (sql2 !=null && !sql2.equals("")) {
 		}
 	}
 	
-	System.out.println("sql2=" + sql2);
-	System.out.println("hs=" + hs);
+//	System.out.println("sql2=" + sql2);
+//	System.out.println("hs=" + hs);
 	for (String s:hs) {
 		subKeys += s + "|";	
 	}
-	System.out.println("subKeys=" + subKeys);
+//	System.out.println("subKeys=" + subKeys);
 }
 String id2 = Util.getId(); 
 %>
@@ -198,7 +198,6 @@ Found: <%= filteredCount %>
 
 %>
 
-appLayout=<%= appLayout %>
 <table id="table-<%=id%>" border=1 class="<%= tableClass %>">
 <tr>
 

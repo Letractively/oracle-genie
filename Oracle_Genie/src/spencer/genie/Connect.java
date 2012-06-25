@@ -1871,11 +1871,11 @@ public class Connect implements HttpSessionBindingListener {
 	}
 	
 	public List<String[]> query(String qry) {
-		return query(qry, 1000, true);
+		return query(qry, 5000, true);
 	}
 
 	public List<String[]> query(String qry, boolean useCache) {
-		return query(qry, 1000, useCache);
+		return query(qry, 5000, useCache);
 	}
 
 	public List<String[]> query(String qry, int maxCount, boolean useCache) {

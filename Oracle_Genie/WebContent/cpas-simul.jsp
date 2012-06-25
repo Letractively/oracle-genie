@@ -339,7 +339,14 @@ function toggleLayout(id) {
 
 <hr/>
 
+<%
+	String id = Util.getId();
+	String qry = "SELECT * FROM CPAS_LAYOUT WHERE TNAME='" + mainLayout + "'";
+%>
 <b>Master</b> [<%= mainLayout %>]
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
+<div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
+
 <div style="padding: 4px;">
 	<div id="mainQry"><%= mainQry %></div>
 	<div id="div-1"></div>
@@ -347,7 +354,14 @@ function toggleLayout(id) {
 
 <hr/>
 
+<%
+	Util.getId();
+	qry = "SELECT * FROM CPAS_LAYOUT WHERE TNAME='" + subLayout + "'";
+%>
 <b>Detail</b> [<%= subLayout %>]
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
+<div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
+
 <div style="padding: 4px;">
 	<div id="subQry"><%= subQry %></div>
 	<div id="div-2"></div>

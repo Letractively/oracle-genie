@@ -57,15 +57,15 @@
     	String savedHistory = cn.getAddedHistory();
 %>
 <tr>
-	<td>
+	<td nowrap>
 		<%= cn.getUrlString() %><br/>
 		IP: <%= cn.getIPAddress() %><br/>
 		Email: <%= cn.getEmail() %><br/>
 		Login Date: <%= cn.getLoginDate() %><br/>
 		Last Date: <%= cn.getLastDate() %><br/>
 	</td>
-	<td><%= savedHistory %></td>
-	<td><%= map.size() %></td>
+	<td nowrap><%= savedHistory %></td>
+	<td nowrap><%= map.size() %></td>
 	<td><%= qry %></td>
 </tr>
 
