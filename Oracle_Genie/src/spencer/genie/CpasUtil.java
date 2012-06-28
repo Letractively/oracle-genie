@@ -11,6 +11,7 @@ public class CpasUtil {
 	Hashtable <String, String> htCapt = new Hashtable <String, String>();
 	HashSet <String> hsTable = new HashSet<String>();
 	HashSet <String> hsTableLoaded = new HashSet<String>();
+	boolean isCpas = false;
 
 	String[] exceptions = {"MEMBER_STATUS.VALUE", "PLAN_STATUS.VALUE", "EMPLOYER_STATUS.VALUE", "MEMBER_EMPLOYER_STATUS.VALUE", 
 			"MEMBER_PLAN_STATUS.VALUE", "PERSON_STATUS.VALUE", "-MEMBER_SERVICE.SRVCODE"};
@@ -33,11 +34,14 @@ public class CpasUtil {
 		List<String>tbls =  cn.queryMulti(qry);
 		for (String tbl: tbls) {
 			hsTable.add(tbl);
+			isCpas = true;
 		}
 		
 	}
 	
 	public String getCodeValue(String tname, String cname, String value, Query q) {
+		if (!isCpas) return "";
+
 		loadTable(tname);
 		if (value==null || value.equals("")) return null;
 
@@ -125,6 +129,7 @@ public class CpasUtil {
 	}
 
 	public String getCpasComment(String tname) {
+		if (!isCpas) return "";
 		String qry = "SELECT DESCR FROM CPAS_TABLE WHERE TNAME='" + tname + "'";
 		String res = cn.queryOne(qry);
 		
@@ -184,11 +189,13 @@ public class CpasUtil {
 	}
 	
 	public boolean hasTable(String tname) {
+		if (!isCpas) return false;
 		loadTable(tname);
 		return hsTable.contains(tname);
 	}
 	
 	public void loadTable(String tname) {
+		if (!isCpas) return;
 		if (hsTableLoaded.contains(tname)) return;
 		
 		String qry = "SELECT TNAME, CNAME, CODE, CAPT FROM CPAS_TABLE_COL WHERE TNAME = '" + tname + "' " +
@@ -230,6 +237,10 @@ public class CpasUtil {
 		String caption = cn.queryOne("SELECT CAPT FROM CPAS_TABLE_COL WHERE TNAME='" + tname + "' AND CNAME='" + cname + "'");
 		
 		return caption;
+	}
+	
+	public boolean isCpas() {
+		return this.isCpas;
 	}
 }
 

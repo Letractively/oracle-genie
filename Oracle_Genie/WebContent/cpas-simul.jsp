@@ -275,6 +275,26 @@ function toggleLayout(id) {
 	reloadData(id);
 }
 
+function toggleEditMain() {
+	$("#mainQryEdit").toggle();
+}
+
+function submitMain() {
+	var val = $("#mainQryText").val();
+	$("#mainQry").html(val);
+	$("#mainQryEdit").hide();
+}
+
+function toggleEditSub() {
+	$("#subQryEdit").toggle();
+}
+
+function submitSub() {
+	var val = $("#subQryText").val();
+	$("#subQry").html(val);
+	$("#subQryEdit").hide();
+}
+
 </script>
 </head> 
 
@@ -349,6 +369,12 @@ function toggleLayout(id) {
 
 <div style="padding: 4px;">
 	<div id="mainQry"><%= mainQry %></div>
+	<a href="Javascript:toggleEditMain()">Edit</a>
+	<div id="mainQryEdit" style="display:none;">
+		<textarea id="mainQryText" rows="4" cols="60"><%= mainQry %></textarea>
+		<br/>
+		<input type="button" value="Submit" onClick="Javscript:submitMain()"/>
+	</div>
 	<div id="div-1"></div>
 </div>
 
@@ -364,6 +390,12 @@ function toggleLayout(id) {
 
 <div style="padding: 4px;">
 	<div id="subQry"><%= subQry %></div>
+	<a href="Javascript:toggleEditSub()">Edit</a>
+	<div id="subQryEdit" style="display:none;">
+		<textarea id="subQryText" rows="4" cols="60"><%= subQry %></textarea>
+		<br/>
+		<input type="button" value="Submit" onClick="Javscript:submitSub()"/>
+	</div>
 	<div id="div-2"></div>
 </div>
 
