@@ -153,11 +153,14 @@ Database
 <a href="javascript:clearCache()">Clear Cache</a> |
 <a href='Javascript:aboutGenie()'>About Genie</a> |
 <a href="logout.jsp">Log out</a>
+
+<% if (cn.isCpas()) { %>
 <br/>
 CPAS 
 <a href="cpas-treeview.jsp" target=_blank>Treeview</a> |
 <a href="cpas-process.jsp" target=_blank>Process</a> |
 <a href="javascript:showCPAS()">CPAS Catalogs</a>
+<% } %>
 </td>
 <td align=right>
 <b>Search</b> <input id="globalSearch" style="width: 160px;"/>

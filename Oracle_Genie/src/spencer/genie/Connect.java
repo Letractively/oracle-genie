@@ -74,7 +74,8 @@ public class Connect implements HttpSessionBindingListener {
 
 	private CpasUtil cu=null;
 	private Date loginDate; 
-	private Date lastDate; 
+	private Date lastDate;
+	private boolean isCpas = false;
 	
 	/**
 	 * Constructor
@@ -296,6 +297,7 @@ public class Connect implements HttpSessionBindingListener {
 		loadForeignKeys();
 		
         cu = new CpasUtil(this);
+        this.isCpas = cu.isCpas;
 	}
 
 	private void loadSchema() {
@@ -1920,5 +1922,9 @@ public class Connect implements HttpSessionBindingListener {
 
 	public CpasUtil getCpasUtil() {
 		return cu;
+	}
+	
+	public boolean isCpas() {
+		return this.isCpas;
 	}
 }
