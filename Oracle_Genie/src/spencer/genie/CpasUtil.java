@@ -12,6 +12,7 @@ public class CpasUtil {
 	HashSet <String> hsTable = new HashSet<String>();
 	HashSet <String> hsTableLoaded = new HashSet<String>();
 	boolean isCpas = false;
+	int cpasType = 1;
 
 	String[] exceptions = {"MEMBER_STATUS.VALUE", "PLAN_STATUS.VALUE", "EMPLOYER_STATUS.VALUE", "MEMBER_EMPLOYER_STATUS.VALUE", 
 			"MEMBER_PLAN_STATUS.VALUE", "PERSON_STATUS.VALUE", "-MEMBER_SERVICE.SRVCODE"};
@@ -35,6 +36,18 @@ public class CpasUtil {
 		for (String tbl: tbls) {
 			hsTable.add(tbl);
 			isCpas = true;
+			cpasType = 1;
+		}
+		
+		if (!isCpas) {
+			qry = "SELECT distinct table_name FROM user_tab_cols where column_name in ('CLNT','ERKEY','CTYPE') UNION  " +
+					"SELECT TNAME FROM ADD$TABLE A WHERE EXISTS (SELECT 1 FROM TAB WHERE TNAME=A.TNAME)";
+			tbls =  cn.queryMulti(qry);
+			for (String tbl: tbls) {
+				hsTable.add(tbl);
+				isCpas = true;
+				cpasType = 2;
+			}
 		}
 		
 	}
@@ -64,6 +77,8 @@ public class CpasUtil {
 		}
 
 		String qry = "SELECT SOURCE, SELECTSTMT FROM CPAS_CODE WHERE GRUP='" + grup + "'";
+		if (cpasType==2)
+			qry = "SELECT TYPE, (SELECT STMTCODE FROM CODE_SELECT WHERE GRUP=A.GRUP) STMT FROM CODE A WHERE GRUP='" + grup + "'";
 		List<String[]> list = cn.query(qry);
 		
 		if (list.size()<1) return null;
@@ -80,7 +95,13 @@ public class CpasUtil {
 			qry = getQryStr(selectstmt, value, q);
 			return qry;
 		}
-		
+
+		if (cpasType==2) {
+			qry = "SELECT NAME FROM CODE_VALUE_NAME WHERE GRUP='" + grup + "' AND VALU='" + value + "'";
+			String name = cn.queryOne(qry);
+			return name;
+		}
+
 		return source;
 	}
 
@@ -88,6 +109,8 @@ public class CpasUtil {
 		if (value==null || value.equals("")) return null;
 		
 		String qry = "SELECT SOURCE, SELECTSTMT FROM CPAS_CODE WHERE GRUP='" + grup + "'";
+		if (cpasType==2)
+			qry = "SELECT TYPE, (SELECT STMTCODE FROM CODE_SELECT WHERE GRUP=A.GRUP) STMT FROM CODE A WHERE GRUP='" + grup + "'";		
 		List<String[]> list = cn.query(qry);
 		
 		if (list.size()<1) return null;
@@ -131,6 +154,8 @@ public class CpasUtil {
 	public String getCpasComment(String tname) {
 		if (!isCpas) return "";
 		String qry = "SELECT DESCR FROM CPAS_TABLE WHERE TNAME='" + tname + "'";
+		if (cpasType==2) qry = "SELECT DESCR FROM ADD$TABLE WHERE TNAME='" + tname + "'";
+		
 		String res = cn.queryOne(qry);
 		
 		if (res==null) res = "";
@@ -151,9 +176,10 @@ public class CpasUtil {
 	}
 
 	public String getQryStr(String selectstmt, String value, Query q) {
+		if (selectstmt==null) return null;
 		String qry = selectstmt.replaceAll("\n", " ");
 
-		String dynamic[] = {":CLNT", ":MKEY", ":PLAN", ":ERKEY"};
+		String dynamic[] = {":CLNT", ":MKEY", ":PLAN", ":ERKEY", ":LANG"};
 		// :CLNT, :MKEY
 		if (qry.indexOf(":")> 0 ) {
 			for (String token : dynamic) {
@@ -161,6 +187,7 @@ public class CpasUtil {
 				if (idx > 0) {
 					String col = token.substring(1);
 					String val = q.getValue(col);
+					if (col.equals("LANG")) val = "E"; // English
 					if (val!=null && !val.startsWith("Out of Index"))
 						qry = qry.replaceAll(token, "'" + val + "'");
 					else
@@ -200,7 +227,9 @@ public class CpasUtil {
 		
 		String qry = "SELECT TNAME, CNAME, CODE, CAPT FROM CPAS_TABLE_COL WHERE TNAME = '" + tname + "' " +
 				" AND (CODE IS NOT NULL OR CAPT IS NOT NULL)";
-		
+		if (cpasType==2) qry = "SELECT TNAME, CNAME, CODE, CAPT FROM ADD$TABLE_COL WHERE TNAME = '" + tname + "' " +
+				" AND (CODE IS NOT NULL OR CAPT IS NOT NULL)";
+			
 		List<String[]> list = cn.query(qry);
 		
 		for (String[] row : list) {
@@ -234,7 +263,9 @@ public class CpasUtil {
 	}
 	
 	public String getColumnCaption(String tname, String cname) {
-		String caption = cn.queryOne("SELECT CAPT FROM CPAS_TABLE_COL WHERE TNAME='" + tname + "' AND CNAME='" + cname + "'");
+		String qry = "SELECT CAPT FROM CPAS_TABLE_COL WHERE TNAME='" + tname + "' AND CNAME='" + cname + "'";
+		if (cpasType==2) qry = "SELECT CAPT FROM ADD$TABLE_COL WHERE TNAME='" + tname + "' AND CNAME='" + cname + "'";
+		String caption = cn.queryOne(qry);
 		
 		return caption;
 	}

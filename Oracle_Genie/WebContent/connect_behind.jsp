@@ -43,6 +43,7 @@
 	
 	cn = new Connect(url, username, password, ipAddress);
 	cn.setUrl(request.getRequestURL().toString());
+	cn.setUserAgent(request.getHeader("user-agent"));
 	
 	if (cn.isConnected()) {
 		// you're connected.

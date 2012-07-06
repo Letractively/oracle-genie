@@ -45,6 +45,7 @@
 	String seclevel = "";
 	String memberid = "";
 	String taskid = "";
+	String userid = "";
 		
 	q = cn.query("SELECT tagname, tagcvalue, tagnvalue, tagdvalue, tagtype FROM CONNSESSION_DATA A WHERE SESSIONID=(SELECT  MAX(SESSIONID) FROM CONNSESSION)");
 	for (String[] row : q) {
@@ -63,6 +64,7 @@
 		if (row[1].equals("SECLEVEL")) seclevel = value;
 		if (row[1].equals("MEMBERID")) memberid = value;
 		if (row[1].equals("TASKID")) taskid = value;
+		if (row[1].equals("USERID")) userid = value;
 	}
 
 	if (clnt==null) clnt = "";
@@ -76,6 +78,7 @@
 	if (seclevel==null) seclevel = "";
 	if (memberid==null) memberid = "";
 	if (taskid==null) taskid = "";
+	if (userid==null) userid = "";
 	
 //	String mQry = cn.getCpasUtil().getQryReplaced(mainQry);
 %>
@@ -123,6 +126,7 @@ function loadSessionValue(sid) {
 			$("#SECLEVEL").val(jo.SECLEVEL);
 			$("#MEMBERID").val(jo.MEMBERID);
 			$("#TASKID").val(jo.TASKID);
+			$("#USERID").val(jo.USERID);
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -147,6 +151,7 @@ function runMain() {
 	var seclevel = $("#SECLEVEL").val();
 	var memberid = $("#MEMBERID").val();
 	var taskid = $("#TASKID").val();
+	var userid = $("#USERID").val();
 	
 	var newQry=mainQry.replace(new RegExp(":S.CLNT", 'g'), "'" + clnt + "'");
 	newQry=newQry.replace(new RegExp(":S.MKEY", 'g'), "'" + mkey + "'");
@@ -158,6 +163,7 @@ function runMain() {
 	newQry=newQry.replace(new RegExp(":S.SECLEVEL", 'g'), "'" + seclevel + "'");
 	newQry=newQry.replace(new RegExp(":S.MEMBERID", 'g'), "'" + memberid + "'");
 	newQry=newQry.replace(new RegExp(":S.TASKID", 'g'), "'" + taskid + "'");
+	newQry=newQry.replace(new RegExp(":S.USERID", 'g'), "'" + userid + "'");
 	
 //	alert(mainQry);
 	$("#sql-1").html(newQry);
@@ -221,6 +227,7 @@ function runSub(fields, values) {
 	var seclevel = $("#SECLEVEL").val();
 	var memberid = $("#MEMBERID").val();
 	var taskid = $("#TASKID").val();
+	var userid = $("#USERID").val();
 
 	var newQry=subQry.replace(new RegExp(":S.CLNT", 'g'), "'" + clnt + "'");
 	newQry=newQry.replace(new RegExp(":S.MKEY", 'g'), "'" + mkey + "'");
@@ -232,6 +239,7 @@ function runSub(fields, values) {
 	newQry=newQry.replace(new RegExp(":S.SECLEVEL", 'g'), "'" + seclevel + "'");
 	newQry=newQry.replace(new RegExp(":S.MEMBERID", 'g'), "'" + memberid + "'");
 	newQry=newQry.replace(new RegExp(":S.TASKID", 'g'), "'" + taskid + "'");
+	newQry=newQry.replace(new RegExp(":S.USERID", 'g'), "'" + userid + "'");
 
 	var keys=fields.split("|");
 	var vals=values.split("|");
@@ -338,7 +346,7 @@ function submitSub() {
 	<td>SECLEVEL</td>
 	<td>MEMBERID</td>
 	<td>TASKID</td>
-	
+	<td>USERID</td>
 </tr>
 <tr>
 	<td><input name="CLNT" id="CLNT" value="<%= clnt %>" size=10 maxlength=10></td>
@@ -351,6 +359,7 @@ function submitSub() {
 	<td><input name="SECLEVEL" id="SECLEVEL" value="<%= seclevel %>" size=10 maxlength=10></td>
 	<td><input name="MEMBERID" id="MEMBERID" value="<%= memberid %>" size=10 maxlength=10></td>
 	<td><input name="TASKID" id="TASKID" value="<%= taskid %>" size=10 maxlength=10></td>
+	<td><input name="USERID" id="USERID" value="<%= userid %>" size=10 maxlength=10></td>
 </tr>
 </table>
 <input type="button" value="Submit" onClick="javascript:run()"/>
