@@ -54,6 +54,8 @@ public class Connect implements HttpSessionBindingListener {
 	private List<String> schemas;
 	private String schemaName;
 	private String ipAddress;
+	private String userAgent;
+	
 	//private Hashtable<String, String> pkColumn;
 	private HashMap<String, String> queryResult;
 	private HashMap<String, QueryLog> queryLog;
@@ -200,6 +202,14 @@ public class Connect implements HttpSessionBindingListener {
 
     public String getIPAddress() {
     	return ipAddress;
+    }
+    
+    public String getUserAgent() {
+    	return userAgent;
+    }
+    
+    public void setUserAgent(String ua) {
+    	userAgent = ua;
     }
     
     public String getSchemaName() {

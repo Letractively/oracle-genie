@@ -60,13 +60,14 @@
 	<td nowrap>
 		<%= cn.getUrlString() %><br/>
 		IP: <%= cn.getIPAddress() %><br/>
+		Agent: <%= cn.getUserAgent() %><br/>
 		Email: <%= cn.getEmail() %><br/>
 		Login Date: <%= cn.getLoginDate() %><br/>
 		Last Date: <%= cn.getLastDate() %><br/>
 	</td>
-	<td nowrap><%= savedHistory %></td>
-	<td nowrap><%= map.size() %></td>
-	<td><%= qry %></td>
+	<td nowrap><%= savedHistory %>&nbsp;</td>
+	<td nowrap><%= map.size() %>&nbsp;</td>
+	<td><%= qry %>&nbsp;</td>
 </tr>
 
 <% 
