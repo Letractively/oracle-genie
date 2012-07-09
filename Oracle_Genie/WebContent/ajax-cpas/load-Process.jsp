@@ -43,20 +43,22 @@
 		String process = q.getValue("PROCESS");
 		String name = q.getValue("NAME");
 		String descr = q.getValue("DESCR");
-		String priv = q.getValue("SECLABEL");
+		String seclabel = q.getValue("SECLABEL");
 		String logflag = q.getValue("LOGFLAG");
 		String rkey = q.getValue("RKEY");
 
 		rowCnt ++;
 		String rowClass = "oddRow";
 		if (rowCnt%2 == 0) rowClass = "evenRow";
+		
+		String secName = cn.queryOne("SELECT CAPTION FROM SECSWITCH WHERE LABEL ='" + seclabel + "'");
 %>
 
 <tr class="simplehighlight">
 	<td class="<%= rowClass%>" nowrap><a href="javascript:loadEvent('<%= process %>');"><%= name %></a></td>
 	<td class="<%= rowClass%>" nowrap><%= process==null?"":process %></td>
 	<td class="<%= rowClass%>" nowrap><%= descr==null?"":descr %></td>
-	<td class="<%= rowClass%>" nowrap><%= priv==null?"":priv %></td>
+	<td class="<%= rowClass%>" nowrap><%= seclabel==null?"":seclabel  + " <span class='cpas'>" + secName + "</span>"%></td>
 	<td class="<%= rowClass%>" nowrap><%= logflag==null?"":logflag %></td>
 	<td class="<%= rowClass%>" nowrap><%= rkey==null?"":rkey %></td>
 </tr>

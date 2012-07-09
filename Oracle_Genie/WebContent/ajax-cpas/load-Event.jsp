@@ -51,13 +51,15 @@
 		rowCnt ++;
 		String rowClass = "oddRow";
 		if (rowCnt%2 == 0) rowClass = "evenRow";		
+		String actionName = cn.queryOne("SELECT NAME FROM CPAS_ACTION WHERE ACTION ='" + action + "'");
+		String secName = cn.queryOne("SELECT CAPTION FROM SECSWITCH WHERE LABEL ='" + seclabel + "'");
 %>
 <tr class="simplehighlight">
 	<td class="<%= rowClass%>" nowrap><a href="javascript:loadEventView('<%= process %>','<%= event %>');"><%= name %></a></td>
 	<td class="<%= rowClass%>" nowrap><%= event==null?"":event %></td>
 	<td class="<%= rowClass%>" nowrap><%= position==null?"":position %></td>
-	<td class="<%= rowClass%>" nowrap><%= action==null?"":action %></td>
-	<td class="<%= rowClass%>" nowrap><%= seclabel==null?"":seclabel %></td>
+	<td class="<%= rowClass%>" nowrap><%= action==null?"":action + " <span class='cpas'>" + actionName + "</span>"%></td>
+	<td class="<%= rowClass%>" nowrap><%= seclabel==null?"":seclabel + " <span class='cpas'>" + secName + "</span>"%></td>
 	<td class="<%= rowClass%>" nowrap><%= uparam==null?"":uparam %></td>
 	<td class="<%= rowClass%>" nowrap><%= log==null?"":log %></td>
 	<td class="<%= rowClass%>" nowrap><%= rkey==null?"":rkey %></td>
