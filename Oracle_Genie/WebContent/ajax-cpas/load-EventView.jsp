@@ -45,12 +45,14 @@
 
 		rowCnt ++;
 		String rowClass = "oddRow";
-		if (rowCnt%2 == 0) rowClass = "evenRow";		
+		if (rowCnt%2 == 0) rowClass = "evenRow";	
+		
+		String secName = cn.queryOne("SELECT CAPTION FROM SECSWITCH WHERE LABEL ='" + seclabel + "'");
 %>
 <tr class="simplehighlight">
 	<td class="<%= rowClass%>" nowrap><%= descr==null?"":descr %></td>
 	<td class="<%= rowClass%>" nowrap><%= position %></td>
-	<td class="<%= rowClass%>" nowrap><%= seclabel==null?"":seclabel %></td>
+	<td class="<%= rowClass%>" nowrap><%= seclabel==null?"":seclabel   + " <span class='cpas'>" + secName + "</span>" %></td>
 	<td class="<%= rowClass%>" nowrap><%= sdi==null?"":sdi %></td>
 	<td class="<%= rowClass%>" nowrap><%= tv==null?"":tv %>
 <% if (tv!=null && sdi!=null) {
