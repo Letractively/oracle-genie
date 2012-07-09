@@ -30,10 +30,11 @@
 	<th class="headerRow">Action</th>
 	<th class="headerRow">Privilege</th>
 	<th class="headerRow">Uparam</th>
-	<th class="headerRow">Log</th>
+<!--
+ 	<th class="headerRow">Log</th>
 	<th class="headerRow">RKey</th>
-</tr>
-
+ -->
+ </tr>
 
 <%
 	int rowCnt = 0;
@@ -61,8 +62,10 @@
 	<td class="<%= rowClass%>" nowrap><%= action==null?"":action + " <span class='cpas'>" + actionName + "</span>"%></td>
 	<td class="<%= rowClass%>" nowrap><%= seclabel==null?"":seclabel + " <span class='cpas'>" + secName + "</span>"%></td>
 	<td class="<%= rowClass%>" nowrap><%= uparam==null?"":uparam %></td>
-	<td class="<%= rowClass%>" nowrap><%= log==null?"":log %></td>
+<%--
+ 	<td class="<%= rowClass%>" nowrap><%= log==null?"":log %></td>
 	<td class="<%= rowClass%>" nowrap><%= rkey==null?"":rkey %></td>
+ --%>
 </tr>
 <%
 	} 

@@ -48,12 +48,13 @@
 		if (rowCnt%2 == 0) rowClass = "evenRow";	
 		
 		String secName = cn.queryOne("SELECT CAPTION FROM SECSWITCH WHERE LABEL ='" + seclabel + "'");
+		String sdiName = cn.queryOne("SELECT NAME FROM CPAS_SDI WHERE SDI ='" + sdi + "'");
 %>
 <tr class="simplehighlight">
 	<td class="<%= rowClass%>" nowrap><%= descr==null?"":descr %></td>
 	<td class="<%= rowClass%>" nowrap><%= position %></td>
 	<td class="<%= rowClass%>" nowrap><%= seclabel==null?"":seclabel   + " <span class='cpas'>" + secName + "</span>" %></td>
-	<td class="<%= rowClass%>" nowrap><%= sdi==null?"":sdi %></td>
+	<td class="<%= rowClass%>" nowrap><%= sdi==null?"":sdi  + " <span class='cpas'>" + sdiName + "</span>"%></td>
 	<td class="<%= rowClass%>" nowrap><%= tv==null?"":tv %>
 <% if (tv!=null && sdi!=null) {
 	qry = "SELECT * FROM TREEACTION_STMT WHERE (sdi, actionid) in (SELECT sdi, actionid FROM TREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv +"')";

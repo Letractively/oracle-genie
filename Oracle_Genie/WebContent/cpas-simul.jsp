@@ -42,6 +42,7 @@
 	String accountid = "";
 	String personid = "";
 	String sessionid = "";
+	String processid = "";
 	String seclevel = "";
 	String memberid = "";
 	String taskid = "";
@@ -61,6 +62,7 @@
 		if (row[1].equals("PERSONID")) personid = value;
 		
 		if (row[1].equals("SESSIONID")) sessionid = value;
+		if (row[1].equals("PROCESSID")) processid = value;
 		if (row[1].equals("SECLEVEL")) seclevel = value;
 		if (row[1].equals("MEMBERID")) memberid = value;
 		if (row[1].equals("TASKID")) taskid = value;
@@ -75,6 +77,7 @@
 	if (personid==null) personid = "";
 
 	if (sessionid==null) sessionid = "";
+	if (processid==null) processid = "";
 	if (seclevel==null) seclevel = "";
 	if (memberid==null) memberid = "";
 	if (taskid==null) taskid = "";
@@ -123,6 +126,7 @@ function loadSessionValue(sid) {
 			$("#ACCOUNTID").val(jo.ACCOUNTID);
 			$("#PERSONID").val(jo.PERSONID);
 			$("#SESSIONID").val(jo.SESSIONID);
+			$("#PROCESSID").val(jo.PROCESSID);
 			$("#SECLEVEL").val(jo.SECLEVEL);
 			$("#MEMBERID").val(jo.MEMBERID);
 			$("#TASKID").val(jo.TASKID);
@@ -148,6 +152,7 @@ function runMain() {
 	var accountid = $("#ACCOUNTID").val();
 	var personid = $("#PERSONID").val();
 	var sessionid = $("#SESSIONID").val();
+	var processid = $("#PROCESSID").val();
 	var seclevel = $("#SECLEVEL").val();
 	var memberid = $("#MEMBERID").val();
 	var taskid = $("#TASKID").val();
@@ -160,6 +165,7 @@ function runMain() {
 	newQry=newQry.replace(new RegExp(":S.ACCOUNTID", 'g'), "'" + accountid + "'");
 	newQry=newQry.replace(new RegExp(":S.PERSONID", 'g'), "'" + personid + "'");
 	newQry=newQry.replace(new RegExp(":S.SESSIONID", 'g'), "'" + sessionid + "'");
+	newQry=newQry.replace(new RegExp(":S.PROCESSID", 'g'), "'" + processid + "'");
 	newQry=newQry.replace(new RegExp(":S.SECLEVEL", 'g'), "'" + seclevel + "'");
 	newQry=newQry.replace(new RegExp(":S.MEMBERID", 'g'), "'" + memberid + "'");
 	newQry=newQry.replace(new RegExp(":S.TASKID", 'g'), "'" + taskid + "'");
@@ -167,7 +173,7 @@ function runMain() {
 	
 //	alert(mainQry);
 	$("#sql-1").html(newQry);
-	$("#layout").val('<%=mainLayout%>');
+	$("#layout").val("<%=mainLayout%>");
 	$("#sql2").val($("#subQry").html());
 //	alert(newQry);
 
@@ -224,6 +230,7 @@ function runSub(fields, values) {
 	var accountid = $("#ACCOUNTID").val();
 	var personid = $("#PERSONID").val();
 	var sessionid = $("#SESSIONID").val();
+	var processid = $("#PROCESSID").val();
 	var seclevel = $("#SECLEVEL").val();
 	var memberid = $("#MEMBERID").val();
 	var taskid = $("#TASKID").val();
@@ -236,6 +243,7 @@ function runSub(fields, values) {
 	newQry=newQry.replace(new RegExp(":S.ACCOUNTID", 'g'), "'" + accountid + "'");
 	newQry=newQry.replace(new RegExp(":S.PERSONID", 'g'), "'" + personid + "'");
 	newQry=newQry.replace(new RegExp(":S.SESSIONID", 'g'), "'" + sessionid + "'");
+	newQry=newQry.replace(new RegExp(":S.PROCESSID", 'g'), "'" + processid + "'");
 	newQry=newQry.replace(new RegExp(":S.SECLEVEL", 'g'), "'" + seclevel + "'");
 	newQry=newQry.replace(new RegExp(":S.MEMBERID", 'g'), "'" + memberid + "'");
 	newQry=newQry.replace(new RegExp(":S.TASKID", 'g'), "'" + taskid + "'");
@@ -250,7 +258,7 @@ function runSub(fields, values) {
 	
 	$("#sql-2").html(newQry);
 	$("#sql2").val("");
-	$("#layout").val('<%=subLayout%>');
+	$("#layout").val("<%=subLayout%>");
 //	alert(newQry);
 
 	$("#div-2").html("");
@@ -274,12 +282,11 @@ function toggleLayout(id) {
 		$("#applylayout").val("0");
 	
 	if (id=="1") {
-		$("#layout").val('<%=mainLayout%>');
+		$("#layout").val("<%=mainLayout%>");
 		$("#sql2").val($("#subQry").html());
 	} else {
 		$("#sql2").val('');
-		$("#layout").val('<%=subLayout%>');
-	}
+		$("#layout").val("<%=subLayout%>");	}
 	reloadData(id);
 }
 
@@ -343,6 +350,7 @@ function submitSub() {
 	<td>ACCOUNTID</td>
 	<td>PERSONID</td>
 	<td>SESSIONID</td>
+	<td>PROCESSID</td>
 	<td>SECLEVEL</td>
 	<td>MEMBERID</td>
 	<td>TASKID</td>
@@ -356,6 +364,7 @@ function submitSub() {
 	<td><input name="ACCOUNTID" id="ACCOUNTID" value="<%= accountid %>" size=10 maxlength=10></td>
 	<td><input name="PERSONID" id="PERSONID" value="<%= personid %>" size=10 maxlength=10></td>
 	<td><input name="SESSIONID" id="SESSIONID" value="<%= sessionid %>" size=10 maxlength=10></td>
+	<td><input name="PROCESSID" id="PROCESSID" value="<%= processid %>" size=10 maxlength=10></td>
 	<td><input name="SECLEVEL" id="SECLEVEL" value="<%= seclevel %>" size=10 maxlength=10></td>
 	<td><input name="MEMBERID" id="MEMBERID" value="<%= memberid %>" size=10 maxlength=10></td>
 	<td><input name="TASKID" id="TASKID" value="<%= taskid %>" size=10 maxlength=10></td>
@@ -407,7 +416,6 @@ function submitSub() {
 	</div>
 	<div id="div-2"></div>
 </div>
-
 
 <div style="display: none;">
 <form name="form0" id="form0" action="query.jsp">
