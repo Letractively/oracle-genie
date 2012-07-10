@@ -270,6 +270,22 @@ public class CpasUtil {
 		return caption;
 	}
 	
+	public String getColumnType(String tname, String cname) {
+		String qry = "SELECT TYPE FROM CPAS_TABLE_COL WHERE TNAME='" + tname + "' AND CNAME='" + cname + "'";
+		if (cpasType==2) qry = "SELECT TYPE FROM ADD$TABLE_COL WHERE TNAME='" + tname + "' AND CNAME='" + cname + "'";
+		String type = cn.queryOne(qry);
+		
+		return type;
+	}
+	
+	public String getColumnPict(String tname, String cname) {
+		String qry = "SELECT PICT FROM CPAS_TABLE_COL WHERE TNAME='" + tname + "' AND CNAME='" + cname + "'";
+		if (cpasType==2) qry = "SELECT PICT FROM ADD$TABLE_COL WHERE TNAME='" + tname + "' AND CNAME='" + cname + "'";
+		String pict = cn.queryOne(qry);
+		
+		return pict;
+	}
+	
 	public boolean isCpas() {
 		return this.isCpas;
 	}

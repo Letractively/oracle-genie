@@ -218,8 +218,12 @@ Found: <%= filteredCount %>
 	
 	boolean applyLayout = false;
 	if (appLayout!=null && appLayout.equals("1")) applyLayout = true;
+
+	String colTypes[] = new String[layoutCols.size()];
+	String colPicts[] = new String[layoutCols.size()];
 	
 if (applyLayout) {
+	int i=0;
 	for (String[] row: layoutCols) {
 		String cname = row[1];
 		String cpos = row[2];
@@ -227,9 +231,13 @@ if (applyLayout) {
 		boolean highlight = false;
 		
 		String colDisp = cn.getCpasUtil().getColumnCaption(layout, cname);
+		colTypes[i] = cn.getCpasUtil().getColumnType(layout, cname);
+		colPicts[i] = cn.getCpasUtil().getColumnPict(layout, cname);
+		if (colPicts[i]==null) colPicts[i] = "";
 %>
-<th class="headerRow"><%=colDisp%></th>
+<th class="headerRow"><%=colDisp%><br/><span class='cpas'><%= colTypes[i] %> <%= colPicts[i] %></span></th>
 <%
+		i++;
 	}
 }	
 
@@ -292,6 +300,7 @@ if (!applyLayout) {
 		for (String c : hs) {
 			subValues += q.getValue(c) + "|";
 		}
+		
 %>
 <tr class="simplehighlight">
 <% if (sql2 != null && !sql2.equals("")) { %>
@@ -315,11 +324,25 @@ if (!applyLayout) {
 			String code = cn.getCpasCodeValue(tname, colName, val, q);
 			if (code!=null)	{
 				//valDisp += "<br/> &gt; <span class='cpas'>" + code + "</span>";
-				valDisp += code;
+//				valDisp += " " + code;
+				valDisp = code;
+			}
+			String align="left";
+			
+			if (colTypes[i] !=null && colTypes[i].endsWith("N")) align="right";
+			
+			if (colTypes[i] !=null && colTypes[i].endsWith("N") && colPicts[i].length() > 0) {
+				String tmp = "SELECT TO_CHAR(" + valDisp + ",'"+colPicts[i] +"') FROM DUAL";
+				String tmp2 = cn.queryOne(tmp);
+				//valDisp += " " + colPicts[i] + " " + tmp + " " + tmp2;
+				tmp2 = tmp2.trim();
+				//System.out.println("tmp2="+tmp2);
+				if (tmp2.startsWith(".")) tmp2 = "0" + tmp2;
+				valDisp = tmp2;
 			}
 			
 %>
-<td class="<%= rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
+<td class="<%= rowClass%>" align=<%= align%>><%=valDisp%>
 </td>
 <%		}
 	}
@@ -386,7 +409,7 @@ if (!applyLayout) {
 */
 if (cpas) {
 	String code = cn.getCpasCodeValue(tname, colName, val, q);
-	if (code!=null)	valDisp += "<br/> &gt; <span class='cpas'>" + code + "</span>";
+	if (code!=null && !code.equals(""))	valDisp += "<br/> &gt; <span class='cpas'>" + code + "</span>";
 }
 
 %>

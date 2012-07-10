@@ -357,18 +357,18 @@ function submitSub() {
 	<td>USERID</td>
 </tr>
 <tr>
-	<td><input name="CLNT" id="CLNT" value="<%= clnt %>" size=10 maxlength=10></td>
-	<td><input name="MKEY" id="MKEY" value="<%= mkey %>" size=10 maxlength=10></td>
-	<td><input name="ERKEY" id="ERKEY" value="<%= erkey %>" size=10 maxlength=10></td>
-	<td><input name="PLAN" id="PLAN" value="<%= plan %>" size=10 maxlength=10></td>
-	<td><input name="ACCOUNTID" id="ACCOUNTID" value="<%= accountid %>" size=10 maxlength=10></td>
-	<td><input name="PERSONID" id="PERSONID" value="<%= personid %>" size=10 maxlength=10></td>
-	<td><input name="SESSIONID" id="SESSIONID" value="<%= sessionid %>" size=10 maxlength=10></td>
-	<td><input name="PROCESSID" id="PROCESSID" value="<%= processid %>" size=10 maxlength=10></td>
-	<td><input name="SECLEVEL" id="SECLEVEL" value="<%= seclevel %>" size=10 maxlength=10></td>
-	<td><input name="MEMBERID" id="MEMBERID" value="<%= memberid %>" size=10 maxlength=10></td>
-	<td><input name="TASKID" id="TASKID" value="<%= taskid %>" size=10 maxlength=10></td>
-	<td><input name="USERID" id="USERID" value="<%= userid %>" size=10 maxlength=10></td>
+	<td><input name="CLNT" id="CLNT" value="<%= clnt %>" size=7 maxlength=10></td>
+	<td><input name="MKEY" id="MKEY" value="<%= mkey %>" size=7 maxlength=10></td>
+	<td><input name="ERKEY" id="ERKEY" value="<%= erkey %>" size=7 maxlength=10></td>
+	<td><input name="PLAN" id="PLAN" value="<%= plan %>" size=7 maxlength=10></td>
+	<td><input name="ACCOUNTID" id="ACCOUNTID" value="<%= accountid %>" size=7 maxlength=10></td>
+	<td><input name="PERSONID" id="PERSONID" value="<%= personid %>" size=7 maxlength=10></td>
+	<td><input name="SESSIONID" id="SESSIONID" value="<%= sessionid %>" size=7 maxlength=10></td>
+	<td><input name="PROCESSID" id="PROCESSID" value="<%= processid %>" size=7 maxlength=10></td>
+	<td><input name="SECLEVEL" id="SECLEVEL" value="<%= seclevel %>" size=7 maxlength=10></td>
+	<td><input name="MEMBERID" id="MEMBERID" value="<%= memberid %>" size=7 maxlength=10></td>
+	<td><input name="TASKID" id="TASKID" value="<%= taskid %>" size=7 maxlength=10></td>
+	<td><input name="USERID" id="USERID" value="<%= userid %>" size=7 maxlength=10></td>
 </tr>
 </table>
 <input type="button" value="Submit" onClick="javascript:run()"/>
@@ -378,6 +378,16 @@ function submitSub() {
 <hr/>
 
 <%
+	if (mainLayout.startsWith("SELECT ")) {
+		String q2 = mainLayout;
+		q2 = q2.replaceAll(":S.CLNT", "'" + clnt + "'");
+		q2 = q2.replaceAll(":S.MKEY", "'" + mkey + "'");
+		q2 = q2.replaceAll(":S.PLAN", "'" + plan + "'");
+		q2 = q2.replaceAll(":S.PERSONID", "'" + personid + "'");
+		
+		mainLayout = cn.queryOne(q2);
+	}
+
 	String id = Util.getId();
 	String qry = "SELECT * FROM CPAS_LAYOUT WHERE TNAME='" + mainLayout + "'";
 %>

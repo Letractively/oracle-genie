@@ -194,7 +194,9 @@ Up to
 		return;		
 	}
 %>
-<BR/>
+<hr/>
+<br/>
+
 <div id="buttonsDiv" style="display: none;">
 <TABLE>
 <TD><a class="qryBtn" id="modeSort" href="Javascript:setDoMode('sort')">Sort</a>
