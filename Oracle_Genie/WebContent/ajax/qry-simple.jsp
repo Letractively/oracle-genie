@@ -327,7 +327,7 @@ Found: <%= filteredCount %>
 */
 if (cpas) {
 	String code = cn.getCpasCodeValue(tname, colName, val, q);
-	if (code!=null)	valDisp += "<br/> &gt; <span class='cpas'>" + code + "</span>";
+	if (code!=null && !code.equals(""))	valDisp += "<br/> &gt; <span class='cpas'>" + code + "</span>";
 }
 
 %>

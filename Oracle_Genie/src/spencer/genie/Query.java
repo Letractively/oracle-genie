@@ -286,6 +286,8 @@ public class Query {
 		int size = qData.rows.size();
 		ArrayList<DataComparable> arr = new ArrayList<DataComparable>();
 		int colIdx = qData.getColumnIndex(col);
+		if (colIdx <0) return;
+		
 		String typeName = qData.columns.get(colIdx).columnTypeName;
 		boolean isReverse = direction.equals("1");
 		

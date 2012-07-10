@@ -65,6 +65,7 @@
     		$("#url").val(jdbcUrl);
     		$("#username").val(userId);
     	}
+    	
     </script>
   </head>
   
@@ -74,6 +75,90 @@
     <h2>Welcome to CPAS Genie.</h2>
 
 <b>Connect to database</b>
+<select id="dbSelect" onchange="setLogin(this.options[this.selectedIndex].value, '');">
+<option></option>
+<option value="jdbc:oracle:thin:@s-ora-001.cpas.com:1521/ACAW">S-ORA-001.ACAW</option>
+<option value="jdbc:oracle:thin:@s-ora-001.cpas.com:1521/BMO">S-ORA-001.BMO</option>
+<option value="jdbc:oracle:thin:@s-ora-001.cpas.com:1521/CIBCGIC">S-ORA-001.CIBCGIC</option>
+<option value="jdbc:oracle:thin:@s-ora-001.cpas.com:1521/COGNOS">S-ORA-001.COGNOS</option>
+<option value="jdbc:oracle:thin:@s-ora-001.cpas.com:1521/CQ2">S-ORA-001.CQ2</option>
+<option value="jdbc:oracle:thin:@s-ora-001.cpas.com:1521/DALLAS">S-ORA-001.DALLAS</option>
+<option value="jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA">S-ORA-001.MCERA</option>
+<option value="jdbc:oracle:thin:@s-ora-001.cpas.com:1521/OE">S-ORA-001.OE</option>
+<option value="jdbc:oracle:thin:@s-ora-001.cpas.com:1521/OEFREEZ2">S-ORA-001.OEFREEZ2</option>
+<option value="jdbc:oracle:thin:@s-ora-001.cpas.com:1521/PSAC">S-ORA-001.PSAC</option>
+<option value="jdbc:oracle:thin:@s-ora-001.cpas.com:1521/RKLARGUS">S-ORA-001.RKLARGUS</option>
+<option value="jdbc:oracle:thin:@s-ora-001.cpas.com:1521/SASKATN">S-ORA-001.SASKATN</option>
+<option value="jdbc:oracle:thin:@s-ora-001.cpas.com:1521/TEMPLATE">S-ORA-001.TEMPLATE</option>
+<option></option>
+
+<option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1526/AIARC">S-ORA-002.AIARC</option>
+<option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1526/GOODYEAR">S-ORA-002.GOODYEAR</option>
+<option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1521/RKLDBV3">S-ORA-002.RKLDBV3</option>
+<option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1521/SDCDEV">S-ORA-002.SDCDEV</option>
+<option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1521/SDCERA">S-ORA-002.SDCERA</option>
+<option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1521/SSGQA">S-ORA-002.SSGQA</option>
+<option></option>
+
+<option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR">S-ORA-003.BALTIMOR</option>
+<option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAAT">S-ORA-003.CAAT</option>
+<option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAPITAL">S-ORA-003.CAPITAL</option>
+<option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1521/DEV10G">S-ORA-003.DEV10G</option>
+<option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1521/MPI">S-ORA-003.MPI</option>
+<option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1526/NDRIO">S-ORA-003.NDRIO</option>
+<option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1526/NTCA">S-ORA-003.NTCA</option>
+<option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PAOC">S-ORA-003.PAOC</option>
+<option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1521/PENSCO">S-ORA-003.PENSCO</option>
+<option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PEPP">S-ORA-003.PEPP</option>
+<option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS">S-ORA-003.PMRS</option>
+<option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1526/SIGMA">S-ORA-003.SIGMA</option>
+<option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1521/VANGUARD">S-ORA-003.VANGUARD</option>
+<option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1526/VCENTER">S-ORA-003.VCENTER</option>
+<option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1526/VUPDATE">S-ORA-003.VUPDATE</option>
+<option></option>
+
+<option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/ACTRA">S-ORA-004.ACTRA</option>
+<option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/CCCERA">S-ORA-004.CCCERA</option>
+<option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/CQDEV">S-ORA-004.CQDEV</option>
+<option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/GENDYN">S-ORA-004.GENDYN</option>
+<option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/IBT">S-ORA-004.IBT</option>
+<option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/INTEGRA">S-ORA-004.INTEGRA</option>
+<option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/KCERA">S-ORA-004.KCERA</option>
+<option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/KEYSTONE">S-ORA-004.KEYSTONE</option>
+<option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/OEFROZEN">S-ORA-004.OEFROZEN</option>
+<option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/PMRS">S-ORA-004.PMRS</option>
+<option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/PPL">S-ORA-004.PPL</option>
+<option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/SAXON55">S-ORA-004.SAXON55</option>
+<option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/SVB">S-ORA-004.SVB</option>
+<option></option>
+
+<option value="jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED">S-ORA-005.MERCED</option>
+<option value="jdbc:oracle:thin:@s-ora-005.cpas.com:1521/NTCA">S-ORA-005.NTCA</option>
+<option value="jdbc:oracle:thin:@s-ora-005.cpas.com:1521/TAIKANG">S-ORA-005.TAIKANG</option>
+<option value="jdbc:oracle:thin:@s-ora-005.cpas.com:1521/TCERADEV">S-ORA-005.TCERADEV</option>
+<option value="jdbc:oracle:thin:@s-ora-005.cpas.com:1521/WYATT">S-ORA-005.WYATT</option>
+<option></option>
+
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1521/AFM">S-ORA-006.AFM</option>
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1526/APA">S-ORA-006.APA</option>
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1521/ARGUS">S-ORA-006.ARGUS</option>
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1526/CIBC">S-ORA-006.CIBC</option>
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1521/CIBC2">S-ORA-006.CIBC2</option>
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1526/COR">S-ORA-006.COR</option>
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1521/DALLAS">S-ORA-006.DALLAS</option>
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1526/GOODYEAR">S-ORA-006.GOODYEAR</option>
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1526/LUTHERAN">S-ORA-006.LUTHERAN</option>
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1521/NAV">S-ORA-006.NAV</option>
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1521/PENSCO">S-ORA-006.PENSCO</option>
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1526/RECKEEP">S-ORA-006.RECKEEP</option>
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1521/SAXON">S-ORA-006.SAXON</option>
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1521/SEARSDB">S-ORA-006.SEARSDB</option>
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1521/SEARSDC">S-ORA-006.SEARSDC</option>
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1526/TTC">S-ORA-006.TTC</option>
+<option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1521/UNILEASE">S-ORA-006.UNILEASE</option>
+
+</select>
+
 	<form action="connect_new.jsp" method="POST">
     <table border=0>
     <tr>
@@ -120,10 +205,15 @@
 
 <br/><hr>
 <b>CPAS Databases:</b><br/>
+
 <div style="margin: 20px; padding:5px; width:600px; height:300px; overflow: scroll; border: 1px solid #666666;">
 
 ACTRA
 <li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.CPAS.COM:1521/ACTRA', 'cpasdba')">cpasdba@jdbc:oracle:thin:@s-ora-004.CPAS.COM:1521/ACTRA</a></li>
+<br/>
+
+AFM (MPF)
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.cpas.com:1521/AFM', '')">@jdbc:oracle:thin:@s-ora-006.cpas.com:1521/AFM</a></li>
 <br/>
 
 AIARC
