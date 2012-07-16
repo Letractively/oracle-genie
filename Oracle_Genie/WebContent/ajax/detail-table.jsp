@@ -228,12 +228,13 @@ Please select a Table to see the detail.
 <% 
 	if (refTabs.size()>0) { 
 %>
+
 <b>Related Table</b>
 <a href="Javascript:toggleDiv('imgTable','divTable')"><img id="imgTable" border=0 src="image/minus.gif"></a>
 <div id="divTable">
-<table border=0>
-<td width=10>&nbsp;</td>
-<td valign=top>
+<table border=0 width=100%>
+<td width=4%>&nbsp;</td>
+<td valign=top width=32%>
 <%
 	int listSize = (refTabs.size() / 3) + 1;
 	int cnt = 0;
@@ -243,7 +244,7 @@ Please select a Table to see the detail.
 %>
 
 <% if ((cnt-1)>=listSize) { %>
-		</td><td valign=top>
+		</td><td valign=top width=32%>
 <%
 		cnt = 1;
 	} 
@@ -265,9 +266,9 @@ Please select a Table to see the detail.
 <b>Related View</b>
 <a href="Javascript:toggleDiv('imgView','divView')"><img id="imgView" border=0 src="image/minus.gif"></a>
 <div id="divView">
-<table border=0>
-<td width=10>&nbsp;</td>
-<td valign=top>
+<table border=0 width=100%>
+<td width=4%>&nbsp;</td>
+<td valign=top width=32%>
 <%
 	int listSize = (refViews.size() / 3) + 1;
 	int cnt = 0;
@@ -277,7 +278,7 @@ Please select a Table to see the detail.
 %>
 
 <% if ((cnt-1)>=listSize) { %>
-		</td><td valign=top>
+		</td><td valign=top width=32%>
 <%
 		cnt = 1;
 	} 
@@ -301,9 +302,9 @@ Please select a Table to see the detail.
 <b>Related Trigger</b>
 <a href="Javascript:toggleDiv('imgTrg','divTrg')"><img id="imgTrg" border=0 src="image/minus.gif"></a>
 <div id="divTrg">
-<table border=0>
-<td width=10>&nbsp;</td>
-<td valign=top>
+<table border=0 width=100%>
+<td width=4%>&nbsp;</td>
+<td valign=top width=32%>
 <%
 	int listSize = (refTrgs.size() / 3) + 1;
 	int cnt = 0;
@@ -313,7 +314,7 @@ Please select a Table to see the detail.
 %>
 
 <% if ((cnt-1)>=listSize) { %>
-		</td><td valign=top>
+		</td><td valign=top width=32%>
 <%
 		cnt = 1;
 	} 
@@ -336,9 +337,9 @@ Please select a Table to see the detail.
 <b>Related Program</b>
 <a href="Javascript:toggleDiv('imgPgm','divPgm')"><img id="imgPgm" border=0 src="image/minus.gif"></a>
 <div id="divPgm">
-<table border=0>
-<td width=10>&nbsp;</td>
-<td valign=top>
+<table border=0 width=100%>
+<td width=4%>&nbsp;</td>
+<td valign=top width=32%>
 <%
 	int listSize = (refPkgs.size() / 3) + 1;
 	int cnt = 0;
@@ -348,7 +349,7 @@ Please select a Table to see the detail.
 %>
 
 <% if ((cnt-1)>=listSize) { %>
-		</td><td valign=top>
+		</td><td valign=top width=32%>
 <%
 		cnt = 1;
 	} 
