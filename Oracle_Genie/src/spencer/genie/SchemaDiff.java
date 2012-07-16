@@ -397,8 +397,9 @@ public class SchemaDiff {
 		String[] s1 = getTableData(c1);
 		String[] s2 = getTableData(c2);
 
-		resultStr = resultStr + "<b>" + oname + "</b><br/>";
-		resultStr += "<pre>" + getDiff(s1, s2) + "</pre>"; 
+		String id = Util.getId();
+		resultStr = resultStr + "<b>" + oname + "</b> <a href='Javascript:toggleDiv(\"img-"+id+"\",\"div-"+ id+"\")'><img id='img-" + id +"' border=0 src=\"image/minus.gif\"></a><br/>";
+		resultStr += "<div id='div-" + id + "' style='margin-left: 20px;'><pre>" + getDiff(s1, s2) + "</pre></div>"; 
 	}
 
 	private String[] getTableData(List<String[]> c) {

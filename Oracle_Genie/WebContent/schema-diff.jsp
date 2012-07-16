@@ -37,6 +37,7 @@
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
     
     <script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="script/genie.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
     <script type="text/javascript">
     var to2;
     
