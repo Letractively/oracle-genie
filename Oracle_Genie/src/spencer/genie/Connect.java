@@ -1458,18 +1458,15 @@ public class Connect implements HttpSessionBindingListener {
 		List<TableCol> list = tableDetailCache.get(owner, tname); 
 		if (list != null ) return list;
 		
+		// primary key
+		ArrayList<String> pk = getPrimaryKeys(owner, tname);
+		
 		list = new ArrayList<TableCol>();
 		
 		Statement stmt = conn.createStatement();
 		String qry = "SELECT * FROM ALL_TAB_COLUMNS WHERE OWNER='" + owner.toUpperCase() + "' AND TABLE_NAME='" + tname + "' ORDER BY column_id";
 
-//System.out.println(qry);		
 		ResultSet rs1 = stmt.executeQuery(qry);
-
-		// primary key
-		ArrayList<String> pk = getPrimaryKeys(owner, tname);
-		
-		//System.out.println("Detail for " + table);
 		while (rs1.next()){
 			String colName = rs1.getString("COLUMN_NAME");
 			String dataType = rs1.getString("DATA_TYPE");
@@ -1479,8 +1476,8 @@ public class Connect implements HttpSessionBindingListener {
 			int nullable = rs1.getString("NULLABLE").equals("Y")?1:0;
 			
 			String colDef = rs1.getString("DATA_DEFAULT");
+			
 			if (colDef==null) colDef="";
-//			String colDef="??";
 			
 			String dType = dataType.toLowerCase();
 			
