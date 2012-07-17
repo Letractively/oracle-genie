@@ -158,6 +158,7 @@ Up to
 <option value="1000" <%= maxRow==1000?"SELECTED":"" %>>1,000</option>
 <option value="5000" <%= maxRow==5000?"SELECTED":"" %>>5,000</option>
 <option value="10000" <%= maxRow==10000?"SELECTED":"" %>>10,000</option>
+<option value="50000" <%= maxRow==50000?"SELECTED":"" %>>50,000</option>
 </select>
 <input type="submit" value="Submit"/>
 &nbsp;
