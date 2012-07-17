@@ -62,6 +62,7 @@ public class Query {
 		this.cn = cn;
 		originalQry = qry;
 		MAX_ROW = maxRow;
+		if (MAX_ROW > Def.MAX_SEARCH_ROWS) MAX_ROW = Def.MAX_SEARCH_ROWS; 
 		
 		sortOrder = new int[MAX_ROW];
 		hideRow = new boolean[MAX_ROW];
@@ -229,9 +230,19 @@ public class Query {
 			return false;
 		}
 
-		currentRow ++;
-		if (hideRow[sortOrder[currentRow]]) return next();
-		return true;
+//		currentRow ++;
+//		if (hideRow[sortOrder[currentRow]]) return next();
+		
+		while (true) {
+			currentRow ++;
+			if (!hideRow[sortOrder[currentRow]]) return true;
+
+			if (currentRow+1 >= qData.rows.size()) {
+				currentRow = 0;
+				return false;
+			}
+		}
+//		return true;
 	}
 
 	public void swap(int array[], int index1, int index2) 
