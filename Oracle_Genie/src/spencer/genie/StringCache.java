@@ -11,19 +11,19 @@ import java.util.Hashtable;
  */
 public class StringCache {
 
-	static StringCache instance = null;
+/*	static StringCache instance = null;
 	static String urlString = null;
-	Hashtable<String, String> strings = new Hashtable<String, String>();
+*/	Hashtable<String, String> strings = new Hashtable<String, String>();
 			
 	private StringCache() {
 	}
 	
-	public static StringCache getInstance(String urlStr) {
-		if (instance==null && urlString==null) {
+	public static StringCache getInstance() {
+/*		if (instance==null && urlString==null) {
 			urlString = urlStr;
 			instance = new StringCache();
-		}
-		return instance;
+		}*/
+		return  new StringCache();
 	}
 	
 	public String get(String str) {

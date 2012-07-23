@@ -14,9 +14,9 @@ public class ContentSearch {
 	private String matchType;
 	private String caseType;
 
-	private static ContentSearch instance = null;
+/*	private static ContentSearch instance = null;
 	static String urlString = null;
-	
+*/	
 	private static boolean running = false;
 	private static boolean skipTable = false;
 	private static String progressStr;
@@ -28,12 +28,12 @@ public class ContentSearch {
 	private ContentSearch() {
 	}
 	
-	public static ContentSearch getInstance(String urlStr) {
-		if (instance==null && urlString==null) {
+	public static ContentSearch getInstance() {
+/*		if (instance==null && urlString==null) {
 			urlString = urlStr;
 			instance = new ContentSearch();
-		}
-		return instance; 
+		}*/
+		return new ContentSearch(); 
 	}
 	
 	public List<String> search(Connect cn, String searchKeyword, String inclTable, String exclTable, String owner, String matchType, String caseType) {

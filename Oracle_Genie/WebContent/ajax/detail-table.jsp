@@ -238,6 +238,7 @@ Please select a Table to see the detail.
 <%
 	int listSize = (refTabs.size() / 3) + 1;
 	int cnt = 0;
+	int cols =1;
 	for (int i=0; i<refTabs.size(); i++) {
 		String refTab = refTabs.get(i);
 		cnt++;
@@ -246,13 +247,20 @@ Please select a Table to see the detail.
 <% if ((cnt-1)>=listSize) { %>
 		</td><td valign=top width=32%>
 <%
+		cols ++;
 		cnt = 1;
-	} 
+	}
 %>
 
 		<a href="Javascript:loadTable('<%= refTab %>')"><%= refTab %></a> <span class="rowcountstyle"><%= cn.getTableRowCount(refTab) %></span>&nbsp;&nbsp;<br/>		
 <% }
+
+	for (; cols<=3; cols++) {
 %>
+	</td><td valign=top width=32%>
+<% } %>
+
+
 </td>
 </table>
 </div>
@@ -272,6 +280,7 @@ Please select a Table to see the detail.
 <%
 	int listSize = (refViews.size() / 3) + 1;
 	int cnt = 0;
+	int cols = 1;
 	for (int i=0; i<refViews.size(); i++) {
 		String refView = refViews.get(i);
 		cnt++;
@@ -281,12 +290,17 @@ Please select a Table to see the detail.
 		</td><td valign=top width=32%>
 <%
 		cnt = 1;
+		cols++;
 	} 
 %>
 
 		<a href="Javascript:loadView('<%= refView %>')"><%= refView %></a>&nbsp;&nbsp;<br/>		
 <% }
+	for (; cols<=3; cols++) {
 %>
+	</td><td valign=top width=32%>
+<% } %>
+
 </td>
 </table>
 </div>
@@ -306,8 +320,9 @@ Please select a Table to see the detail.
 <td width=4%>&nbsp;</td>
 <td valign=top width=32%>
 <%
-	int listSize = (refTrgs.size() / 3) + 1;
+	int listSize = ((refTrgs.size()-1) / 3) + 1;
 	int cnt = 0;
+	int cols = 1;
 	for (int i=0; i<refTrgs.size(); i++) {
 		String refTrg = refTrgs.get(i);
 		cnt++;
@@ -317,12 +332,17 @@ Please select a Table to see the detail.
 		</td><td valign=top width=32%>
 <%
 		cnt = 1;
+		cols ++;
 	} 
 %>
 
 		<a href="Javascript:loadPackage('<%= refTrg %>')"><%= refTrg %></a>&nbsp;&nbsp;<br/>		
 <% }
+	for (; cols<=3; cols++) {
 %>
+	</td><td valign=top width=32%>
+<% } %>
+
 </td>
 </table>
 </div>
@@ -343,6 +363,7 @@ Please select a Table to see the detail.
 <%
 	int listSize = (refPkgs.size() / 3) + 1;
 	int cnt = 0;
+	int cols = 1;
 	for (int i=0; i<refPkgs.size(); i++) {
 		String refPkg = refPkgs.get(i);
 		cnt++;
@@ -352,12 +373,17 @@ Please select a Table to see the detail.
 		</td><td valign=top width=32%>
 <%
 		cnt = 1;
+		cols ++;
 	} 
 %>
 
 		<a href="Javascript:loadPackage('<%= refPkg %>')"><%= refPkg %></a>&nbsp;&nbsp;<br/>		
 <% }
+	for (; cols<=3; cols++) {
 %>
+	</td><td valign=top width=32%>
+<% } %>
+
 </td>
 </table>
 </div>

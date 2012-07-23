@@ -123,12 +123,12 @@ public class Connect implements HttpSessionBindingListener {
        		this.schemaName = userName;
 //       		System.out.println("this.schemaName=" + this.schemaName);
 
-            queryCache = QueryCache.getInstance(urlString);
-            listCache = ListCache.getInstance(urlString);
-            listCache2 = ListCache2.getInstance(urlString);
-            stringCache = StringCache.getInstance(urlString);
-            tableDetailCache = TableDetailCache.getInstance(urlString);
-            contentSearch = ContentSearch.getInstance(urlString);
+            queryCache = QueryCache.getInstance();
+            listCache = ListCache.getInstance();
+            listCache2 = ListCache2.getInstance();
+            stringCache = StringCache.getInstance();
+            tableDetailCache = TableDetailCache.getInstance();
+            contentSearch = ContentSearch.getInstance();
 
             loadData();
         }
