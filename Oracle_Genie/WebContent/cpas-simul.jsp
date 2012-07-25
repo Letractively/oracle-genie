@@ -23,9 +23,11 @@
 	String subQry = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='DS'");
 	String mainLayout = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='MT'");
 	String subLayout = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='DT'");
+	String as = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='AS'");
 	
 	if (mainQry==null) mainQry="";
 	if (subQry==null) subQry="";
+	if (as==null) as="";
 
 	List<String[]> q = cn.query("SELECT caption, treekey FROM TREEVIEW WHERE SDI='"+sdi+"' and actionid="+actionid);
 	String caption = "";
@@ -376,7 +378,10 @@ function submitSub() {
 </div>
 
 <hr/>
+<b>Action</b>
 
+<div style="padding: 4px;"><%= as %></div>
+<hr/>
 <%
 	if (mainLayout.startsWith("SELECT ")) {
 		String q2 = mainLayout;
