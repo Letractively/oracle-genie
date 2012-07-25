@@ -1295,12 +1295,15 @@ public class Connect implements HttpSessionBindingListener {
        		
        		rs.close();
        		stmt.close();
+
+    		stringCache.add(qry, res);
+    		
 		} catch (SQLException e) {
-             System.err.println ("queryOne - " + qry);
+            System.err.println ("queryOne - " + qry);
+            System.out.println ("queryOne - " + qry);
              e.printStackTrace();
              message = e.getMessage();
  		}
-		stringCache.add(qry, res);
 		return res;
 	}
 

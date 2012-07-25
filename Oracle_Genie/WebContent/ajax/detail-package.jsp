@@ -45,18 +45,18 @@
 	if (list.size()>0) { 
 %>
 <b>Procedures</b>
-<table border=0>
-<td width=10>&nbsp;</td>
-<td valign=top>
+<table border=0 width=100%>
+<td width=8%>&nbsp;</td>
+<td valign=top width=23%>
 <%
-	int listSize = (list.size() / 3) + 1;
+	int listSize = (list.size() / 4) + 1;
 	int cnt = 0;
 	for (int i=0; i<list.size(); i++) {
 		cnt++;
 %>
 
 <% if ((cnt-1)>=listSize) { %>
-		</td><td valign=top>
+		</td><td valign=top width=23%>
 <%
 		cnt = 1;
 	} 
@@ -73,13 +73,13 @@
 
 <b>Dependencies</b>
 
-<table>
+<table border=0 width=100%>
 <tr>
-	<td>&nbsp;</td>
-	<td bgcolor=#ccccff>Program</td>
-	<td bgcolor=#ccccff>Table</td>
-	<td bgcolor=#ccccff>View</td>
-	<td bgcolor=#ccccff>Synonym</td>
+	<td width=8%>&nbsp;</td>
+	<td width=23% bgcolor=#ccccff>Program</td>
+	<td width=23% bgcolor=#ccccff>Table</td>
+	<td width=23% bgcolor=#ccccff>View</td>
+	<td width=23% bgcolor=#ccccff>Synonym</td>
 </tr>
 <tr>
 	<td>&nbsp;</td>

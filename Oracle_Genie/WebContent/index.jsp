@@ -129,8 +129,8 @@ function callserver() {
 <body>
 
 <table width=100% border=0>
-<td><img src="image/cpas.jpg" title="Version <%= Util.getVersionDate() %>"/></td>
-<td><h2 style="color: blue;">CPAS Genie</h2></td>
+<td><img src="image/cpas.jpg" alt="Version <%= Util.getVersionDate() %>"/></td>
+<td nowrap><h2 style="color: blue;">CPAS Genie</h2></td>
 <td><h3><%= cn.getUrlString() %></h3></td>
 <td>
 &nbsp;
@@ -145,7 +145,7 @@ Database
  --%>
 </td>
 
-<td>
+<td nowrap>
 <a href="index.jsp">Home</a> |
 <a href="query.jsp" target="_blank">Query</a> |
 <!-- <a href="worksheet.jsp" target="_blank">Work Sheet</a> |
@@ -163,7 +163,7 @@ CPAS
 <a href="javascript:showCPAS()">CPAS Catalogs</a>
 <% } %>
 </td>
-<td align=right>
+<td align=right nowrap>
 <b>Search</b> <input id="globalSearch" style="width: 160px;"/>
 <a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
 </td>
@@ -229,13 +229,16 @@ Genie will help you navigate through database objects and their relationships.<b
 If you have any question or suggestion, please feel free to contact me.
 <br/><br/>
 
+<%--
 Please download the latest community version here:<br/>
 <a href="http://code.google.com/p/oracle-genie/">http://code.google.com/p/oracle-genie/</a>
 <br/><br/>
+--%>
 
 <%= Util.getVersionDate() %><br/>
 Spencer Hwang - the creator of Genie<br/>
-<a href="mailto:spencer.hwang@gmail.com">spencer.hwang@gmail.com</a>
+<!-- <a href="mailto:spencer.hwang@gmail.com">spencer.hwang@gmail.com</a>
+ --><a href="mailto:spencerh@cpas.com">spencerh@cpas.com</a>
 
 </div>
 

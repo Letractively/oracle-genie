@@ -67,7 +67,7 @@
 	</td>
 	<td nowrap><%= savedHistory %>&nbsp;</td>
 	<td nowrap><%= map.size() %>&nbsp;</td>
-	<td><%= qry %>&nbsp;</td>
+	<td><pre><%= qry %>&nbsp;</pre></td>
 </tr>
 
 <% 

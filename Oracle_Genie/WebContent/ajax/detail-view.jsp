@@ -25,7 +25,6 @@
 	String qry = "SELECT TEXT FROM USER_VIEWS WHERE VIEW_NAME='" + view +"'";
 	if (owner != null) 
 		qry = "SELECT TEXT FROM ALL_VIEWS WHERE OWNER='" + owner + "' AND VIEW_NAME='" + view +"'"; 
-	String text = cn.queryOne(qry);
 	
 	boolean hasCpas = cn.hasCpas(view);
 	String cpasComment = cn.getCpasComment(view);
@@ -88,6 +87,9 @@
 
 <hr>
 
+<%
+	String text = cn.queryOne(qry, false);
+%>
 <b>Definition</b> 
 <a href="Javascript:toggleDiv('imgDef','divDef')"><img id="imgDef" src="image/minus.gif"></a>
 <div id="divDef" style="margin-left: 20px;">
