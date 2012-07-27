@@ -218,6 +218,9 @@ Found: <%= filteredCount %>
 			}
 			
 			String colDisp = colName.toLowerCase();
+			
+			if (pkColList != null && pkColList.contains(colName)) colDisp = "<b>" + colDisp + "</b>";
+			
 			String cpasDisp = "";
 			if (cpas) {
 				String capt = cn.getCpasCodeCapt(tname, colName);
@@ -354,8 +357,8 @@ if (cpas) {
 	id = Util.getId();
 %>
 
-<a href="Javascript:toggleDiv('img-<%=id%>','div-<%=id%>')"><img id="img-<%=id%>" border=0 src="image/minus.gif"></a>
-<div id="div-<%=id%>">
+<a href="Javascript:toggleDiv('img-<%=id%>','div-<%=id%>')"><img id="img-<%=id%>" border=0 src="image/plus.gif"></a>
+<div id="div-<%=id%>" style="display: none;">
 <%
 for (int i=0; i<fkLinkTab.size(); i++) {
 	String ft = fkLinkTab.get(i);
