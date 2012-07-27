@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * Utility class for Genie
@@ -101,6 +102,11 @@ public class Util {
 		}
 
 		return res;
+	}
+	
+	public static boolean isNumber(String inputData) {
+		return NumberUtils.isNumber(inputData);
+		//return inputData.matches("[-+]?\\d+(\\.\\d+)?");
 	}
 	
 	public static List<String> getTables(String sql) {
@@ -195,11 +201,11 @@ public class Util {
 	}
 	
 	public static String getVersionDate() {
-		return "July 25, 2012";
+		return "July 27, 2012";
 	}
 
 	public static String getScriptionVersion() {
-		return "20120725";
+		return "20120727";
 	}
 
 	public static String getIpAddress(HttpServletRequest request) {
