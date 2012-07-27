@@ -214,7 +214,7 @@ Found: <%= filteredCount %>
 	boolean hasData = q.hasMetaData();
 	int colIdx = 0;
 
-	List<String[]> layoutCols = cn.query("SELECT CNAME, CPOS, CWIDTH FROM CPAS_LAYOUT_COL WHERE TNAME='" + layout + "' AND CPOS > 0 ORDER BY CPOS");
+	List<String[]> layoutCols = cn.query("SELECT CNAME, CPOS, CWIDTH FROM CPAS_LAYOUT_COL WHERE USERNAME='DEFAULT_SETUP' AND TNAME='" + layout + "' AND CPOS > 0 ORDER BY CPOS");
 	
 	boolean applyLayout = false;
 	if (appLayout!=null && appLayout.equals("1")) applyLayout = true;
@@ -331,8 +331,8 @@ if (!applyLayout) {
 			
 			if (colTypes[i] !=null && colTypes[i].endsWith("N")) align="right";
 			
-			if (colTypes[i] !=null && colTypes[i].endsWith("N") && colPicts[i].length() > 0) {
-				String tmp = "SELECT TO_CHAR(" + valDisp + ",'"+colPicts[i] +"') FROM DUAL";
+			if (colTypes[i] !=null && colTypes[i].endsWith("N") && colPicts[i].length() > 0 && Util.isNumber(valDisp)) {
+				String tmp = "SELECT TO_CHAR('" + valDisp + "','"+colPicts[i] +"') FROM DUAL";
 				String tmp2 = cn.queryOne(tmp);
 				//valDisp += " " + colPicts[i] + " " + tmp + " " + tmp2;
 				tmp2 = tmp2.trim();

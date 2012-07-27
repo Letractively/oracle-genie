@@ -7,6 +7,7 @@
 %>
 
 <%
+	boolean isCPAS = request.getRequestURI().contains("cpas-genie1");
 	Connect cn = (Connect) session.getAttribute("CN");
 
 	String title = "Genie " + cn.getUrlString();
@@ -129,8 +130,14 @@ function callserver() {
 <body>
 
 <table width=100% border=0>
-<td><img src="image/cpas.jpg" alt="Version <%= Util.getVersionDate() %>"/></td>
-<td nowrap><h2 style="color: blue;">CPAS Genie</h2></td>
+<td>
+<% if (isCPAS) {%>
+<img src="image/cpas.jpg" title="Version <%= Util.getVersionDate() %>"/>
+<% } else { %>
+<img src="image/lamp.png" title="Version <%= Util.getVersionDate() %>"/>
+<% } %>
+</td>
+<td nowrap><h2 style="color: blue;">Genie</h2></td>
 <td><h3><%= cn.getUrlString() %></h3></td>
 <td>
 &nbsp;
@@ -155,7 +162,7 @@ Database
 <a href='Javascript:aboutGenie()'>About Genie</a> |
 <a href="logout.jsp">Log out</a>
 
-<% if (cn.isCpas()) { %>
+<% if (cn.isCpas() && isCPAS) { %>
 <br/>
 CPAS 
 <a href="cpas-treeview.jsp" target=_blank>Treeview</a> |
@@ -220,6 +227,8 @@ CPAS
 <div id="dialog-modal" title="About CPAS Genie" style="display:none; background: #ffffff;">
 <img src="image/genie2.jpg" align="center" />
 <br/>
+
+<% if (isCPAS) { %>
 Thanks for using CPAS Genie.<br/>
 
 CPAS Genie is for CPAS Oracle database.<br/>
@@ -239,6 +248,25 @@ Please download the latest community version here:<br/>
 Spencer Hwang - the creator of Genie<br/>
 <!-- <a href="mailto:spencer.hwang@gmail.com">spencer.hwang@gmail.com</a>
  --><a href="mailto:spencerh@cpas.com">spencerh@cpas.com</a>
+
+<% } else { %>
+Thanks for using Oracle Genie.<br/>
+
+Genie will help you navigate through database objects and their relationships.<br/> 
+
+<br/>
+If you have any question or suggestion, please feel free to contact me.
+<br/><br/>
+
+Please download the latest community version here:<br/>
+<a href="http://code.google.com/p/oracle-genie/">http://code.google.com/p/oracle-genie/</a>
+<br/><br/>
+
+<%= Util.getVersionDate() %><br/>
+Spencer Hwang - the creator of Genie<br/>
+<a href="mailto:spencer.hwang@gmail.com">spencer.hwang@gmail.com</a>
+
+<% } %>
 
 </div>
 

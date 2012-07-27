@@ -5,8 +5,9 @@
 	pageEncoding="utf-8"
 %>
 
-
 <%
+	boolean isCPAS = request.getRequestURI().contains("cpas-genie");
+
 	session.removeAttribute("CN");
 
 	String cookieName = "url";
@@ -70,10 +71,17 @@
   </head>
   
   <body>
+<% if (isCPAS) { %>
 	<img src="http://www.cpas.com/images/layout_01.jpg">
+<% } %>	
   <img src="image/genie2.jpg" title="Version <%= Util.getVersionDate() %>"/>
+<% if (isCPAS) { %>
     <h2>Welcome to CPAS Genie.</h2>
+<% } else {%>	
+    <h2>Welcome to Oracle Genie.</h2>
+<% } %>	
 
+<% if (isCPAS) { %>
 <b>Connect to database</b>
 <select id="dbSelect" onchange="setLogin(this.options[this.selectedIndex].value, '');">
 <option></option>
@@ -158,6 +166,8 @@
 <option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1521/UNILEASE">S-ORA-006.UNILEASE</option>
 
 </select>
+<% } %>
+
 
 	<form action="connect_new.jsp" method="POST">
     <table border=0>
@@ -203,7 +213,10 @@
 %>
 </div>
 
-<br/><hr>
+<br/>
+
+<% if (isCPAS) { %>
+<hr>
 <b>CPAS Databases:</b><br/>
 
 <div style="margin: 20px; padding:5px; width:600px; height:300px; overflow: scroll; border: 1px solid #666666;">
@@ -302,13 +315,14 @@ TCERA
 <li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/TCERADEV', 'client_55tcm')">client_55tcm@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/TCERADEV</a></li>
 <br/>
 
-
 </div>
 
 <br/>
 Please contact Spencer Hwang(<a href="mailto:spencerh@cpas.com">spencerh@cpas.com</a>) to add more database locations.
 
 </div>
+
+<% } %>
 
 <br/><br/><br/><br/><br/>
   </body>
