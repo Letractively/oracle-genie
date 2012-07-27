@@ -7,7 +7,7 @@
 %>
 
 <%
-	boolean isCPAS = request.getRequestURI().contains("cpas-genie1");
+	boolean isCPAS = request.getRequestURI().contains("cpas-genie");
 	Connect cn = (Connect) session.getAttribute("CN");
 
 	String title = "Genie " + cn.getUrlString();
