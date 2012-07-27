@@ -266,7 +266,7 @@ $(document).ready(function() {
 if (autoLoadChild.size() <= 5) {
 	for (String id1: autoLoadChild) {
 %>
-loadData(<%=id1%>,0);
+	loadData(<%=id1%>,0);
 <%
 	}
 }
