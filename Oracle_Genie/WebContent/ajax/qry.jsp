@@ -302,6 +302,8 @@ Rows/Page
 		
 			String colDisp = colName.toLowerCase();
 			String cpasDisp = "";
+			if (pkColList != null && pkColList.contains(colName)) colDisp = "<b>" + colDisp + "</b>";					
+
 			if (cpas) {
 				String capt = cn.getCpasCodeCapt(tname, colName);
 				if (capt != null) 
@@ -309,7 +311,7 @@ Rows/Page
 			}			
 %>
 <th class="headerRow"><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
-	href="Javascript:doAction('<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><b><%=colDisp%></b></a>
+	href="Javascript:doAction('<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colDisp%></a>
 	<%= extraImage %><%= cpasDisp %>
 </th>
 <%
@@ -447,6 +449,7 @@ if (fkLinkTab.size()>0 && dLink && false) {
 					linkImage = "image/link.gif";
 				}
 
+				if (pkColList != null && pkColList.contains(colName)) valDisp = "<span class='pk'>" + valDisp + "</span>";
 				if (cpas) {
 					String code = cn.getCpasCodeValue(tname, colName, val, q);
 					if (code!=null && !code.equals(""))	valDisp += "<br/> &gt; <span class='cpas'>" + code + "</span>";

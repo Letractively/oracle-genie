@@ -328,7 +328,11 @@ Found: <%= filteredCount %>
 					linkImage = "image/link.gif";
 				}
 */
+
+if (pkColList != null && pkColList.contains(colName)) valDisp = "<span class='pk'>" + valDisp + "</span>";
 if (cpas) {
+
+	
 	String code = cn.getCpasCodeValue(tname, colName, val, q);
 	if (code!=null && !code.equals(""))	valDisp += "<br/> &gt; <span class='cpas'>" + code + "</span>";
 }

@@ -50,7 +50,7 @@
 <% } else { %>
 	<img id="img-<%=itemid%>" src="image/plus.gif" class="toggle"></a>
 <% } %>
-<a href="javascript:loadSTMT('<%= sdi %>', <%=list.get(i)[3]%>, '<%= tv %>');"><%=Util.escapeHtml(list.get(i)[1])%></a><br/>
+<a href="javascript:loadSTMT('<%= sdi %>', <%=list.get(i)[3]%>, '<%= tv %>');"><%=Util.escapeHtml(list.get(i)[1])%></a> <%= tv %><br/>
 <div id="div-<%=sdi%>-<%=itemid%>" style="margin-left: 20px; display:none;"></div>
 <% 
 	} 
