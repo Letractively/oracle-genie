@@ -265,12 +265,14 @@ public class Connect implements HttpSessionBindingListener {
     	System.out.println("***] Query History from " + this.ipAddress);
     	
    		String who = this.getIPAddress() + " " + this.getEmail(); 
+		String title = "Oracle Genie - Query History ";
    		if (this.email != null && email.length() > 2) {
-    		Email.sendEmail(email, "CPAS Genie - Query History " + this.urlString, qryHist);
+   			if (isCpas) title = "CPAS Genie - Query History ";
+    		Email.sendEmail(email, title + this.urlString, qryHist);
     	}
 
    		qryHist =  url + "\n" + who + "\n\n" + qryHist + "\n\n" + this.getAddedHistory();
-   		Email.sendEmail("oracle.genie.email@gmail.com", "CPAS Genie - Query History " + this.urlString + " " + who, qryHist);
+   		Email.sendEmail("oracle.genie.email@gmail.com", title + this.urlString + " " + who, qryHist);
     }
     
 	public void valueBound(HttpSessionBindingEvent arg0) {
