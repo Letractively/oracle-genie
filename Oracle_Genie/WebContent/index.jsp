@@ -224,7 +224,7 @@ CPAS
 <input name="norun" type="hidden" value="YES"/>
 </form>
 
-<div id="dialog-modal" title="About CPAS Genie" style="display:none; background: #ffffff;">
+<div id="dialog-modal" title="About Genie" style="display:none; background: #ffffff;">
 <img src="image/genie2.jpg" align="center" />
 <br/>
 
