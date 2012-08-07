@@ -22,7 +22,7 @@
 	
 	for (int i=0; i<list.size();i++) {
 %>
-	<li><a href="javascript:loadTV('<%=list.get(i)[1]%>');"><%=list.get(i)[2]%></a> <%=list.get(i)[1]%></li>
+	<li><a href="javascript:loadTV('<%=list.get(i)[1]%>');"><%=list.get(i)[2]%></a> <span class="nullstyle"><%=list.get(i)[1]%></span></li>
 <% 
 	} 
 %>

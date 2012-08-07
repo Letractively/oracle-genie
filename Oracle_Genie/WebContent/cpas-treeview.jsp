@@ -51,7 +51,7 @@
 #outer-tv {
     background-color: #FFFFFF;
     border: 1px solid #999999;
-    width: 350px;
+    width: 400px;
     height: 600px;
     overflow: auto;
     float: left;
@@ -93,9 +93,9 @@ $(document).ready(function(){
 			$('#outer-tv').height(newH);
 			$('#outer-tvstmt').height(newH);
 			
-			var tmp = w - $('#outer-sdi').width() - $('#outer-tv').width() - 45; 
+			var tmp = w - $('#outer-sdi').width() - $('#outer-tv').width() - 50; 
 
-			if (tmp < 660) tmp = 660;
+			if (tmp < 600) tmp = 600;
 			$('#outer-tvstmt').width(tmp);			
 		}
 	}
