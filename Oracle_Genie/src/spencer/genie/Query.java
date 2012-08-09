@@ -123,7 +123,7 @@ public class Query {
 		String theRest = "";
 		
 		String temp = q.toUpperCase();
-		if (temp.startsWith("SELECT ")) q = q.substring(7);
+		if (temp.startsWith("SELECT")) q = q.substring(6);
 		
 		temp = q.toUpperCase();
 		int idx = temp.indexOf("FROM ");
@@ -150,7 +150,7 @@ public class Query {
 		}
 
 		String newQry = "SELECT " + newCols + " " + theRest;
-//		System.out.println("newQry=" + newQry);
+		//System.out.println("newQry=" + newQry);
 		return newQry;
 	}
 

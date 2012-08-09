@@ -49,8 +49,8 @@ Please select a Table to see the detail.
 </tr>
 <tr>
 <%	
-	List<TableCol> cols = cn.getTableDetail(catalog, tname);
 	ArrayList<String> pk = cn.getPrimaryKeys(catalog, tname);
+	List<TableCol> cols = cn.getTableDetail(catalog, tname);
 
 	for (int i=0; i<cols.size();i++) {
 		TableCol col = cols.get(i);

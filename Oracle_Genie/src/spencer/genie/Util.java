@@ -201,11 +201,11 @@ public class Util {
 	}
 	
 	public static String getVersionDate() {
-		return "August 7, 2012";
+		return "August 9, 2012";
 	}
 
 	public static String getScriptionVersion() {
-		return "20120807";
+		return "20120809";
 	}
 
 	public static String getIpAddress(HttpServletRequest request) {
@@ -215,4 +215,7 @@ public class Util {
 		return ipAddress;
 	}
 
+	public static String trackingId() {
+		return "UA-34000949-1";
+	}
 }

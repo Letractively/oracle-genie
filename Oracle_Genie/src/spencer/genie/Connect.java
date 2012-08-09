@@ -312,7 +312,7 @@ public class Connect implements HttpSessionBindingListener {
         this.isCpas = cu.isCpas;
 	}
 
-	private void loadSchema() {
+	private synchronized void loadSchema() {
 		try {
        		Statement stmt = conn.createStatement();
        		ResultSet rs = stmt.executeQuery("select username from USER_USERS");	
@@ -331,7 +331,7 @@ public class Connect implements HttpSessionBindingListener {
  		}
 	}
 		
-	private void loadConstraints() {
+	private synchronized void loadConstraints() {
 		constraints.clear();
 		try {
        		Statement stmt = conn.createStatement();
@@ -375,7 +375,7 @@ public class Connect implements HttpSessionBindingListener {
  		}
 	}
 
-	private void loadPrimaryKeys() {
+	private synchronized void loadPrimaryKeys() {
 		pkByTab.clear();
 		pkByCon.clear();
 		try {
@@ -402,7 +402,7 @@ public class Connect implements HttpSessionBindingListener {
  		}
 	}
 
-	private void loadForeignKeys() {
+	private synchronized void loadForeignKeys() {
 		foreignKeys.clear();
 		try {
        		Statement stmt = conn.createStatement();
@@ -430,7 +430,7 @@ public class Connect implements HttpSessionBindingListener {
  		}
 	}
 
-	private void loadComment(String tname) {
+	private synchronized void loadComment(String tname) {
 		
 		// column comments
 		try {
@@ -503,7 +503,7 @@ public class Connect implements HttpSessionBindingListener {
 		return (comment != null? comment : "");
 	}
 	
-	public String getSynTableComment(String owner, String tname) {
+	public synchronized String getSynTableComment(String owner, String tname) {
 		String res="";
 		try {
        		Statement stmt = conn.createStatement();
@@ -527,7 +527,7 @@ public class Connect implements HttpSessionBindingListener {
 		
 	}
 	
-	public String getSynColumnComment(String owner, String tname, String cname) {
+	public synchronized String getSynColumnComment(String owner, String tname, String cname) {
 		String res="";
 		try {
        		Statement stmt = conn.createStatement();
@@ -551,7 +551,7 @@ public class Connect implements HttpSessionBindingListener {
 		
 	}
 	
-	private void loadTables() {
+	private synchronized void loadTables() {
 		tables.clear();
 		try {
 			DatabaseMetaData dbm = conn.getMetaData();
@@ -581,7 +581,7 @@ public class Connect implements HttpSessionBindingListener {
 		}
 	}
 	
-	public String genie(String value, String tab, String targetCol, String sourceCol) {
+	public synchronized String genie(String value, String tab, String targetCol, String sourceCol) {
 		String res=null;
 		
 		String qry = "SELECT " + targetCol + " FROM " + tab + " WHERE " + sourceCol + "='" + value ;
@@ -660,7 +660,7 @@ public class Connect implements HttpSessionBindingListener {
 		return getPrimaryKeys(null, tname);
 	}
 	
-	public ArrayList<String> getPrimaryKeys(String catalog, String tname)  {
+	public synchronized ArrayList<String> getPrimaryKeys(String catalog, String tname)  {
 		ArrayList pk = null;
 		String colName = "";
 		
@@ -693,7 +693,7 @@ public class Connect implements HttpSessionBindingListener {
 		return pk;
 	}
 	
-	public String getQueryValue(String sql)  {
+	public synchronized String getQueryValue(String sql)  {
 		String res = "";
 		
 		res = (String) queryResult.get(sql);
@@ -778,14 +778,14 @@ public class Connect implements HttpSessionBindingListener {
 		return pkName;
 	}
 
-	public String getPrimaryKeyName(String owner, String tname) {
+	public synchronized String getPrimaryKeyName(String owner, String tname) {
 		String qry = "SELECT CONSTRAINT_NAME FROM ALL_CONSTRAINTS WHERE OWNER='" +
 				owner.toUpperCase() + "' AND TABLE_NAME='" + tname + "' AND CONSTRAINT_TYPE = 'P'";
 		
 		return queryOne(qry);
 	}
 
-	public String getTableNameByPrimaryKey(String kname) {
+	public synchronized String getTableNameByPrimaryKey(String kname) {
 		String tName = pkByCon.get(kname.toUpperCase());
 		
 		// check for other owner
@@ -798,7 +798,7 @@ public class Connect implements HttpSessionBindingListener {
 		return tName;
 	}
 
-	public String getTableNameByPrimaryKey(String owner, String kname) {
+	public synchronized String getTableNameByPrimaryKey(String owner, String kname) {
 		if (owner==null) return this.getTableNameByPrimaryKey(kname);
 
 		String qry = "SELECT OWNER||'.'||TABLE_NAME FROM ALL_CONSTRAINTS WHERE OWNER='" +
@@ -806,7 +806,7 @@ public class Connect implements HttpSessionBindingListener {
 		return this.queryOne(qry);
 	}
 
-	public List<String> getConstraintColList(String cname) {
+	public synchronized List<String> getConstraintColList(String cname) {
 		if (cname.contains(".")) {
 			String[] temp = cname.split("\\.");
 			return getConstraintColList(temp[0], temp[1]);
@@ -822,7 +822,7 @@ public class Connect implements HttpSessionBindingListener {
 		return getConstraintColList(this.getSchemaName().toUpperCase(), cname);
 	}
 
-	public List<String> getConstraintColList(String owner, String cname) {
+	public synchronized List<String> getConstraintColList(String owner, String cname) {
 		if (owner == null) owner = this.getSchemaName().toUpperCase();
 		
 		List<String> list = new ArrayList<String>();
@@ -847,7 +847,7 @@ public class Connect implements HttpSessionBindingListener {
 		return list;
 	}
 
-	public String getConstraintCols(String cname) {
+	public synchronized String getConstraintCols(String cname) {
 		if (cname == null) return "";
 		
 		if (cname.contains(".")) {
@@ -869,7 +869,7 @@ public class Connect implements HttpSessionBindingListener {
 		return cols;
 	}
 
-	public String getConstraintCols(String owner, String cname) {
+	public synchronized String getConstraintCols(String owner, String cname) {
 		
 		if (owner == null) return getConstraintCols(cname);
 		
@@ -887,7 +887,7 @@ public class Connect implements HttpSessionBindingListener {
 		return res;
 	}
 
-	public List<ForeignKey> getForeignKeys(String tname) {
+	public synchronized List<ForeignKey> getForeignKeys(String tname) {
 		
 		if (tname.contains(".")) {
 			String[] temp = tname.split("\\.");
@@ -915,7 +915,7 @@ public class Connect implements HttpSessionBindingListener {
 		return list;
 	}
 
-	public List<ForeignKey> getForeignKeys(String owner, String tname) {
+	public synchronized List<ForeignKey> getForeignKeys(String owner, String tname) {
 		List<ForeignKey> list = new ArrayList<ForeignKey>();
 //System.out.println("owner,tname=" + owner + "," + tname);		
 		try {
@@ -950,7 +950,7 @@ public class Connect implements HttpSessionBindingListener {
 		return list;
 	}
 
-	public List<String> getReferencedTables(String tname) {
+	public synchronized List<String> getReferencedTables(String tname) {
 		
 		if (tname.contains(".")) {
 			String[] temp = tname.split("\\.");
@@ -987,7 +987,7 @@ public class Connect implements HttpSessionBindingListener {
 		return list2;
 	}
 
-	public List<String> getReferencedTables(String owner, String tname) {
+	public synchronized List<String> getReferencedTables(String owner, String tname) {
 		if (owner == null || owner.equalsIgnoreCase(this.getSchemaName())) {
 			return getReferencedTables(tname);
 		}
@@ -1000,7 +1000,7 @@ public class Connect implements HttpSessionBindingListener {
 		return this.queryMultiUnique(qry);
 	}
 	
-	public List<String> getReferencedPackages(String tname) {
+	public synchronized List<String> getReferencedPackages(String tname) {
 		List<String> list = new ArrayList<String>();
 
 		try {
@@ -1025,7 +1025,7 @@ public class Connect implements HttpSessionBindingListener {
 		return list;
 	}
 	
-	public List<String> getReferencedViews(String tname) {
+	public synchronized List<String> getReferencedViews(String tname) {
 		List<String> list = new ArrayList<String>();
 
 		try {
@@ -1050,7 +1050,7 @@ public class Connect implements HttpSessionBindingListener {
 		return list;
 	}
 	
-	public List<String> getIndexes(String owner, String tname) {
+	public synchronized List<String> getIndexes(String owner, String tname) {
 		List<String> list = new ArrayList<String>();
 
 		if (owner == null) owner = this.getSchemaName().toUpperCase();
@@ -1080,7 +1080,7 @@ public class Connect implements HttpSessionBindingListener {
 		return list;
 	}
 	
-	public List<String> getConstraints(String owner, String tname) {
+	public synchronized List<String> getConstraints(String owner, String tname) {
 		List<String> list = new ArrayList<String>();
 
 		if (owner == null) owner = this.getSchemaName().toUpperCase();
@@ -1105,7 +1105,7 @@ public class Connect implements HttpSessionBindingListener {
 		return list;
 	}
 	
-	public List<String> getReferencedTriggers(String tname) {
+	public synchronized List<String> getReferencedTriggers(String tname) {
 		List<String> list = new ArrayList<String>();
 
 		try {
@@ -1130,7 +1130,7 @@ public class Connect implements HttpSessionBindingListener {
 		return list;
 	}
 	
-	public String getIndexColumns(String owner, String iname) {
+	public synchronized String getIndexColumns(String owner, String iname) {
 		String res = "(";
 		if (owner == null) owner = this.getSchemaName().toUpperCase();
 		try {
@@ -1158,7 +1158,7 @@ public class Connect implements HttpSessionBindingListener {
 		return res;
 	}
 	
-	public String getDependencyPackage(String owner, String name) {
+	public synchronized String getDependencyPackage(String owner, String name) {
 		String res = "";
 		if (owner==null) owner = this.getSchemaName().toUpperCase();
 		try {
@@ -1188,7 +1188,7 @@ public class Connect implements HttpSessionBindingListener {
 		return res;
 	}
 
-	public String getDependencyTable(String owner, String name) {
+	public synchronized String getDependencyTable(String owner, String name) {
 		String res = "";
 		if (owner==null) owner = this.getSchemaName().toUpperCase();
 		try {
@@ -1220,7 +1220,7 @@ public class Connect implements HttpSessionBindingListener {
 		return res;
 	}
 
-	public String getDependencyView(String owner, String name) {
+	public synchronized String getDependencyView(String owner, String name) {
 		String res = "";
 		if (owner==null) owner = this.getSchemaName().toUpperCase();
 		try {
@@ -1252,7 +1252,7 @@ public class Connect implements HttpSessionBindingListener {
 		return res;
 	}
 
-	public String getDependencySynonym(String owner, String name) {
+	public synchronized String getDependencySynonym(String owner, String name) {
 		String res = "";
 		if (owner==null) owner = this.getSchemaName().toUpperCase();
 		try {
@@ -1283,7 +1283,7 @@ public class Connect implements HttpSessionBindingListener {
 		return res;
 	}
 
-	public String queryOne(String qry, boolean useCache) {
+	public synchronized String queryOne(String qry, boolean useCache) {
 		String res = stringCache.get(qry);
 		if (res != null && useCache) return res;
 		
@@ -1317,7 +1317,7 @@ public class Connect implements HttpSessionBindingListener {
 		return queryMulti(qry, true);
 	}
 		
-	public List<String> queryMulti(String qry, boolean useCache) {
+	public synchronized List<String> queryMulti(String qry, boolean useCache) {
 		
 		List<String> list = null;
 		
@@ -1441,7 +1441,7 @@ public class Connect implements HttpSessionBindingListener {
 		return getTableDetail(owner, tname);
 	}
 
-	public List<TableCol> getTableDetail(String owner, String tname) throws SQLException {
+	public synchronized List<TableCol> getTableDetail(String owner, String tname) throws SQLException {
 		if (owner==null) {
 			// see if the table is users
 			if (tables.contains(tname)) {
@@ -1469,18 +1469,19 @@ public class Connect implements HttpSessionBindingListener {
 		list = new ArrayList<TableCol>();
 		
 		Statement stmt = conn.createStatement();
-		String qry = "SELECT * FROM ALL_TAB_COLUMNS WHERE OWNER='" + owner.toUpperCase() + "' AND TABLE_NAME='" + tname + "' ORDER BY column_id";
+		String qry = "SELECT COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION, DATA_SCALE, NULLABLE, DATA_DEFAULT FROM ALL_TAB_COLUMNS WHERE OWNER='" + owner.toUpperCase() + "' AND TABLE_NAME='" + tname + "' ORDER BY column_id";
+//System.out.println("***** " + qry);
 
-		ResultSet rs1 = stmt.executeQuery(qry);
-		while (rs1.next()){
-			String colName = rs1.getString("COLUMN_NAME");
-			String dataType = rs1.getString("DATA_TYPE");
-			int dataSize = rs1.getInt("DATA_LENGTH");
-			int decimalDigits = rs1.getInt("DATA_PRECISION");
-			int scale = rs1.getInt("DATA_SCALE");
-			int nullable = rs1.getString("NULLABLE").equals("Y")?1:0;
+		ResultSet rs = stmt.executeQuery(qry);
+		while (rs.next()){
+			String colName = rs.getString("COLUMN_NAME");
+			String dataType = rs.getString("DATA_TYPE");
+			int dataSize = rs.getInt("DATA_LENGTH");
+			int decimalDigits = rs.getInt("DATA_PRECISION");
+			int scale = rs.getInt("DATA_SCALE");
+			int nullable = rs.getString("NULLABLE").equals("Y")?1:0;
 			
-			String colDef = rs1.getString("DATA_DEFAULT");
+			String colDef = rs.getString("DATA_DEFAULT");
 			
 			if (colDef==null) colDef="";
 			
@@ -1509,13 +1510,12 @@ public class Connect implements HttpSessionBindingListener {
 			list.add(rec);
 		}
 		
-		rs1.close();
+		rs.close();
 		stmt.close();
 		
 		tableDetailCache.add(owner, tname, list);
 		return list;
 	}
-
 
 	public List<TableCol> getTableDetail2(String owner, String tname) throws SQLException {
 		List<TableCol> list = tableDetailCache.get(owner, tname); 

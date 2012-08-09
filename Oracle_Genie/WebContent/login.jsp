@@ -292,6 +292,10 @@ MERCED
 <li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED', 'CLIENT_55MDC')">CLIENT_55MDC@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED</a></li>
 <br/>
 
+NTCA
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/NTCA', 'NTCA_DATA')">NTCA_DATA@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/NTCA</a></li>
+<br/>
+
 PEPP
 <li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PEPP', 'test_pepp')">test_pepp@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PEPP</a></li>
 <li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PEPP', 'prd_pepp')">prd_pepp@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PEPP</a></li>
@@ -302,7 +306,8 @@ PMRS
 <br/>
 
 PPL
-<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1521/WE8MSWIN', 'client_54')">client_54@jdbc:oracle:thin:@s-ora-002.cpas.com:1521/WE8MSWIN</a></li>
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.cpas.com:1521/PPL', 'client_54_ppl_dev')">client_54_ppl_dev@jdbc:oracle:thin:@s-ora-004.cpas.com:1521/PPL</a></li>
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.cpas.com:1521/PPL', 'client_54_ppl_prod')">client_54_ppl_prod@jdbc:oracle:thin:@s-ora-004.cpas.com:1521/PPL</a></li>
 <br/>
 
 RKLARGUS
@@ -330,5 +335,21 @@ Please contact Spencer Hwang(<a href="mailto:spencerh@cpas.com">spencerh@cpas.co
 <% } %>
 
 <br/><br/><br/><br/><br/>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', '<%= Util.trackingId() %>']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
   </body>
 </html>
