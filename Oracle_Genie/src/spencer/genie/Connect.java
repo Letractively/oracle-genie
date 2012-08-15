@@ -121,7 +121,7 @@ public class Connect implements HttpSessionBindingListener {
 
 //       		this.schemaName = conn.getCatalog();
        		this.schemaName = userName;
-//       		System.out.println("this.schemaName=" + this.schemaName);
+       		System.out.println("this.schemaName=" + this.schemaName);
 
             queryCache = QueryCache.getInstance();
             listCache = ListCache.getInstance();
@@ -134,7 +134,7 @@ public class Connect implements HttpSessionBindingListener {
         }
         catch (Exception e)
         {
-            System.err.println ("3 Cannot connect to database server");
+            System.err.println ("3 Cannot connect to database server " + url + " ," + ipAddress);
             e.printStackTrace();
             message = e.getMessage();
         }
@@ -265,9 +265,8 @@ public class Connect implements HttpSessionBindingListener {
     	System.out.println("***] Query History from " + this.ipAddress);
     	
    		String who = this.getIPAddress() + " " + this.getEmail(); 
-		String title = "Oracle Genie - Query History ";
+		String title = "Genie - Query History ";
    		if (this.email != null && email.length() > 2) {
-   			if (isCpas) title = "CPAS Genie - Query History ";
     		Email.sendEmail(email, title + this.urlString, qryHist);
     	}
 
@@ -307,6 +306,7 @@ public class Connect implements HttpSessionBindingListener {
 		loadConstraints();
 		loadPrimaryKeys();
 		loadForeignKeys();
+		loadTableRowCount();
 		
         cu = new CpasUtil(this);
         this.isCpas = cu.isCpas;
@@ -430,6 +430,41 @@ public class Connect implements HttpSessionBindingListener {
  		}
 	}
 
+	private synchronized void loadTableRowCount() {
+		// column comments
+		try {
+       		Statement stmt = conn.createStatement();
+       		ResultSet rs = stmt.executeQuery("select owner, table_name, num_rows from ALL_TABLES");	
+
+	   		while (rs.next()) {
+	   			String owner = rs.getString(1);
+	   			String tname = rs.getString(2);
+	   			String numRows = rs.getString(3);
+
+	   			if (numRows==null) numRows = "";
+	   			else {
+	   				int n = Integer.parseInt(numRows);
+	   				if (n < 1000) {
+	   					numRows = numRows;
+	   				} else if (n < 1000000) {
+	   					numRows = Math.round(n /1000) + "K";
+	   				} else {
+	   					numRows = (Math.round(n /100000) / 10.0 )+ "M";
+	   				}
+	   			}
+	   			String cacheKey = "ROWCOUNT." + owner + "." + tname;
+	   			stringCache.add(cacheKey, numRows);
+	   		}
+	   		rs.close();
+	   		stmt.close();
+
+		} catch (SQLException e) {
+            System.err.println ("loadTableRowCount()");
+            e.printStackTrace();
+            message = e.getMessage();
+		}
+	}
+	
 	private synchronized void loadComment(String tname) {
 		
 		// column comments
@@ -1269,7 +1304,10 @@ public class Connect implements HttpSessionBindingListener {
        			if(!rowner.equalsIgnoreCase(this.getSchemaName()))
        				rname = rowner + "." + rname;
 
-       			res += "<a href='javascript:loadSynonym(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;<br/>";
+       			String qry = "SELECT TABLE_OWNER, TABLE_NAME FROM USER_SYNONYMS WHERE SYNONYM_NAME='" + rname + "'"; 	
+       			List<String[]> list = query(qry);
+       			
+       			res += "<a href='javascript:loadSynonym(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;<span class='rowcountstyle'>" + getTableRowCount(list.get(0)[1], list.get(0)[2]) + "</span><br/>";
        		}
        		
        		rs.close();
@@ -1779,14 +1817,20 @@ public class Connect implements HttpSessionBindingListener {
 	}
 
 	public String getTableRowCount(String tname) {
-		String numRows = null;
-		
 		if (tname != null && tname.indexOf(".") > 0) {
 			int idx = tname.indexOf(".");
 			String owner = tname.substring(0, idx);
 			String tt = tname.substring(idx+1);
 			return getTableRowCount(owner, tt);
 		}
+
+		String owner = schemaName.toUpperCase();
+		String cacheKey = "ROWCOUNT." + owner + "." + tname;
+		
+		String cacheValue = stringCache.get(cacheKey);
+		if (cacheValue != null) return cacheValue;
+
+		String numRows = null;
 
 		numRows = queryOne("SELECT NUM_ROWS FROM USER_TABLES WHERE TABLE_NAME ='" + tname + "'");
 
@@ -1801,10 +1845,17 @@ public class Connect implements HttpSessionBindingListener {
 				numRows = (Math.round(n /100000) / 10.0 )+ "M";
 			}
 		}
+		
+		stringCache.add(cacheKey, numRows);
 		return numRows;
 	}
 	
 	public String getTableRowCount(String owner, String tname) {
+		String cacheKey = "ROWCOUNT." + owner + "." + tname;
+		
+		String cacheValue = stringCache.get(cacheKey);
+		if (cacheValue != null) return cacheValue;
+		
 		String numRows = null;
 		
 		if (owner ==null || owner.equals("") || owner.equals(this.getSchemaName())) {
@@ -1824,6 +1875,8 @@ public class Connect implements HttpSessionBindingListener {
 				numRows = (Math.round(n /100000) / 10.0 )+ "M";
 			}
 		}
+		
+		stringCache.add(cacheKey, numRows);
 		return numRows;
 	}
 	

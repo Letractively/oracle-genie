@@ -62,13 +62,17 @@
 <br/>
 <b>Synonym:</b><br/>
 <%
-	qry = "SELECT OBJECT_NAME FROM USER_OBJECTS WHERE object_type='SYNONYM' AND OBJECT_NAME LIKE '%" + Util.escapeQuote(keyword) +"%' ORDER BY OBJECT_NAME";
-	list = cn.queryMulti(qry);
+	//qry = "SELECT OBJECT_NAME FROM USER_OBJECTS WHERE object_type='SYNONYM' AND OBJECT_NAME LIKE '%" + Util.escapeQuote(keyword) +"%' ORDER BY OBJECT_NAME";
+	qry = "SELECT SYNONYM_NAME, TABLE_OWNER, TABLE_NAME FROM USER_SYNONYMS WHERE SYNONYM_NAME LIKE '%" + Util.escapeQuote(keyword) +"%' ORDER BY 1";
+	List<String[]> lst0 = cn.query(qry);
 
-	for (String text : list) {
+	for (String[] rec : lst0) {
+		String sname = rec[1];
+		String owner = rec[2];
+		String tname = rec[3];
 %>
 	&nbsp;&nbsp;
-	<a href="javascript:loadSynonym('<%=text%>');"><%=text%></a><br/>
+	<a href="javascript:loadSynonym('<%=sname%>');"><%=sname%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(owner, tname) %></span><br/>
 <%
 	}
 %>
@@ -76,10 +80,11 @@
 <br/>
 <b>Column:</b><br/>
 <%
-	qry = "SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION, DATA_SCALE FROM USER_TAB_COLUMNS WHERE COLUMN_NAME='" + Util.escapeQuote(keyword) +"' ORDER BY TABLE_NAME";
+	qry = "SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION, DATA_SCALE, OWNER FROM ALL_TAB_COLUMNS WHERE COLUMN_NAME='" + Util.escapeQuote(keyword) +"' ORDER BY TABLE_NAME";
 	List<String[]> lst = cn.query(qry);
 	
 	for (String[] rec : lst) {
+		String owner = rec[7];
 		String tname = rec[1];
 		String cname = rec[2];
 
@@ -104,7 +109,7 @@
 		String comment = cn.getComment(tname, cname);
 %>
 	&nbsp;&nbsp;
-	<a href="javascript:loadTable('<%=tname%>');"><%=tname%></a>.<%= cname.toLowerCase() %> <%= dType %> <%= comment %><br/>
+	<a href="javascript:loadTable('<%=owner %>.<%=tname%>');"><%=owner %>.<%=tname%></a>.<%= cname.toLowerCase() %> <%= dType %> <%= comment %> <span class="rowcountstyle"><%= cn.getTableRowCount(owner, tname) %></span><br/>
 <%
 	}
 %>
