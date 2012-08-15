@@ -131,7 +131,6 @@
 <%--<%= cn.getComment(tname) --%>
 
 <% if (q.getRecordCount() > 0) { %>
-
 <div style="float: left;">
 <% if (pgNo>1) { %>
 <a href="Javascript:gotoPage(<%=id%>, <%= pgNo - 1%>)"><img border=0 src="image/prev.png" border=0 align="bottom"></a>
@@ -362,7 +361,8 @@ if (cpas) {
 %>
 
 <a href="Javascript:toggleDiv('img-<%=id%>','div-<%=id%>')"><img id="img-<%=id%>" border=0 src="image/plus.gif"></a>
-<div id="div-<%=id%>" style="display: none;">
+<div id="div-<%=id%>" style="display: none; margin-left:30px;">
+<img src="image/down_arrow.gif">
 <%
 for (int i=0; i<fkLinkTab.size(); i++) {
 	String ft = fkLinkTab.get(i);
@@ -390,7 +390,7 @@ for (int i=0; i<fkLinkTab.size(); i++) {
 %>
 <div id="div-fkk-<%=id %>">
 <br/>
-<a style="margin-left: 30px;" href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
+<a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
 <span class="cpas"><%= cn.getCpasComment(ft) %></span>
 &nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle border=0 title="<%=fsql%>"/></a>
 (<%= tname %>.<%=fc.toLowerCase() %>)
@@ -398,7 +398,7 @@ for (int i=0; i<fkLinkTab.size(); i++) {
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
 <div style="display: none;" id="mode-<%=id%>">hide</div>
 <div style="display: none;" id="hide-<%=id%>"></div>
-<div id="div-<%=id%>" style="margin-left: 30px; display: none;"></div>
+<div id="div-<%=id%>" style="display: none;"></div>
 </div>
 <% } %>
 
