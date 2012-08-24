@@ -74,7 +74,7 @@
 			   	setHighlight();
 				//alert(data);
 				//$("body").css("cursor", "auto");
-			   	_gaq.push(['_trackEvent', 'Table', tName]);
+			   	_gaq.push(['_trackEvent', 'Table', 'Table ' + tName]);
 			},
 	        error:function (jqXHR, textStatus, errorThrown){
 	            alert(jqXHR.status + " " + errorThrown);
@@ -94,7 +94,7 @@
 				$("#inner-result1").html(data);
 //				SyntaxHighlighter.all();
 			   	setHighlight();
-			   	_gaq.push(['_trackEvent', 'View', vName]);
+			   	_gaq.push(['_trackEvent', 'View', 'View ' + vName]);
 			},
 	        error:function (jqXHR, textStatus, errorThrown){
 	            alert(jqXHR.status + " " + errorThrown);
@@ -111,7 +111,7 @@
 			url: "ajax/detail-package.jsp?name=" + pName + "&t=" + (new Date().getTime()),
 			success: function(data){
 				$("#inner-result1").html(data);
-			   	_gaq.push(['_trackEvent', 'Program', pName]);
+			   	_gaq.push(['_trackEvent', 'Program', 'Program ' + pName]);
 			},
 	        error:function (jqXHR, textStatus, errorThrown){
 	            alert(jqXHR.status + " " + errorThrown);
@@ -129,7 +129,7 @@
 			success: function(data){
 				$("#inner-result1").html(data);
 			   	setHighlight();
-			   	_gaq.push(['_trackEvent', 'Synonym', sName]);
+			   	_gaq.push(['_trackEvent', 'Synonym', 'Synonym ' + sName]);
 			},
 	        error:function (jqXHR, textStatus, errorThrown){
 	            alert(jqXHR.status + " " + errorThrown);
@@ -146,7 +146,7 @@
 			url: "ajax/detail-tool.jsp?name=" + name + "&t=" + (new Date().getTime()),
 			success: function(data){
 				$("#inner-result1").html(data);
-			   	_gaq.push(['_trackEvent', 'Tool', name]);
+			   	_gaq.push(['_trackEvent', 'Tool', 'Tool ' + name]);
 			},
 	        error:function (jqXHR, textStatus, errorThrown){
 	            alert(jqXHR.status + " " + errorThrown);

@@ -121,7 +121,7 @@ public class Connect implements HttpSessionBindingListener {
 
 //       		this.schemaName = conn.getCatalog();
        		this.schemaName = userName;
-       		System.out.println("this.schemaName=" + this.schemaName);
+//       		System.out.println("this.schemaName=" + this.schemaName);
 
             queryCache = QueryCache.getInstance();
             listCache = ListCache.getInstance();
@@ -245,6 +245,29 @@ public class Connect implements HttpSessionBindingListener {
 //        }
 //	}
 
+	public String extractJS(String str) {
+		
+		int start = 0;
+		int end;
+		
+		String res = "";
+		
+		while (true) {
+			start = str.indexOf("Javascript:", start);
+			if (start < 0 ) break;
+			end = str.indexOf("'>", start);
+			if (end < 0 ) break;
+			String tk = str.substring(start+11, end);
+					
+			res += tk + "\n";
+			//System.out.println("*** " + res);
+			start = end;
+		}
+	
+		return res;
+	}
+	
+    
     public void printQueryLog() {
     	HashMap<String, QueryLog> map = this.getQueryHistory();
     	String qryHist = "";
@@ -262,6 +285,7 @@ public class Connect implements HttpSessionBindingListener {
     		if (ql.getCount() > 1) cntLine += "s";
     		qryHist += ql.getQueryString() + ";\n"+ cntLine + "\n\n";
     	}
+    	System.out.println(extractJS(this.getAddedHistory()));
     	System.out.println("***] Query History from " + this.ipAddress);
     	
    		String who = this.getIPAddress() + " " + this.getEmail(); 
@@ -270,7 +294,7 @@ public class Connect implements HttpSessionBindingListener {
     		Email.sendEmail(email, title + this.urlString, qryHist);
     	}
 
-   		qryHist =  url + "\n" + who + "\n\n" + qryHist + "\n\n" + this.getAddedHistory();
+   		qryHist =  url + "\n" + who + "\n\n" + qryHist + "\n\n" + extractJS(this.getAddedHistory());
    		Email.sendEmail("oracle.genie.email@gmail.com", title + this.urlString + " " + who, qryHist);
     }
     

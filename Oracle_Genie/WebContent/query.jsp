@@ -17,14 +17,16 @@
 	
 	int maxRow = Integer.parseInt(upto);
 	
-	if (sql==null) sql = "SELECT * FROM TAB";
+	String norun = request.getParameter("norun");
+
+	if (sql==null) {
+		sql = "SELECT * FROM TAB";
+		norun = "Y";
+	}
 	sql = sql.trim();
 	if (sql.endsWith(";")) sql = sql.substring(0, sql.length()-1);
-//	if (sql.endsWith("/")) sql = sql.substring(0, sql.length()-1);
 	sql = sql.replaceAll("&gt;",">").replace("&lt;","<");
-	
-	String norun = request.getParameter("norun");
-	
+
 	int lineLength = Util.countLines(sql);
 	if (lineLength <3) lineLength = 4;
 	if (lineLength >50) lineLength = 50;
@@ -89,7 +91,9 @@
 <%= cn.getUrlString() %>
 
 &nbsp;&nbsp;&nbsp;
+<a href="query.jsp" target="_blank">Query</a> |
 <a href="q.jsp" target="_blank">Q</a> |
+<a href="erd_svg.jsp?tname=<%= tbl %>" target="_blank">ERD</a> |
 <a href="worksheet.jsp" target="_blank">Work Sheet</a>
 
 <br/><br/>
@@ -236,6 +240,8 @@ Up to
   _gaq.push(['_setAccount', '<%= Util.trackingId() %>']);
   _gaq.push(['_trackPageview']);
 
+  _gaq.push(['_trackEvent', 'Query', 'Query <%= tbl %>']);
+  
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';

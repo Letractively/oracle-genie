@@ -6,7 +6,31 @@
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
+<%!
+public String extractJS(String str) {
+	
+	int start = 0;
+	int end;
+	
+	String res = "";
+	
+	while (true) {
+		start = str.indexOf("Javascript:", start);
+		if (start < 0 ) break;
+		end = str.indexOf("'>", start);
+		if (end < 0 ) break;
+		String tk = str.substring(start+11, end);
+				
+		res += tk + "<br/>\n";
+		//System.out.println("*** " + res);
+		start = end;
+	}
 
+	return res;
+}
+
+
+%>
 <%
 	GenieManager gm = GenieManager.getInstance();
 	ArrayList<Connect> ss = gm.getSessions();
@@ -65,7 +89,7 @@
 		Login Date: <%= cn.getLoginDate() %><br/>
 		Last Date: <%= cn.getLastDate() %><br/>
 	</td>
-	<td nowrap valign=top><%= savedHistory %>&nbsp;</td>
+	<td nowrap valign=top><%= extractJS(savedHistory) %>&nbsp;</td>
 	<td nowrap valign=top><%= map.size() %>&nbsp;</td>
 	<td valign=top><p style="white-space:pre;"><%= qry %>&nbsp;</p></td>
 </tr>

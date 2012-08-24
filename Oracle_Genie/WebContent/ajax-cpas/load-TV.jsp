@@ -64,6 +64,7 @@ String schema = "TREEVIEW";
 String sql = "SELECT LEVEL, ITEMID, CAPTION, SWITCH, ACTIONID, TREEKEY, UDATA, TRANSLATE, RATIO FROM TREEVIEW START WITH ITEMID = 0 AND SDI = '" + sdi + "' AND " +  
         "SCHEMA = '"+schema+"' CONNECT BY PARENTID = PRIOR ITEMID AND SDI = '" + sdi + "' AND SCHEMA = '"+schema+"' ORDER BY SORTORDER";
 
+//System.out.println(sql);
 List<String[]> list2 = cn.query(sql);
 
 String id = Util.getId();
