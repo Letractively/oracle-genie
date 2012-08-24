@@ -89,12 +89,14 @@ public class CpasUtil {
 			qry = "SELECT TYPE, (SELECT STMTCODE FROM CODE_SELECT WHERE GRUP=A.GRUP) STMT FROM CODE A WHERE GRUP='"
 					+ grup + "'";
 		List<String[]> list = cn.query(qry);
+//System.out.println(qry);
 
 		if (list.size() < 1)
 			return null;
 		String source = list.get(0)[1];
 		String selectstmt = list.get(0)[2];
 
+//System.out.println("source=" + source);
 		if (source.equals("T")) {
 			qry = "SELECT NAME FROM CPAS_CODE_VALUE WHERE GRUP='" + grup
 					+ "' AND VALU='" + value + "'";
@@ -108,6 +110,11 @@ public class CpasUtil {
 		}
 
 		if (cpasType == 2) {
+			if (source.equals("C") || source.equals("P")) {
+				qry = getQryStr(selectstmt, value, q);
+				return qry;
+			}
+			
 			qry = "SELECT NAME FROM CODE_VALUE_NAME WHERE GRUP='" + grup
 					+ "' AND VALU='" + value + "'";
 			String name = cn.queryOne(qry);
@@ -204,7 +211,7 @@ public class CpasUtil {
 			return null;
 		String qry = selectstmt.replaceAll("\n", " ");
 
-		String dynamic[] = { ":CLNT", ":MKEY", ":PLAN", ":ERKEY", ":LANG" };
+		String dynamic[] = { ":CLNT", ":MKEY", ":PLAN", ":ERKEY", ":LANG", ":GRUP" };
 		// :CLNT, :MKEY
 		if (qry.indexOf(":") > 0) {
 			for (String token : dynamic) {
@@ -214,9 +221,13 @@ public class CpasUtil {
 					String val = q.getValue(col);
 					if (col.equals("LANG"))
 						val = "E"; // English
-					if (val != null && !val.startsWith("Out of Index"))
-						qry = qry.replaceAll(token, "'" + val + "'");
-					else
+					if (val != null && !val.startsWith("Out of Index")) {
+						if (val.equals("")) {
+							qry = qry.replaceAll(token, token.substring(1));
+						} else {
+							qry = qry.replaceAll(token, "'" + val + "'");
+						}
+					} else
 						qry = qry.replaceAll(token, col);
 				}
 			}
@@ -224,9 +235,12 @@ public class CpasUtil {
 		}
 
 		// if qry contains :, discard
-		if (qry.indexOf(":") > 0)
-			return null;
-
+		if (qry.indexOf(":") > 0) {
+			qry = qry.replaceAll(":", "");
+			//return qry;
+			//return null;
+		}
+//System.out.println(qry);
 		// remove order by
 		int idx = qry.indexOf(" ORDER BY ");
 		if (idx > 0)
@@ -343,6 +357,13 @@ public class CpasUtil {
 
 	public boolean isCpas() {
 		return this.isCpas;
+	}
+	
+	public String getCpasCodeTable() {
+		if (cpasType==1) return "CPAS_CODE";
+		if (cpasType==2) return "CODE";
+		
+		return "CPAS_CODE";
 	}
 /*
 	public static String parseNavigatorQuery(String cQuery) {

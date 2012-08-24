@@ -283,6 +283,7 @@ KCERA
 
 MCERA
 <li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA', 'client_55mc')">client_55mc@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA</a></li>
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA', 'client_55mct')">client_55mct@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA</a></li>
 <br/>
 
 MERCED

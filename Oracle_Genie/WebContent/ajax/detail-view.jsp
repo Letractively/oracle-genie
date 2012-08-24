@@ -62,7 +62,8 @@
 		if (grup == null || grup.equals("_")) grup = "";
 		
 		if (grup != null && !grup.equals("")) {
-			grup = " -&gt; <a href=\"javascript:showDialog('CPAS_CODE','"+grup+"')\">" + grup + "</a>";
+			String codeTable = cn.getCpasUtil().getCpasCodeTable();
+			grup = " -&gt; <a href=\"javascript:showDialog('" + codeTable + "','"+grup+"')\">" + grup + "</a>";
 		}
 
 		rowCnt++;

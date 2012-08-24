@@ -15,6 +15,10 @@
 		qry = "SELECT TAB, NAME FROM CPAS_TAB ORDER BY ORDERBY"; 	
 		list = cn.query(qry);
 	}
+	if (list.size()==0) {
+		qry = "SELECT DISTINCT TYPE, (SELECT NAME FROM CPAS_CODE_VALUE WHERE GRUP='CCV' AND VALU=A.TYPE) FROM CPAS_PROCESS A ORDER BY 1"; 	
+		list = cn.query(qry);
+	}
 	
 	int totalCnt = list.size();
 %>

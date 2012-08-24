@@ -15,7 +15,8 @@
 	int totalCnt = list.size();
 
 	if (totalCnt==0) {
-		qry = "SELECT sdi, sdi FROM TREEACTION group by sdi";
+//		qry = "SELECT sdi, sdi FROM TREEACTION group by sdi";
+		qry = "SELECT sdi, name FROM CPAS_SDI order by orderby, sdi";
 		list = cn.query(qry);
 		totalCnt = list.size();
 	}

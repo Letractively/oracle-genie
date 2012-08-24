@@ -62,7 +62,7 @@ public class SecurityFilter implements Filter {
 			String redirectPage = "login.jsp";
 			if (servletPath.contains("ajax/")) {
 				redirectPage = "no-connection.jsp";
-				System.out.println("ajax/no-connection.jsp");
+				//System.out.println("ajax/no-connection.jsp");
 			}
 			
 			resp.sendRedirect(redirectPage);

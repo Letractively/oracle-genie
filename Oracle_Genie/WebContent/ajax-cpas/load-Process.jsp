@@ -17,6 +17,14 @@
 	if (pname==null || pname.equals("null")) {
 		pname= cn.queryOne("SELECT NAME FROM CPAS_TAB WHERE TAB='" + ptype+"'");
 	}
+	if (pname==null || pname.equals("null")) {
+		pname= cn.queryOne("SELECT NAME FROM CPAS_PROCESS WHERE PROCESS='" + ptype+"'");
+	}
+	if (pname==null || pname.equals("null")) {
+		pname= cn.queryOne("SELECT NAME FROM CPAS_CODE_VALUE WHERE GRUP='CCV' AND VALU='" + ptype+"'");
+	}
+	
+	
 //	String pname = cn.queryOne("SELECT NAME FROM CPAS_TAB WHERE TAB='" + ptype+"'");
 	String id = Util.getId();
 %>

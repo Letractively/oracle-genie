@@ -77,11 +77,12 @@
 			response.addCookie(cookie2);
 			
 			cn.setEmail(email);
+			System.out.println("Email " + email + " " + ipAddress);
 		}
 		
 		// redirect to homepage
 		out.println("Connected.");
-		System.out.println("Connected.");
+//		System.out.println("Connected.");
 //		response.sendRedirect("ajax/connected.jsp");
 		return;
 	}

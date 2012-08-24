@@ -41,7 +41,7 @@ public class BlobDownloadServlet extends HttpServlet {
     	if (sql.endsWith(";")) sql = sql.substring(0, sql.length()-1);
     	sql = sql.replaceAll("&gt;",">").replace("&lt;","<");
     	
-    	System.out.println(req.getRemoteAddr()+": " + sql +";");
+//    	System.out.println(req.getRemoteAddr()+": " + sql +";");
     	
     	OldQuery q = new OldQuery(cn, sql, req);
     	ResultSet rs = q.getResultSet();
