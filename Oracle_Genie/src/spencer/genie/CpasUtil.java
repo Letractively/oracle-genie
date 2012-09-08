@@ -16,7 +16,7 @@ public class CpasUtil {
 
 	String[] exceptions = { "MEMBER_STATUS.VALUE", "PLAN_STATUS.VALUE",
 			"EMPLOYER_STATUS.VALUE", "MEMBER_EMPLOYER_STATUS.VALUE",
-			"MEMBER_PLAN_STATUS.VALUE", "PERSON_STATUS.VALUE",
+			"MEMBER_PLAN_STATUS.VALUE", "PERSON_STATUS.VALUE", "CALC_STATUS.VALU",
 			"-MEMBER_SERVICE.SRVCODE" };
 
 	public CpasUtil(Connect cn) {
@@ -52,6 +52,7 @@ public class CpasUtil {
 			}
 		}
 
+		System.out.println("cpasType="+cpasType);
 	}
 
 	public String getCodeValue(String tname, String cname, String value, Query q) {
@@ -72,7 +73,16 @@ public class CpasUtil {
 			}
 		}
 
-		String key = tname + "." + cname;
+		String key = (tname + "." + cname).toUpperCase();
+		if (key.equals("MEMBER_STATUS.GRUP") || key.equals("CALC_STATUS.GRUP")) {
+			String qry = "SELECT CAPTION FROM CPAS_CODE WHERE grup = '" + value + "'";
+			if (cpasType==2) 
+				qry = "SELECT CAPT FROM CODE_CAPTION WHERE grup = '" + value + "'";
+//			System.out.println("**** " + qry);
+			
+			return cn.queryOne(qry);
+		}
+		
 		String grup = htCode.get(key);
 		if (grup == null) {
 			if (cname.equals("CLNT"))
@@ -96,6 +106,33 @@ public class CpasUtil {
 		String source = list.get(0)[1];
 		String selectstmt = list.get(0)[2];
 
+		if (source.equals("P")) {  // procedure call
+			if (grup.equals("FN")) {
+				grup = "FND";
+			
+				qry = "SELECT SOURCE, SELECTSTMT FROM CPAS_CODE WHERE GRUP='" + grup + "'";
+				if (cpasType == 2)
+					qry = "SELECT TYPE, (SELECT STMTCODE FROM CODE_SELECT WHERE GRUP=A.GRUP) STMT FROM CODE A WHERE GRUP='"
+						+ grup + "'";
+				list = cn.query(qry);
+
+				if (list.size() < 1) return null;
+				source = list.get(0)[1];
+				selectstmt = list.get(0)[2];
+			}
+			if (cpasType ==2) {
+				qry = "SELECT SOURCE, SELECTSTMT FROM CPAS_CODE WHERE GRUP='" + grup + "'";
+				if (cpasType == 2)
+					qry = "SELECT TYPE, (SELECT STMTCODE FROM CODE_SELECT WHERE GRUP=A.GRUP) STMT FROM CODE A WHERE GRUP='"
+						+ grup + "'";
+				list = cn.query(qry);
+
+				if (list.size() < 1) return null;
+				source = list.get(0)[1];
+				selectstmt = list.get(0)[2];
+			}
+		}
+		
 //System.out.println("source=" + source);
 		if (source.equals("T")) {
 			qry = "SELECT NAME FROM CPAS_CODE_VALUE WHERE GRUP='" + grup
@@ -149,6 +186,12 @@ public class CpasUtil {
 
 		if (source.equals("S")) {
 			qry = getQryStr(selectstmt, value, q);
+			return qry;
+		}
+
+		if (source.equals("U")) {
+			selectstmt = "SELECT NAME FROM CODE_VALUE_NAME WHERE GRUP='" + grup +"' AND VALU ='" + value + "'";
+			qry = cn.queryOne(selectstmt);
 			return qry;
 		}
 

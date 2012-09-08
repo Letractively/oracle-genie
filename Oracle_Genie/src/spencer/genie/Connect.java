@@ -430,8 +430,9 @@ public class Connect implements HttpSessionBindingListener {
 		foreignKeys.clear();
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE from user_constraints where CONSTRAINT_TYPE = 'R' order by table_name, constraint_type");	
-
+//       		ResultSet rs = stmt.executeQuery("select OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE from all_constraints where CONSTRAINT_TYPE = 'R' order by table_name, constraint_type");	
+       		ResultSet rs = stmt.executeQuery("select OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE from all_constraints where CONSTRAINT_TYPE = 'R' and (owner=user or owner in (select distinct table_owner from user_synonyms)) order by table_name, constraint_type");	
+       		
        		while (rs.next()) {
        			ForeignKey fk = new ForeignKey();
        			fk.owner = rs.getString("OWNER");
@@ -446,6 +447,8 @@ public class Connect implements HttpSessionBindingListener {
        		}
        		rs.close();
        		stmt.close();
+       		
+       		System.out.println("foreignKeys.size()=" + foreignKeys.size());
 
 		} catch (SQLException e) {
              System.err.println ("7 Cannot connect to database server");
@@ -1346,9 +1349,12 @@ public class Connect implements HttpSessionBindingListener {
 	}
 
 	public synchronized String queryOne(String qry, boolean useCache) {
-		String res = stringCache.get(qry);
-		if (res != null && useCache) return res;
+		if (useCache) {
+			String res = stringCache.get(qry);
+			if (res != null) return res;
+		}
 		
+		String res=null;
 		try {
        		Statement stmt = conn.createStatement();
        		ResultSet rs = stmt.executeQuery(qry);	
@@ -1360,7 +1366,7 @@ public class Connect implements HttpSessionBindingListener {
        		rs.close();
        		stmt.close();
 
-    		stringCache.add(qry, res);
+       		if (useCache) stringCache.add(qry, res);
     		
 		} catch (SQLException e) {
             System.err.println ("queryOne - " + qry);

@@ -19,6 +19,7 @@
 	
 //	System.out.println("ping " + connected + " " + (new Date()));
 
+/*
 	String email = cn.getEmail();
 	if (email == null || email.equals("")) {
 		String ip = cn.getIPAddress();
@@ -32,6 +33,7 @@
 	
 		cn.setEmail(email);
 	}
+*/	
 %>
 
 <%=connected%> <%= new Date() %>

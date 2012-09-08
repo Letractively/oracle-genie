@@ -293,6 +293,10 @@ MERCED
 <li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED', 'CLIENT_55MDC')">CLIENT_55MDC@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED</a></li>
 <br/>
 
+NDRIO 
+<li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/NDRIO', 'NDRIO_CPAS_CLIENT')">NDRIO_CPAS_CLIENT@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/NDRIO</a></li>
+<br/>
+
 NTCA
 <li style="margin-left: 100px;"><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/NTCA', 'NTCA_DATA')">NTCA_DATA@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/NTCA</a></li>
 <br/>
