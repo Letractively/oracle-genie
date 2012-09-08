@@ -201,11 +201,11 @@ public class Util {
 	}
 	
 	public static String getVersionDate() {
-		return "August 23, 2012";
+		return "September 8, 2012";
 	}
 
 	public static String getScriptionVersion() {
-		return "20120823";
+		return "20120908";
 	}
 
 	public static String getIpAddress(HttpServletRequest request) {
