@@ -27,7 +27,13 @@
 	String term = request.getParameter("term");
 	String filter = term;
 
-	String qry = "SELECT TABLE_NAME, NUM_ROWS FROM USER_TABLES ORDER BY 1"; 	
+	String qry = "SELECT object_name FROM user_objects where object_type in ('VIEW','TABLE') " +
+		" union all " +
+		" SELECT synonym_name FROM USER_SYNONYMS A " +
+		" where exists (select 1 from all_tables where owner=A.table_owner and table_name=A.table_name) " +
+		" order by 1";
+	
+//	String qry = "SELECT TABLE_NAME, NUM_ROWS FROM USER_TABLES ORDER BY 1"; 	
 	List<String[]> list = cn.query(qry, true);
 	
 	int totalCnt = list.size();
@@ -39,7 +45,7 @@
 <%	
 	for (int i=0; i<list.size();i++) {
 		if (filter != null && !list.get(i)[1].startsWith(filter)) continue;
-		if (getNumRows(list.get(i)[2]).equals("0")) continue;
+//		if (getNumRows(list.get(i)[2]).equals("0")) continue;
 		selectedCnt++;
 %>
 "<%=list.get(i)[1]%>",
@@ -51,7 +57,7 @@
 		for (int i=0; i<list.size();i++) {
 			if (filter != null && !list.get(i)[1].contains(filter)) continue;
 			if (list.get(i)[1].startsWith(filter)) continue;
-			if (getNumRows(list.get(i)[2]).equals("0")) continue;
+//			if (getNumRows(list.get(i)[2]).equals("0")) continue;
 			selectedCnt++;
 %>
 "<%=list.get(i)[1]%>",
@@ -60,6 +66,8 @@
 		}
 	}
 %>
+
+<%--
 <%
 	// if not found, search views
 	if (selectedCnt <= 30) {
@@ -94,5 +102,6 @@
 		}
 	}
 %>
-
+ --%>
+ 
 ""]
