@@ -14,11 +14,26 @@ public class CpasUtil {
 	boolean isCpas = false;
 	int cpasType = 1;
 
-	String[] exceptions = { "MEMBER_STATUS.VALUE", "PLAN_STATUS.VALUE",
-			"EMPLOYER_STATUS.VALUE", "MEMBER_EMPLOYER_STATUS.VALUE",
-			"MEMBER_PLAN_STATUS.VALUE", "PERSON_STATUS.VALUE", "CALC_STATUS.VALU",
-			"-MEMBER_SERVICE.SRVCODE" };
+	String[] exceptions = { 
+			"MEMBER_STATUS.VALUE", 
+			"PLAN_STATUS.VALUE",
+			"EMPLOYER_STATUS.VALUE", 
+			"MEMBER_EMPLOYER_STATUS.VALUE",
+			"MEMBER_PLAN_STATUS.VALUE", 
+			"PERSON_STATUS.VALUE", 
+			"CALC_STATUS.VALU",
+			"-MEMBER_SERVICE.SRVCODE" 
+	};
 
+	String calcStage[][] = {
+			{"AA", "Request"},
+			{"SA", "Saving"},
+			{"ZZ", "Processed"},
+			{"CC", "Cancelled"},
+			{"RR", "Recalculated"},
+			{"FF", "Finalizing"}
+	};
+	
 	public CpasUtil(Connect cn) {
 		this.cn = cn;
 
@@ -73,6 +88,13 @@ public class CpasUtil {
 			}
 		}
 
+		if (temp.equals("CALC.STAGE")) {
+			for (int i=0; i<calcStage.length;i++) {
+				if (value.equals(calcStage[i][0])) return calcStage[i][1];
+			}
+			return null;
+		}
+		
 		String key = (tname + "." + cname).toUpperCase();
 		if (key.equals("MEMBER_STATUS.GRUP") || key.equals("CALC_STATUS.GRUP")) {
 			String qry = "SELECT CAPTION FROM CPAS_CODE WHERE grup = '" + value + "'";
@@ -141,7 +163,7 @@ public class CpasUtil {
 			return name;
 		}
 
-		if (source.equals("S")) {
+		if (source.equals("S") || source.equals("3") || source.equals("A")) {
 			qry = getQryStr(selectstmt, value, q);
 			return qry;
 		}
