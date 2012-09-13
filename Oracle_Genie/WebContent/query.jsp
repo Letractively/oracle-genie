@@ -82,6 +82,41 @@
     	setHighlight();
       });
     </script>
+    
+	<style>
+	.ui-autocomplete-loading { background: white url('image/ui-anim_basic_16x16.gif') right center no-repeat; }
+.ui-autocomplete {
+		max-height: 300px;
+		overflow-y: auto;
+		/* prevent horizontal scrollbar */
+		overflow-x: hidden;
+		/* add padding to account for vertical scrollbar */
+		padding-right: 20px;
+	}
+	/* IE 6 doesn't support max-height
+	 * we use height instead, but this forces the menu to always be this tall
+	 */
+	* html .ui-autocomplete {
+		height: 300px;
+	}	
+	</style>
+	<script>
+	$(function() {
+		function addTable( tname ) {
+			if (tname == "") return;
+			showTable(tname);
+		}
+
+		$( "#tablesearch" ).autocomplete({
+			source: "ajax/auto-complete.jsp",
+			minLength: 2,
+			select: function( event, ui ) {
+				addTable( ui.item ?
+					ui.item.value: "" );
+			}
+		});
+	});
+	</script>    
 </head> 
 
 <body>
@@ -97,6 +132,7 @@
 <a href="worksheet.jsp" target="_blank">Work Sheet</a>
 
 <br/><br/>
+
 <a href="Javascript:toggleHelp()"><img  style="float: left" id="helpDivImage" border="0" src="image/minus.gif"></a>
 <div id="div-help" style="float: left">
 	<a id="showERD" href="Javascript:showERD('<%=tbl%>')">Show ERD</a>
@@ -104,6 +140,11 @@
 <%-- 	<a href="Javascript:showRelatedTables('<%=tbl%>')">Show Related Tables</a>
  --%>
  	</div>
+
+<div class="ui-widget">
+	<label for="tablesearch">Table: </label>
+	<input id="tablesearch" style="width: 250px;"/>
+</div>
 
 	<div id="table-detail"></div>
 
