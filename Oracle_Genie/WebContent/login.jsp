@@ -81,8 +81,35 @@
     <h2>Welcome to Oracle Genie.</h2>
 <% } %>	
 
+
+	<form action="connect_new.jsp" method="POST">
+    <table border=0>
+    <tr>
+    	<td>JDBC URL</td>
+    	<td><input size=60 name="url" id="url" value="<%= initJdbcUrl %>"/></td>
+    </tr>
+    <tr>
+    	<td>User Name</td>
+    	<td><input name="username" id="username" value="<%= initUserName %>"/></td>
+    </tr>
+    <tr>
+    	<td>Password</td>
+    	<td><input name="password" type="password"/></td>
+    </tr>
+    <tr>
+    	<td>Your Email</td>
+    	<td><input name="email" id="email" value="<%= email %>"/> Genie will send query logs by email.</td>
+    </tr>
+    </table>
+    <input type="submit" value="Connect"/>
+	</form>
+
+<br/>
+
+
 <% if (isCPAS) { %>
-<b>Connect to database</b>
+<hr>
+<b>CPAS Databases:</b>
 <select id="dbSelect" onchange="setLogin(this.options[this.selectedIndex].value, '');">
 <option></option>
 <option value="jdbc:oracle:thin:@s-ora-001.cpas.com:1521/ACAW">S-ORA-001.ACAW</option>
@@ -166,58 +193,8 @@
 <option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1521/UNILEASE">S-ORA-006.UNILEASE</option>
 
 </select>
-<% } %>
-
-
-	<form action="connect_new.jsp" method="POST">
-    <table border=0>
-    <tr>
-    	<td>JDBC URL</td>
-    	<td><input size=60 name="url" id="url" value="<%= initJdbcUrl %>"/></td>
-    </tr>
-    <tr>
-    	<td>User Name</td>
-    	<td><input name="username" id="username" value="<%= initUserName %>"/></td>
-    </tr>
-    <tr>
-    	<td>Password</td>
-    	<td><input name="password" type="password"/></td>
-    </tr>
-    <tr>
-    	<td>Your Email</td>
-    	<td><input name="email" id="email" value="<%= email %>"/> Genie will send query logs by email.</td>
-    </tr>
-    </table>
-    <input type="submit" value="Connect"/>
-	</form>
 
 <br/>
-
-
-<div>
-
-<%
-	StringTokenizer st = new StringTokenizer(cookieUrls);
-    while (st.hasMoreTokens()) {
-    	String token = st.nextToken();
-    	int idx = token.indexOf("@");
-    	String userid = token.substring(0, idx);
-    	String jdbcUrl = token.substring(idx+1);
-%>
-<a href="javascript:setLogin('<%= jdbcUrl %>', '<%= userid %>')"><%= token %></a>
-<a href="remove-cookie.jsp?value=<%= token %>"><img border=0 src="image/clear.gif"></a>
-<br/>
-
-<%
-	}
-%>
-</div>
-
-<br/>
-
-<% if (isCPAS) { %>
-<hr>
-<b>CPAS Databases:</b><br/>
 
 <div style="margin: 20px; padding:5px; width:600px; height:300px; overflow: scroll; border: 1px solid #666666;">
 
@@ -334,12 +311,34 @@ TCERA
 
 <br/>
 Please contact Spencer Hwang(<a href="mailto:spencerh@cpas.com">spencerh@cpas.com</a>) to add more database locations.
-
+<br/>
 </div>
 
 <% } %>
 
-<br/><br/><br/><br/><br/>
+
+<br/>
+<div>
+
+<b>Connection history:</b><br/>
+<%
+	StringTokenizer st = new StringTokenizer(cookieUrls);
+    while (st.hasMoreTokens()) {
+    	String token = st.nextToken();
+    	int idx = token.indexOf("@");
+    	String userid = token.substring(0, idx);
+    	String jdbcUrl = token.substring(idx+1);
+%>
+<a style="margin-left: 20px;" href="javascript:setLogin('<%= jdbcUrl %>', '<%= userid %>')"><%= token %></a>
+<a href="remove-cookie.jsp?value=<%= token %>"><img border=0 src="image/clear.gif"></a>
+<br/>
+
+<%
+	}
+%>
+</div>
+
+<br/><br/><br/>
 
 <script type="text/javascript">
 

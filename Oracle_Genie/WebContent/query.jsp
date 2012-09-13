@@ -143,7 +143,7 @@
 
 <div class="ui-widget">
 	<label for="tablesearch">Table: </label>
-	<input id="tablesearch" style="width: 250px;"/>
+	<input id="tablesearch" style="width: 300px;"/>
 </div>
 
 	<div id="table-detail"></div>

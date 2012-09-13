@@ -27,14 +27,8 @@
 	String term = request.getParameter("term");
 	String filter = term;
 
-	String qry = "SELECT object_name FROM user_objects where object_type in ('VIEW','TABLE') " +
-		" union all " +
-		" SELECT synonym_name FROM USER_SYNONYMS A " +
-		" where exists (select 1 from all_tables where owner=A.table_owner and table_name=A.table_name) " +
-		" order by 1";
-	
-//	String qry = "SELECT TABLE_NAME, NUM_ROWS FROM USER_TABLES ORDER BY 1"; 	
-	List<String[]> list = cn.query(qry, true);
+	String qry = "SELECT object_name FROM user_objects WHERE object_type in ('TABLE','VIEW','PACKAGE','SYNONYM') order by 1";
+	List<String[]> list = cn.query(qry, 10000, true);
 	
 	int totalCnt = list.size();
 	int selectedCnt = 0;
@@ -67,41 +61,4 @@
 	}
 %>
 
-<%--
-<%
-	// if not found, search views
-	if (selectedCnt <= 30) {
-
-		qry = "SELECT VIEW_NAME FROM USER_VIEWS ORDER BY 1"; 	
-		List<String> list2 = cn.queryMulti(qry);
-		
-		for (int i=0; i<list2.size();i++) {
-			if (filter != null && !list2.get(i).startsWith(filter)) continue;
-			selectedCnt++;
-%>
-"<%=list2.get(i)%>",
-<% 
-			if (selectedCnt >= 50) break;
-		}
-	}
-%>
-<%
-	// if not found, search views
-	if (selectedCnt <= 30) {
-
-		qry = "SELECT VIEW_NAME FROM USER_VIEWS ORDER BY 1"; 	
-		List<String> list2 = cn.queryMulti(qry);
-		
-		for (int i=0; i<list2.size();i++) {
-			if (filter != null && !list2.get(i).contains(filter)) continue;
-			selectedCnt++;
-%>
-"<%=list2.get(i)%>",
-<% 
-			if (selectedCnt >= 50) break;
-		}
-	}
-%>
- --%>
- 
 ""]
