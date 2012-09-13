@@ -62,6 +62,18 @@ $(document).ready(function(){
  		var keyword = $(this).val().toLowerCase();
  		globalSearch(keyword);
  	})
+ 	
+ 	// load initial auto-complete
+	$.ajax({
+		url: "ajax/auto-complete.jsp?term=xxx",
+		success: function(data){
+		}  
+	}); 	
+	$.ajax({
+		url: "ajax/auto-complete2.jsp?term=xxx",
+		success: function(data){
+		}  
+	}); 	
 })
 
 	function aboutGenie() {
@@ -124,6 +136,35 @@ function callserver() {
 }	
 </script>
 
+	<style>
+	.ui-autocomplete-loading { background: white url('image/ui-anim_basic_16x16.gif') right center no-repeat; }
+.ui-autocomplete {
+		max-height: 500px;
+		overflow-y: auto;
+		/* prevent horizontal scrollbar */
+		overflow-x: hidden;
+		/* add padding to account for vertical scrollbar */
+		padding-right: 20px;
+	}
+	/* IE 6 doesn't support max-height
+	 * we use height instead, but this forces the menu to always be this tall
+	 */
+	* html .ui-autocomplete {
+		height: 500px;
+	}	
+	</style>
+	<script>
+	$(function() {
+		$( "#globalSearch" ).autocomplete({
+			source: "ajax/auto-complete2.jsp",
+			minLength: 2,
+			select: function( event, ui ) {
+				globalSearch( ui.item ?
+					ui.item.value: "" );
+			}
+		});
+	});
+	</script>    
 
 </head> 
 
@@ -171,7 +212,7 @@ CPAS
 <% } %>
 </td>
 <td align=right nowrap>
-<b>Search</b> <input id="globalSearch" style="width: 160px;"/>
+<b>Global Search</b> <input id="globalSearch" style="width: 200px;"/>
 <a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
 </td>
 </table>
@@ -195,8 +236,7 @@ CPAS
 
 
 <br/>
-
-<b>Search</b> <input id="searchFilter" style="width: 180px;"/>
+<b>Filter</b> <input id="searchFilter" style="width: 180px;"/>
 <a href="Javascript:clearField()"><img border=0 src="image/clear.gif"></a>
 <div id="outer-table">
 <div id="inner-table">

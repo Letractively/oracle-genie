@@ -1956,6 +1956,7 @@ public class Connect implements HttpSessionBindingListener {
 	}
 	
 	public boolean hasCpas(String tname) {
+		if (cu==null) return false;
 		return cu.hasTable(tname);
 	}
 	
