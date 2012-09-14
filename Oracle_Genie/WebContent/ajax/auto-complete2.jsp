@@ -33,8 +33,39 @@
 	int totalCnt = list.size();
 	int selectedCnt = 0;
 	if (filter !=null) filter = filter.toUpperCase();
+	
+	List<String> res1 = new ArrayList<String>();
+	int cnt = 0;
+	for (int i=0; i<list.size();i++) {
+		if (list.get(i)[1].startsWith(filter)) { 
+			res1.add(list.get(i)[1].toLowerCase());
+			cnt ++;
+		}
+		if (cnt >= 50) break; 
+	}	
+
+if (cnt < 50) {
+	for (int i=0; i<list.size();i++) {
+		if (!list.get(i)[1].startsWith(filter) && list.get(i)[1].contains(filter)) {
+			res1.add(list.get(i)[1].toLowerCase());
+			cnt ++;
+		}
+		if (cnt >= 50) break; 
+	}	
+}
 %>
 
+[
+<%	
+	for (int i=0; i<res1.size();i++) {
+%>
+"<%=res1.get(i)%>",
+<% 
+	} 
+%>
+""]
+
+<%--
 [
 <%	
 	for (int i=0; i<list.size();i++) {
@@ -62,3 +93,4 @@
 %>
 
 ""]
+ --%>

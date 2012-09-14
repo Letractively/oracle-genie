@@ -57,12 +57,12 @@ $(document).ready(function(){
 		var filter = $(this).val().toUpperCase();
 		searchWithFilter(filter);
  	})
- 	
+/* 	
 	$('#globalSearch').change(function(){
  		var keyword = $(this).val().toLowerCase();
  		globalSearch(keyword);
  	})
- 	
+*/ 	
  	// load initial auto-complete
 	$.ajax({
 		url: "ajax/auto-complete.jsp?term=xxx",
@@ -159,7 +159,7 @@ function callserver() {
 			source: "ajax/auto-complete2.jsp",
 			minLength: 2,
 			select: function( event, ui ) {
-				globalSearch( ui.item ?
+				loadObject( ui.item ?
 					ui.item.value: "" );
 			}
 		});
@@ -171,30 +171,19 @@ function callserver() {
 <body>
 
 <table width=100% border=0>
-<td>
-<% if (isCPAS) {%>
-<img src="image/cpas.jpg" title="Version <%= Util.getVersionDate() %>"/>
+<td width="44">
+<% if (isCPAS && false) {%>
+<img align=middle src="image/cpas.jpg" title="Ver. <%= Util.getVersionDate() %>"/>
 <% } else { %>
-<img src="image/lamp.png" title="Version <%= Util.getVersionDate() %>"/>
+<img align=top src="image/lamp.png" title="Ver. <%= Util.getVersionDate() %>"/>
 <% } %>
 </td>
-<td nowrap><h2 style="color: blue;">Genie</h2></td>
-<td><h3><%= cn.getUrlString() %></h3></td>
 <td>
-&nbsp;
-<%--
-Database
-<select name="schema" id="shcmeaList" onchange="loadSchema(this.options[this.selectedIndex].value);">
-	<option></option>
-<% for (int i=0; i<cn.getSchemas().size();i++) { %>
-	<option value="<%=cn.getSchema(i)%>" <%= cn.getSchemaName().equals(cn.getSchema(i))?"SELECTED ":"" %>><%=cn.getSchema(i)%></option>
-<% } %>
-</select>
- --%>
+<span style="color: blue; font-family: Arial; font-size:28px; font-weight:bold;">Genie</span>
 </td>
-
+<!-- <td nowrap><h2 style="color: blue;">Genie</h2></td> -->
+<td><h3><%= cn.getUrlString() %></h3></td>
 <td nowrap>
-<a href="index.jsp">Home</a> |
 <a href="query.jsp" target="_blank">Query</a> |
 <!-- <a href="worksheet.jsp" target="_blank">Work Sheet</a> |
  -->
@@ -205,15 +194,16 @@ Database
 
 <% if (cn.isCpas() && isCPAS) { %>
 <br/>
-CPAS 
+<a href="javascript:showCPAS()">CPAS Catalogs</a> | 
 <a href="cpas-treeview.jsp" target=_blank>Treeview</a> |
-<a href="cpas-process.jsp" target=_blank>Process</a> |
-<a href="javascript:showCPAS()">CPAS Catalogs</a>
+<a href="cpas-process.jsp" target=_blank>Process</a>
 <% } %>
 </td>
 <td align=right nowrap>
-<b>Global Search</b> <input id="globalSearch" style="width: 200px;"/>
-<a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
+<b>Search</b> <input id="globalSearch" style="width: 200px;"/>
+<!-- <a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
+ -->
+<input type="button" value="Find" onClick="Javascript:globalSearch($('#globalSearch').val())"/>
 </td>
 </table>
 

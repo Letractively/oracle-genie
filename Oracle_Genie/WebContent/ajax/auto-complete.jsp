@@ -37,71 +37,35 @@
 	List<String[]> list = cn.query(qry, true);
 	
 	int totalCnt = list.size();
-	int selectedCnt = 0;
 	if (filter !=null) filter = filter.toUpperCase();
+	
+	List<String> res1 = new ArrayList<String>();
+	int cnt = 0;
+	for (int i=0; i<list.size();i++) {
+		if (list.get(i)[1].startsWith(filter)) { 
+			res1.add(list.get(i)[1].toLowerCase());
+			cnt ++;
+			if (cnt >= 50) break; 
+		} 
+	}
+	
+if (cnt < 50) {
+	for (int i=0; i<list.size();i++) {
+		if (!list.get(i)[1].startsWith(filter) && list.get(i)[1].contains(filter)) {
+			res1.add(list.get(i)[1].toLowerCase());
+			cnt ++;
+		}
+		if (cnt >= 50) break; 
+	}
+}	
 %>
 
 [
 <%	
-	for (int i=0; i<list.size();i++) {
-		if (filter != null && !list.get(i)[1].startsWith(filter)) continue;
-//		if (getNumRows(list.get(i)[2]).equals("0")) continue;
-		selectedCnt++;
+	for (int i=0; i<res1.size();i++) {
 %>
-"<%=list.get(i)[1].toLowerCase()%>",
+"<%=res1.get(i)%>",
 <% 
-		if (selectedCnt >= 50) break;
 	} 
-	// if not found, search partial match
-	if (selectedCnt <= 30) {
-		for (int i=0; i<list.size();i++) {
-			if (filter != null && !list.get(i)[1].contains(filter)) continue;
-			if (list.get(i)[1].startsWith(filter)) continue;
-//			if (getNumRows(list.get(i)[2]).equals("0")) continue;
-			selectedCnt++;
 %>
-"<%=list.get(i)[1].toLowerCase()%>",
-<% 
-			if (selectedCnt >= 50) break;
-		}
-	}
-%>
-
-<%--
-<%
-	// if not found, search views
-	if (selectedCnt <= 30) {
-
-		qry = "SELECT VIEW_NAME FROM USER_VIEWS ORDER BY 1"; 	
-		List<String> list2 = cn.queryMulti(qry);
-		
-		for (int i=0; i<list2.size();i++) {
-			if (filter != null && !list2.get(i).startsWith(filter)) continue;
-			selectedCnt++;
-%>
-"<%=list2.get(i)%>",
-<% 
-			if (selectedCnt >= 50) break;
-		}
-	}
-%>
-<%
-	// if not found, search views
-	if (selectedCnt <= 30) {
-
-		qry = "SELECT VIEW_NAME FROM USER_VIEWS ORDER BY 1"; 	
-		List<String> list2 = cn.queryMulti(qry);
-		
-		for (int i=0; i<list2.size();i++) {
-			if (filter != null && !list2.get(i).contains(filter)) continue;
-			selectedCnt++;
-%>
-"<%=list2.get(i)%>",
-<% 
-			if (selectedCnt >= 50) break;
-		}
-	}
-%>
- --%>
- 
 ""]
