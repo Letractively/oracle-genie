@@ -3,6 +3,7 @@ package spencer.genie;
 import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class QueryData {
@@ -69,6 +70,10 @@ public class QueryData {
 					val = "BLOB size=" + blob.length();
 				}
 
+			} else if (cType == 93) {
+				Timestamp tsTemp = rs.getTimestamp(colInd);
+				if (tsTemp != null) 
+					val =  tsTemp.toString(); // this does give the timestamp in correct format
 			} else
 				val = rs.getString(colInd);
 		} catch (SQLException e) {

@@ -55,12 +55,14 @@ public class Util {
 			
 			if (keys[i].equals("is null"))
 				res = res + " AND " + cols[i].trim() + " IS NULL";
-			else if (keys[i].length()==10 && keys[i].substring(4,5).endsWith("-")) { // date 
+			else if (keys[i].length()==10 && keys[i].substring(4,5).equals("-") && keys[i].substring(7,8).equals("-")) { // date 
 				res = res + " AND " + cols[i].trim() + "= to_date('" + keys[i] + "','yyyy-mm-dd')";
-			} else if (keys[i].length()==19 && keys[i].substring(4,5).endsWith("-")) { // date 
+			} else if (keys[i].length()==19 && keys[i].substring(4,5).equals("-") && keys[i].substring(7,8).equals("-")) { // date 
 				res = res + " AND " + cols[i].trim() + "= to_date('" + keys[i] + "','yyyy-mm-dd hh24:mi:ss')";
-			} else if (keys[i].length()==21 && keys[i].substring(4,5).endsWith("-")) { // date 
+			} else if (keys[i].length()==21 && keys[i].substring(4,5).equals("-") && keys[i].substring(7,8).equals("-")) { // date 
 				res = res + " AND " + cols[i].trim() + "= to_date('" + keys[i].substring(0,19) + "','yyyy-mm-dd hh24:mi:ss')";
+			} else if (keys[i].length()>21 && keys[i].substring(4,5).equals("-") && keys[i].substring(7,8).equals("-")) { // timestamp 
+				res = res + " AND " + cols[i].trim() + "= TO_TIMESTAMP('" + keys[i] + "','YYYY-MM-DD HH24:MI:SS.FF')";
 			} else {
 				res = res + " AND " + cols[i].trim() + "='" + keys[i] + "'";
 			}
@@ -201,11 +203,11 @@ public class Util {
 	}
 	
 	public static String getVersionDate() {
-		return "September 13, 2012";
+		return "September 14, 2012";
 	}
 
 	public static String getScriptionVersion() {
-		return "20120913";
+		return "20120914";
 	}
 
 	public static String getIpAddress(HttpServletRequest request) {
