@@ -107,7 +107,7 @@
 			showTable(tname);
 		}
 
-		$( "#tablesearch" ).autocomplete({
+		$( "#tablesearch-xxx" ).autocomplete({
 			source: "ajax/auto-complete.jsp",
 			minLength: 2,
 			select: function( event, ui ) {
@@ -115,6 +115,21 @@
 					ui.item.value: "" );
 			}
 		});
+
+		$( "#tablesearch" ).autocomplete({
+			source: "ajax/auto-complete.jsp",
+			minLength: 2,
+			select: function( event, ui ) {
+				addTable( ui.item ?
+					ui.item.value: "" );
+			}
+		}).data( "autocomplete" )._renderItem = function( ul, item ) {
+			return $( "<li></li>" )
+			.data( "item.autocomplete", item )
+			.append( "<a>" + item.label + " <span class='rowcountstyle'>" + item.desc + "</span></a>" )
+			.appendTo( ul );
+		};
+	
 	});
 	</script>    
 </head> 
@@ -240,7 +255,7 @@ Up to
 		return;		
 	}
 %>
-<hr/>
+<hr noshade color="green"/>
 <br/>
 
 <div id="buttonsDiv" style="display: none;">

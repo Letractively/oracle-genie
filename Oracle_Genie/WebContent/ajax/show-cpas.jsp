@@ -25,18 +25,21 @@
 <b>CPAS Catalog</b>
 <br/><br/>
 <a href="cpas-treeview.jsp" target="_blank">CPAS Tree View</a> | 
+<a href="cpas-customtreeview.jsp" target="_blank">CPAS Custom Tree View</a> | 
 <a href="cpas-process.jsp" target="_blank">CPAS Process</a>
 <br/><br/>
-<li><a href="Javascript:q('CPAS_CATALOG')">CPAS_CATALOG</a></li>
 <li><a href="Javascript:q('BATCHCAT')">BATCHCAT</a></li>
 <li><a href="Javascript:q('ERRORCAT')">ERRORCAT</a></li>
 <li><a href="Javascript:q('REPORTCAT')">REPORTCAT</a></li>
+<li><a href="Javascript:q('REQUESTCAT')">REQUESTCAT</a></li>
+<li><a href="Javascript:q('TASKCAT')">TASKCAT</a></li>
+<br/>
+
+<li><a href="Javascript:q('CPAS_CATALOG')">CPAS_CATALOG</a></li>
 <li><a href="Javascript:q('CPAS_CODE')">CPAS_CODE</a></li>
 <li><a href="Javascript:q('CPAS_WIZARD')">CPAS_WIZARD</a></li>
 <li><a href="Javascript:q('CPAS_VALIDATION')">CPAS_VALIDATION</a></li>
 <li><a href="Javascript:q('CPAS_ROLE')">CPAS_ROLE</a></li>
-<li><a href="Javascript:q('REQUESTCAT')">REQUESTCAT</a></li>
-<li><a href="Javascript:q('TASKCAT')">TASKCAT</a></li>
 <br/>
 
 <li><a href="Javascript:q('CPAS_ACTION')">CPAS_ACTION</a></li>

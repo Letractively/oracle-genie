@@ -16,39 +16,20 @@
 	String tv = request.getParameter("treekey");
 
 	if (actionid==null && tv != null) {
-		actionid = cn.queryOne("SELECT actionid FROM TREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv + "'");
+		actionid = cn.queryOne("SELECT actionid FROM CUSTOMTREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv + "'");
 	}
 	
-	String mainQry = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='MS'");
-	String subQry = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='DS'");
-	String mainLayout = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='MT'");
-	String subLayout = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='DT'");
-	String as = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='AS'");
+	String mainQry = cn.queryOne("SELECT ACTIONSTMT FROM CUSTOMTREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='MS'");
+	String subQry = cn.queryOne("SELECT ACTIONSTMT FROM CUSTOMTREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='DS'");
+	String mainLayout = cn.queryOne("SELECT ACTIONSTMT FROM CUSTOMTREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='MT'");
+	String subLayout = cn.queryOne("SELECT ACTIONSTMT FROM CUSTOMTREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='DT'");
+	String as = cn.queryOne("SELECT ACTIONSTMT FROM CUSTOMTREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='AS'");
 	
 	if (mainQry==null) mainQry="";
 	if (subQry==null) subQry="";
 	if (as==null) as="";
 
-	List<String[]> q = cn.query("SELECT caption, treekey FROM TREEVIEW WHERE SDI='"+sdi+"' and actionid="+actionid);
-	
-	if (actionid==null || actionid.equals("")) {
-		if (actionid==null && tv != null) {
-			actionid = cn.queryOne("SELECT actionid FROM CUSTOMTREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv + "'");
-		}
-		
-		mainQry = cn.queryOne("SELECT ACTIONSTMT FROM CUSTOMTREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='MS'");
-		subQry = cn.queryOne("SELECT ACTIONSTMT FROM CUSTOMTREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='DS'");
-		mainLayout = cn.queryOne("SELECT ACTIONSTMT FROM CUSTOMTREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='MT'");
-		subLayout = cn.queryOne("SELECT ACTIONSTMT FROM CUSTOMTREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='DT'");
-		as = cn.queryOne("SELECT ACTIONSTMT FROM CUSTOMTREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='AS'");
-		
-		if (mainQry==null) mainQry="";
-		if (subQry==null) subQry="";
-		if (as==null) as="";
-
-		q = cn.query("SELECT caption, treekey FROM CUSTOMTREEVIEW WHERE SDI='"+sdi+"' and actionid="+actionid);
-	}
-	
+	List<String[]> q = cn.query("SELECT caption, treekey FROM CUSTOMTREEVIEW WHERE SDI='"+sdi+"' and actionid="+actionid);
 	String caption = "";
 	String treekey = "";
 	if (q != null && q.size()>0) {
