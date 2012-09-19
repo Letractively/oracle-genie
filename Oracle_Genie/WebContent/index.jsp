@@ -155,7 +155,7 @@ function callserver() {
 	</style>
 	<script>
 	$(function() {
-		$( "#globalSearch" ).autocomplete({
+		$( "#globalSearch-xxx" ).autocomplete({
 			source: "ajax/auto-complete2.jsp",
 			minLength: 2,
 			select: function( event, ui ) {
@@ -164,6 +164,23 @@ function callserver() {
 			}
 		});
 	});
+	
+	$(function() {
+		$( "#globalSearch" ).autocomplete({
+			source: "ajax/auto-complete2.jsp",
+			minLength: 2,
+			select: function( event, ui ) {
+				loadObject( ui.item ?
+					ui.item.value: "" );
+			}
+		}).data( "autocomplete" )._renderItem = function( ul, item ) {
+			return $( "<li></li>" )
+			.data( "item.autocomplete", item )
+			.append( "<a>" + item.label + " <span class='rowcountstyle'>" + item.desc + "</span></a>" )
+//			.append( "<a>" + item.label + "</a>" )
+			.appendTo( ul );
+		};
+	});	
 	</script>    
 
 </head> 
@@ -337,3 +354,8 @@ Spencer Hwang - the creator of Genie<br/>
 
 </body>
 </html>
+
+<%
+
+cn.getSynonym("XXX");
+%>
