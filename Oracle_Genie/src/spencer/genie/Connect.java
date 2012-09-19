@@ -1426,8 +1426,17 @@ public class Connect implements HttpSessionBindingListener {
 	}
 
 	public String getSynonym(String sname) {
-		String qry = "SELECT table_owner||'.'||table_name FROM user_synonyms where synonym_name='" + sname + "'";
-		return this.queryOne(qry);
+		String qry = "SELECT SYNONYM_NAME,  table_owner||'.'||table_name FROM USER_SYNONYMS ORDER BY 1"; 	
+		List<String[]> list = query(qry);
+
+		for (String[] syn : list) {
+			if (syn[1].equals(sname.toUpperCase())) {
+				return syn[2];
+			}
+			if (syn[1].compareTo(sname.toUpperCase()) > 0) return null;
+		}
+		
+		return null;
 	}
 	
 	public int getPKLinkCount(String tname, String cols, String keys) {
@@ -1853,13 +1862,24 @@ public class Connect implements HttpSessionBindingListener {
 			String tt = tname.substring(idx+1);
 			return getTableRowCount(owner, tt);
 		}
-
+		
 		String owner = schemaName.toUpperCase();
 		String cacheKey = "ROWCOUNT." + owner + "." + tname;
 		
 		String cacheValue = stringCache.get(cacheKey);
 		if (cacheValue != null) return cacheValue;
 
+		String synName = getSynonym(tname);
+		if (synName != null && synName.length() > 3) {
+			tname = synName;
+			if (tname != null && tname.indexOf(".") > 0) {
+				int idx = tname.indexOf(".");
+				owner = tname.substring(0, idx);
+				String tt = tname.substring(idx+1);
+				return getTableRowCount(owner, tt);
+			}
+		}
+		
 		String numRows = null;
 
 		numRows = queryOne("SELECT NUM_ROWS FROM USER_TABLES WHERE TABLE_NAME ='" + tname + "'");
