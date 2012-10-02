@@ -62,6 +62,7 @@
 %>
 <a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
 <a href="javascript:openSimulator()">Simulator</a>
+<a href="cpas-treeview.jsp?sdi=<%= sdi %>&treekey=<%= tv %>" target="_blank">Treeview</a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 <form id="formSimul" target="_blank" action="cpas-simul.jsp">
 <input name="sdi" type="hidden" value="<%=sdi%>"/>

@@ -336,7 +336,7 @@
     	
     	$("#searchProgress").html("");
     	
-    	checkProgress();
+    	//checkProgress();
     	$("#progressDiv").show();
     	
     	$("#searchResult").html("Searching...  <a href='javascript:skipCurrent()'>skip current table</a>");
@@ -355,13 +355,14 @@
                 alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
+		setTimeout('checkProgress()', 1000);
     	
     }
 
     function readySearch() {
     	$("#startButton").attr("disabled", false);
     	$("#cancelButton").attr("disabled", true);
-    	//clearTimeout(to2);
+    	clearTimeout(to2);
     }
     
     function cancelSearch() {
@@ -391,11 +392,11 @@
 				if (current != data) {
 	    			$("#searchProgress").html(data);
 				}
-				
-				if (data.indexOf("Finished") == 0)
-					clearTimeout(to2);
-				else
+				var idx = data.indexOf("Finished ");
+				if (data.indexOf("Finished ") < 0) {
 					to2 = setTimeout("checkProgress()",1000);
+				}
+				
 			},
             error:function (jqXHR, textStatus, errorThrown){
                 alert(jqXHR.status + " " + errorThrown);

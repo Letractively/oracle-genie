@@ -69,7 +69,27 @@ public class CpasUtil {
 
 		System.out.println("cpasType="+cpasType);
 	}
+/*
+	public String getCodeValueCustom(String tname, String cname, String value, Query q) {
+		// exception handling
+		String temp = tname + "." + cname;
 
+		// handle exception
+		if (temp.equals("CALC.STAGE")) {
+			for (int i=0; i<calcStage.length;i++) {
+				if (value.equals(calcStage[i][0])) return calcStage[i][1];
+			}
+			return null;
+		} else if (temp.equals("BATCH_QUEUE.TASKKEY")) {
+			String qry = "SELECT TASKNAME FROM BATCHCAT_TASK WHERE BATCHKEY='" + q.getValue("BATCHKEY") + "' AND TASKKEY = '" + value + "'";
+			
+			return cn.queryOne(qry);
+		}
+		
+		return null;
+	}
+*/
+	
 	public String getCodeValue(String tname, String cname, String value, Query q) {
 		if (!isCpas)
 			return "";
@@ -88,11 +108,16 @@ public class CpasUtil {
 			}
 		}
 
+		// handle exception
 		if (temp.equals("CALC.STAGE")) {
 			for (int i=0; i<calcStage.length;i++) {
 				if (value.equals(calcStage[i][0])) return calcStage[i][1];
 			}
 			return null;
+		} else if (temp.equals("BATCH_QUEUE.TASKKEY")) {
+			String qry = "SELECT TASKNAME FROM BATCHCAT_TASK WHERE BATCHKEY='" + q.getValue("BATCHKEY") + "' AND TASKKEY = '" + value + "'";
+			
+			return cn.queryOne(qry);
 		}
 		
 		String key = (tname + "." + cname).toUpperCase();
@@ -123,8 +148,10 @@ public class CpasUtil {
 		List<String[]> list = cn.query(qry);
 //System.out.println(qry);
 
-		if (list.size() < 1)
+		if (list.size() < 1) {
 			return null;
+		}
+		
 		String source = list.get(0)[1];
 		String selectstmt = list.get(0)[2];
 

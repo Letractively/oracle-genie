@@ -271,7 +271,7 @@ public class Connect implements HttpSessionBindingListener {
     public void printQueryLog() {
     	HashMap<String, QueryLog> map = this.getQueryHistory();
     	String qryHist = "";
-    	if (map == null || map.size()==0) return;
+    	if (map == null /* || map.size()==0 */) return;
     	
     	if (url.indexOf("8888")>0) return; // local test
     	
@@ -290,7 +290,7 @@ public class Connect implements HttpSessionBindingListener {
     	
    		String who = this.getIPAddress() + " " + this.getEmail(); 
 		String title = "Genie - Query History ";
-   		if (this.email != null && email.length() > 2) {
+   		if (this.email != null && email.length() > 2 && map.size() > 0) {
     		Email.sendEmail(email, title + this.urlString, qryHist);
     	}
 
@@ -461,7 +461,8 @@ public class Connect implements HttpSessionBindingListener {
 		// column comments
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select owner, table_name, num_rows from ALL_TABLES");	
+//       		ResultSet rs = stmt.executeQuery("select owner, table_name, num_rows from ALL_TABLES");	
+       		ResultSet rs = stmt.executeQuery("select owner, table_name, num_rows from ALL_TABLES where (owner=user or owner in (select distinct table_owner from user_synonyms))");	
 
 	   		while (rs.next()) {
 	   			String owner = rs.getString(1);
@@ -1964,11 +1965,18 @@ public class Connect implements HttpSessionBindingListener {
 	}
 	
 	public String getCpasCodeCapt(String tname, String cname) {
-		return cu.getCodeCapt(tname, cname);
+		String comment = cu.getCodeCapt(tname, cname);
+		if (comment != null && comment.startsWith("_")) return null;
+		
+		return comment;
 	}
 	
 	public String getCpasComment(String tname) {
-		return cu.getCpasComment(tname);
+		String comment = cu.getCpasComment(tname);
+		if (comment != null && comment.startsWith("_")) return "";
+		if (tname.equalsIgnoreCase(comment)) return "";
+
+		return comment;
 	}
 	
 	public String getCpasCodeGrup(String tname, String cname) {

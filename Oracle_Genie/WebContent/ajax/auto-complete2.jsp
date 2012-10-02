@@ -6,7 +6,8 @@
 	pageEncoding="utf-8"
 %>
 <%! 
-	final int MAX_LIST = 200;
+	final int MAX_CACHE_LIST = 500;
+	final int MAX_DISPLAY_LIST = 50;
 
 	public String getNumRows (String numRows) {
 		if (numRows==null) numRows = "";
@@ -43,14 +44,14 @@
 	List<String> res1 = null;
 	
 	res1 = new ArrayList<String>();
-	if (xlist != null && term.startsWith(xterm) && xlist.size() < MAX_LIST) {
+	if (xlist != null && term.startsWith(xterm) && xlist.size() < MAX_CACHE_LIST) {
 		int cnt = 0;
 		for (int i=0; i<xlist.size();i++) {
 			if (xlist.get(i).contains(filter)) { 
 				res1.add(xlist.get(i));
 				cnt ++;
 			}
-			if (cnt >= MAX_LIST) break; 
+			if (cnt >= MAX_CACHE_LIST) break; 
 		}	
 	} else {
 		int cnt = 0;
@@ -61,16 +62,16 @@
 //				res1.add(list.get(i)[1] + "<span class='rowcountstyle'>" + cn.getTableRowCount(list.get(i)[1].toUpperCase()) +  "</span>");
 				cnt ++;
 			}
-			if (cnt >= MAX_LIST) break; 
+			if (cnt >= MAX_CACHE_LIST) break; 
 		}	
 
-		if (cnt < MAX_LIST) {
+		if (cnt < MAX_CACHE_LIST) {
 			for (int i=0; i<list.size();i++) {
 				if (!list.get(i)[1].startsWith(filter) && list.get(i)[1].contains(filter)) {
 					res1.add(list.get(i)[1]);
 					cnt ++;
 				}
-				if (cnt >= MAX_LIST) break; 
+				if (cnt >= MAX_CACHE_LIST) break; 
 			}	
 		}
 	}
@@ -80,7 +81,7 @@
 
 [
 <%	
-for (int i=0; i<res1.size();i++) {
+for (int i=0; i<res1.size() && i < MAX_DISPLAY_LIST;i++) {
 %>
 <%=(i>0?",":"")%>{"value": "<%=res1.get(i)%>", "label": "<%=res1.get(i)%>", "desc": "<%= cn.getTableRowCount(res1.get(i).toUpperCase()) %>"} 
 <% 
@@ -88,32 +89,3 @@ for (int i=0; i<res1.size();i++) {
 %>
 ]
 
-<%--
-[
-<%	
-	for (int i=0; i<list.size();i++) {
-		if (filter != null && !list.get(i)[1].startsWith(filter)) continue;
-//		if (getNumRows(list.get(i)[2]).equals("0")) continue;
-		selectedCnt++;
-%>
-"<%=list.get(i)[1].toLowerCase()%>",
-<% 
-		if (selectedCnt >= 50) break;
-	} 
-	// if not found, search partial match
-	if (selectedCnt <= 30) {
-		for (int i=0; i<list.size();i++) {
-			if (filter != null && !list.get(i)[1].contains(filter)) continue;
-			if (list.get(i)[1].startsWith(filter)) continue;
-//			if (getNumRows(list.get(i)[2]).equals("0")) continue;
-			selectedCnt++;
-%>
-"<%=list.get(i)[1].toLowerCase()%>",
-<% 
-			if (selectedCnt >= 50) break;
-		}
-	}
-%>
-
-""]
- --%>

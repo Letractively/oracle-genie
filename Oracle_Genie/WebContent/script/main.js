@@ -428,10 +428,9 @@ function runQuery(catalog,tab) {
 	    			$("#searchProgress").html(data);
 				}
 				
-				if (data.indexOf("Finished") == 0)
-					clearTimeout(to2);
-				else
-					to2 = setTimeout("checkProgress()",1000);
+				if (data.indexOf("Finished ") < 0) {
+					to2 = setTimeout("checkProgress()",2000);
+				}
 			},
             error:function (jqXHR, textStatus, errorThrown){
                 alert(jqXHR.status + " " + errorThrown);

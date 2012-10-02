@@ -4,6 +4,9 @@
 
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
+	String id = request.getParameter("id");
+	String process = request.getParameter("process");
+	String event = request.getParameter("event");
 %>
 
 <html>
@@ -69,6 +72,15 @@ $(window).resize(function() {
 $(document).ready(function(){
 	checkResize();
 	loadPtype();
+<% if (id != null ) {%>
+	loadProcess('<%=id%>');
+<% } %>
+<% if (process != null ) {%>
+loadEvent('<%=process%>');
+<% } %>
+<% if (event != null ) {%>
+loadEventView('<%=process%>','<%=event%>');
+<% } %>
 })
 
 	function checkResize() {
@@ -125,6 +137,7 @@ function loadProcess(ptype) {
 			    //Add the selected class to the current link
 			    $(this).addClass('selected');
 			});
+			$("#pt-"+ptype).addClass('selected');	
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -145,6 +158,7 @@ function loadEvent(process) {
 			    //Add the selected class to the current link
 			    $(this).addClass('selected');
 			});
+			$("#pr-"+process).addClass('selected');	
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -164,7 +178,7 @@ function loadEventView(process, event) {
 			    //Add the selected class to the current link
 			    $(this).addClass('selected');
 			});
-			
+			$("#ev-"+event).addClass('selected');	
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -176,6 +190,22 @@ function openSimulator() {
 	$("#formSimul").submit();
 }
 
+function processSearch(keyword) {
+	keyword = keyword.trim();
+	$("#inner-process").html("<img src='image/loading.gif'/>");
+	$("#inner-event").html('');
+	$("#inner-eventview").html('');
+
+	$.ajax({
+		url: "ajax-cpas/process-search.jsp?keyword=" + keyword + "&t=" + (new Date().getTime()),
+		success: function(data){
+			$("#inner-process").html(data);
+		},
+        error:function (jqXHR, textStatus, errorThrown){
+            alert(jqXHR.status + " " + errorThrown);
+        }  
+	});
+}
 </script>
 
 </head>
@@ -193,7 +223,13 @@ function openSimulator() {
 <a href="query.jsp" target="_blank">Query</a> |
 <a href="cpas-treeview.jsp" target="_blank">CPAS TreeView</a> 
 		</td>
-		<td align=right><h3><%=cn.getUrlString()%></h3></td>
+		<td align=left><h3><%=cn.getUrlString()%></h3></td>
+		<td align=right nowrap>
+<b>Process Search</b> <input id="globalSearch" style="width: 200px;" onChange="processSearch($('#globalSearch').val())"/>
+<!-- <a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
+ -->
+<input type="button" value="Find" onClick="Javascript:processSearch($('#globalSearch').val())"/>
+</td>
 	</table>
 
 	<table border=0 cellspacing=0>

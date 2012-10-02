@@ -64,7 +64,7 @@
 %>
 
 <tr class="simplehighlight">
-	<td class="<%= rowClass%>" nowrap><a href="javascript:loadEvent('<%= process %>');"><%= name %></a></td>
+	<td class="<%= rowClass%>" nowrap><a id="pr-<%= process %>" href="javascript:loadEvent('<%= process %>');"><%= name %></a></td>
 	<td class="<%= rowClass%>" nowrap><%= process==null?"":process %></td>
 	<td class="<%= rowClass%>" nowrap><%= descr==null?"":descr %></td>
 	<td class="<%= rowClass%>" nowrap><%= seclabel==null?"":seclabel  + " <span class='cpas'>" + secName + "</span>"%></td>

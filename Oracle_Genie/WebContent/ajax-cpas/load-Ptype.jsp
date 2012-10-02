@@ -26,7 +26,7 @@
 <%
 	for (int i=0; i<list.size();i++) {
 %>
-	<li><a href="javascript:loadProcess('<%=list.get(i)[1]%>');"><%=list.get(i)[2]%></a> <span class="nullstyle"><%=list.get(i)[1]%></span></li>
+	<li><a id="pt-<%=list.get(i)[1]%>" href="javascript:loadProcess('<%=list.get(i)[1]%>');"><%=list.get(i)[2]%></a> <span class="nullstyle"><%=list.get(i)[1]%></span></li>
 <% 
 	} 
 %>

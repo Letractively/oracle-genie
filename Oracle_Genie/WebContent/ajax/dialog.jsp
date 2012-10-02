@@ -15,8 +15,12 @@
 	
 	String pkName = cn.getPrimaryKeyName(table);
 	String conCols = cn.getConstraintCols(pkName);
-	
+//System.out.println("pkName="+ pkName);	
+//System.out.println("conCols="+ conCols);
+if (table.equals("ERRORCAT")) conCols = "ERRORID";
+
 	String condition = Util.buildCondition(conCols, key);
+//System.out.println("condition="+ condition);	
 
 	String sql = "SELECT * FROM " + table + " WHERE " + condition;
 	if (sql.endsWith(";")) sql = sql.substring(0, sql.length()-1);
@@ -39,5 +43,6 @@
 </div>
 
 <script type="text/javascript">
-	hideNullColumn("" + <%= id %>);
+//	hideNullColumn("" + <%= id %>);
+	hideNullColumnTable("" + <%= id %>);
 </script>

@@ -250,3 +250,9 @@ html.busy, html.busy * {
     color: #DF0101;
 	font-weight: bold;
 }
+
+#tabs {
+    width: 280px;
+    height: 600px;
+    float: left;
+}

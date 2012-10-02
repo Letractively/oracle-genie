@@ -56,7 +56,7 @@
 		String secName = cn.queryOne("SELECT CAPTION FROM SECSWITCH WHERE LABEL ='" + seclabel + "'");
 %>
 <tr class="simplehighlight">
-	<td class="<%= rowClass%>" nowrap><a href="javascript:loadEventView('<%= process %>','<%= event %>');"><%= name %></a></td>
+	<td class="<%= rowClass%>" nowrap><a id="ev-<%= event %>" href="javascript:loadEventView('<%= process %>','<%= event %>');"><%= name %></a></td>
 	<td class="<%= rowClass%>" nowrap><%= event==null?"":event %></td>
 	<td class="<%= rowClass%>" nowrap><%= position==null?"":position %></td>
 	<td class="<%= rowClass%>" nowrap><%= action==null?"":action + " <span class='cpas'>" + actionName + "</span>"%></td>
