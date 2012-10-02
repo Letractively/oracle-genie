@@ -34,6 +34,8 @@
 	List<String> fkLinkTab = new ArrayList<String>();
 	List<String> fkLinkCol = new ArrayList<String>();
 	
+	HashSet hs = new HashSet();
+	
 	for (int i=0; i<fks.size(); i++) {
 		ForeignKey rec = fks.get(i);
 		String linkCol = cn.getConstraintCols(rec.constraintName);
@@ -41,6 +43,8 @@
 		
 		fkLinkTab.add(rTable);
 		fkLinkCol.add(linkCol);
+		hs.add(linkCol);
+		//System.out.println("HS=" + linkCol);
 	}
 
 	List<String> autoLoadFK = new ArrayList<String>();
@@ -133,14 +137,108 @@
 <br/>
 </div>
 <% } %>
+</div>
 
-<% if (fkLinkTab.size() > 0) {%>
-	<img style="margin-left: 70px;" src="image/arrow_up.jpg"><br/>
-</div><br/>
+<%
+// see if there is logial foreign key
+  int logicalFK = 0;
+	for (int i=0; i< q.getColumnCount(); i++) {
+		String label = q.getColumnLabel(i);
+		String ft, fsql, fc;
+		
+		if (hs.contains(label)) continue;
+		
+		if (label.equals("PROCESSID")) {
+			ft = "BATCH";
+			fsql = cn.getPKLinkSql(ft, q.getValue(label));
+		} else if (label.equals("PENID")) {
+			ft = "PENSIONER";
+			fsql = cn.getPKLinkSql(ft, q.getValue(label));
+		} else if (label.equals("PERSONID")) {
+			ft = "PERSON";
+			fsql = cn.getPKLinkSql(ft, q.getValue(label));
+		} else if (label.equals("MKEY")) {
+			if (hs.contains("CLNT, MKEY")) continue;
+			ft = "MEMBER";
+			fsql = cn.getPKLinkSql(ft, q.getValue("CLNT")+ "^" + q.getValue(label));
+		} else if (label.equals("ERKEY")) {
+			if (hs.contains("CLNT, ERKEY")) continue;
+			ft = "EMPLOYER";
+			fsql = cn.getPKLinkSql(ft, q.getValue("CLNT")+ "^" + q.getValue(label));
+		} else if (label.equals("PLAN")) {
+			if (hs.contains("CLNT, PLAN")) continue;
+			ft = "SV_PLAN";
+			fsql = cn.getPKLinkSql(ft, q.getValue("CLNT")+ "^" + q.getValue(label));
+		} else if (label.equals("ACCOUNTID")) {
+			ft = "ACCOUNT";
+			fsql = cn.getPKLinkSql(ft, q.getValue(label));
+		} else if (label.equals("CALCID")) {
+			ft = "CALC";
+			fsql = cn.getPKLinkSql(ft, q.getValue(label));
+		} else if (label.equals("ERRORID")) {
+			ft = "ERRORCAT";
+			fsql = cn.getPKLinkSql(ft, q.getValue(label));
+		} else if (label.equals("BATCHKEY")) {
+			ft = "BATCHCAT";
+			fsql = cn.getPKLinkSql(ft, q.getValue(label));
+		} else if (label.equals("REPORTID")) {
+			ft = "REPORTCAT";
+			fsql = cn.getPKLinkSql(ft, q.getValue(label));
+		} else if (label.equals("REQUESTKEY")) {
+			ft = "REQUESTCAT";
+			fsql = cn.getPKLinkSql(ft, q.getValue(label));
+		} else if (label.equals("FUND")) {
+			ft = "FUND";
+			fsql = cn.getPKLinkSql(ft, q.getValue(label));
+		} else if (label.equals("SESSIONID")) {
+			ft = "CONNSESSION";
+			fsql = cn.getPKLinkSql(ft, q.getValue(label));
+/*
+		} else if (label.equals("PROCESSKEY")) {
+			ft = "BATCH";
+			fsql = cn.getPKLinkSql(ft, q.getValue(label));
+*/
+		} else {
+			continue;
+		}
+		
+		if (ft.equals(table)) continue;
+		if (q.getValue(label)==null) continue;
+		fc = label;
+		id = Util.getId();
+		autoLoadFK.add(id);
+		logicalFK++;
+
+%>
+<% if (logicalFK == 1) {%>
+	<b><a style="margin-left: 50px;" href="Javascript:toggleLFK()">Logical Link <img id="img-lfk" border=0 src="image/minus.gif"></a></b><br/>
+<div id="div-lfk" style="margin-top:10px;">
 <% } %>
 
 
+<div id="div-fkk-<%=id%>"  style="margin-left: 70px;">
+>>> <a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
+(<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(ft) %>)
+<span class="cpas"><%= cn.getCpasComment(ft) %></span>
+&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=fsql%>"/></a>
+(<%= table %>.<%= fc.toLowerCase() %>)
+&nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')"><img src="image/clear.gif" border=0/></a>
+<div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
+<div style="display: none;" id="mode-<%=id%>">hide</div>
+<div style="display: none;" id="hide-<%=id%>"></div>
+<div id="div-<%=id%>" style="display: none;"></div>
+<br/>
+</div>	
+<%	  
+	}
+%>
 
+<% if (fkLinkTab.size() > 0 || logicalFK > 0) {%>
+</div>
+	<img style="margin-left: 70px;" src="image/arrow_up.jpg"><br/>
+<% } %>
+
+<br/>
 <%
 	id = Util.getId();
 %>

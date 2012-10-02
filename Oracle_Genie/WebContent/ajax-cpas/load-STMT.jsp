@@ -110,6 +110,12 @@
 	<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
 	<div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 <% } %>
+
+<% if (label[i][0].equals("AS") && !values[i].equals("") && values[i].indexOf(" ")<0) {
+%>
+	<a href="cpas-process.jsp?id=<%= values[i]%>" target="_blank">open process</a>
+<% } %>
+
 	</td>
 </tr>
 

@@ -314,11 +314,102 @@ Found: <%= filteredCount %>
 					
 //					linkUrl ="blob.jsp?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue);
 					String fname = "download.txt";
-					if (val.startsWith("<?xml")) fname = "download.xml";
-					if (val.startsWith("<html")) fname = "download.html";
+					if (val!=null && val.startsWith("<?xml")) fname = "download.xml";
+					if (val!=null && val.startsWith("<html")) fname = "download.html";
 					
 					linkUrl ="clob_download?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue)+"&filename="+fname;
 					linkImage ="image/download.gif";
+				} else {
+					
+					if (colName.equals("MKEY")) {
+						isLinked = true;
+						lTable = "MEMBER";
+						keyValue = q.getValue("CLNT") + "^" + val;
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+					} else if (colName.equals("ERKEY")) {
+						isLinked = true;
+						lTable = "EMPLOYER";
+						keyValue = q.getValue("CLNT") + "^" + val;
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+					} else if (colName.equals("PLAN")) {
+						isLinked = true;
+						lTable = "SV_PLAN";
+						keyValue = q.getValue("CLNT") + "^" + val;
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+					} else if (colName.equals("PENID")) {
+						isLinked = true;
+						lTable = "PENSIONER";
+						keyValue = val;
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+					} else if (colName.equals("PROCESSID")) {
+						isLinked = true;
+						lTable = "BATCH";
+						keyValue = val;
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+					} else if (colName.equals("PENIDID")) {
+						isLinked = true;
+						lTable = "PENSIONER";
+						keyValue = val;
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+					} else if (colName.equals("PERSONID")) {
+						isLinked = true;
+						lTable = "PERSON";
+						keyValue = val;
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+					} else if (colName.equals("ACCOUNTID")) {
+						isLinked = true;
+						lTable = "ACCOUNT";
+						keyValue = val;
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+					} else if (colName.equals("CALCID")) {
+						isLinked = true;
+						lTable = "CALC";
+						keyValue = val;
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+					} else if (colName.equals("ERRORID")) {
+						isLinked = true;
+						lTable = "ERRORCAT";
+						keyValue = val;
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+					} else if (colName.equals("ERRORID")) {
+						isLinked = true;
+						lTable = "ERRORCAT";
+						keyValue = val;
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+					} else if (colName.equals("BATCHKEY")) {
+						isLinked = true;
+						lTable = "BATCHCAT";
+						keyValue = val;
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+					} else if (colName.equals("REPORTID")) {
+						isLinked = true;
+						lTable = "REPORTCAT";
+						keyValue = val;
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+					} else if (colName.equals("REQUESTKEY")) {
+						isLinked = true;
+						lTable = "REQUESTCAT";
+						keyValue = val;
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+					} else if (colName.equals("FUND")) {
+						isLinked = true;
+						lTable = "FUND";
+						keyValue = val;
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+					} else if (colName.equals("SESSIONID")) {
+						isLinked = true;
+						lTable = "CONNSESSION";
+						keyValue = val;
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+/*
+					} else if (colName.equals("PROCESSKEY")) {
+						isLinked = true;
+						lTable = "BATCH";
+						keyValue = val;
+						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
+*/
+					}
+					
 				}
 /*				
 				if (pkColIndex >0 && i == pkColIndex) {

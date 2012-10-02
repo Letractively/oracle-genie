@@ -44,25 +44,37 @@ var stackFwd = [];
 $(window).resize(function() {
 	checkResize();
 });
-	
+
 $(document).ready(function(){
 
-	setMode('table');
+	$('#searchFilter1').change(function(){
+		var filter = $(this).val().toUpperCase();
+		searchWithFilter1(filter);
+	})
+
+ 	$('#searchFilter2').change(function(){
+		var filter = $(this).val().toUpperCase();
+		searchWithFilter2(filter);
+ 	})
+	$('#searchFilter3').change(function(){
+		var filter = $(this).val().toUpperCase();
+		searchWithFilter3(filter);
+ 	})
+	$('#searchFilter4').change(function(){
+		var filter = $(this).val().toUpperCase();
+		searchWithFilter4(filter);
+ 	})
+	$('#searchFilter5').change(function(){
+		var filter = $(this).val().toUpperCase();
+		searchWithFilter5(filter);
+ 	})
+
+	initLoad();
 	checkResize();
 	CATALOG = "<%= cn.getSchemaName()%>";
 //	toggleKeepAlive();
 	callserver();
 
-	$('#searchFilter').change(function(){
-		var filter = $(this).val().toUpperCase();
-		searchWithFilter(filter);
- 	})
-/* 	
-	$('#globalSearch').change(function(){
- 		var keyword = $(this).val().toLowerCase();
- 		globalSearch(keyword);
- 	})
-*/ 	
  	// load initial auto-complete
 	$.ajax({
 		url: "ajax/auto-complete.jsp?term=xxx",
@@ -108,19 +120,25 @@ $(document).ready(function(){
 		var h = $(window).height();
 	
 		if (h > 500) {
-			var diff = $('#outer-table').position().top - $('#outer-result1').position().top;
+//			var diff = $('#outer-table').position().top - $('#outer-result1').position().top;
 			//alert(diff);
 			var newH = h - 80;
 
-			var tmp = w - $('#outer-table').width() - $('#outer-result2').width() - 45; 
+			var tmp = w - $('#tabs').width() - $('#outer-result2').width() - 45; 
 
-			$('#outer-table').height(newH-diff);
+//			$('#outer-table').height(newH-diff);
 			$('#outer-result1').height(newH);
 			$('#outer-result2').height(newH);
+			$('#tabs').height(newH-4);
+			$('#tabs2').height(newH-40);
 			
 			if (tmp < 660) tmp = 660;
 			$('#outer-result1').width(tmp);
 			
+			if (w > 1200)
+				$('#topline').width(w-30);
+			else
+				$('#topline').width(1170);
 		}
 	}
 	
@@ -154,17 +172,7 @@ function callserver() {
 	}	
 	</style>
 	<script>
-	$(function() {
-		$( "#globalSearch-xxx" ).autocomplete({
-			source: "ajax/auto-complete2.jsp",
-			minLength: 2,
-			select: function( event, ui ) {
-				loadObject( ui.item ?
-					ui.item.value: "" );
-			}
-		});
-	});
-	
+	var loadCount=0;
 	$(function() {
 		$( "#globalSearch" ).autocomplete({
 			source: "ajax/auto-complete2.jsp",
@@ -177,16 +185,141 @@ function callserver() {
 			return $( "<li></li>" )
 			.data( "item.autocomplete", item )
 			.append( "<a>" + item.label + " <span class='rowcountstyle'>" + item.desc + "</span></a>" )
-//			.append( "<a>" + item.label + "</a>" )
 			.appendTo( ul );
 		};
 	});	
+	
+	$(function() {
+		$( "#tabs" ).tabs();
+	});	
+	
+	function initLoad() {
+		$("#list-table").html("<img src='image/loading.gif'/>");
+		$("#inner-result1").html("<img src='image/loading.gif'/>");
+		loadList("ajax/list-view.jsp", "list-view");	
+		loadList("ajax/list-synonym.jsp", "list-synonym");	
+		loadList("ajax/list-package.jsp", "list-package");	
+		loadList("ajax/list-tool.jsp", "list-tool");	
+		loadList("ajax/list-table.jsp", "list-table");	
+		
+		//$("#inner-result1").html('<img src="image/genie_bw.png"/>');
+	}
+	
+	function loadList(url, targetDiv) {
+		$.ajax({
+			url: url,
+			success: function(data){
+				$("#" + targetDiv).html(data);
+				loadCount ++;
+				if (loadCount >= 5) {
+					$("#inner-result1").html('<img src="image/genie_bw.png"/>');
+				}
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});
+	}
+	
+	function searchWithFilter1(filter) {
+		gotoUrl = "ajax/list-table.jsp?filter=" + filter;
+
+		$.ajax({
+			url: gotoUrl,
+			success: function(data){
+				$("#list-table").html(data);
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});
+		
+	}
+	function searchWithFilter2(filter) {
+		gotoUrl = "ajax/list-view.jsp?filter=" + filter;
+
+		$.ajax({
+			url: gotoUrl,
+			success: function(data){
+				$("#list-view").html(data);
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});
+		
+	}
+	function searchWithFilter3(filter) {
+		gotoUrl = "ajax/list-synonym.jsp?filter=" + filter;
+
+		$.ajax({
+			url: gotoUrl,
+			success: function(data){
+				$("#list-synonym").html(data);
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});
+		
+	}
+	function searchWithFilter4(filter) {
+		gotoUrl = "ajax/list-package.jsp?filter=" + filter;
+
+		$.ajax({
+			url: gotoUrl,
+			success: function(data){
+				$("#list-package").html(data);
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});
+		
+	}
+	function searchWithFilter5(filter) {
+		gotoUrl = "ajax/list-tool.jsp?filter=" + filter;
+
+		$.ajax({
+			url: gotoUrl,
+			success: function(data){
+				$("#list-tool").html(data);
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});
+		
+	}
+
+	function clearField1() {
+		$("#searchFilter1").val("");
+		searchWithFilter1('');
+	}
+	function clearField2() {
+		$("#searchFilter2").val("");
+		searchWithFilter2('');
+	}
+	function clearField3() {
+		$("#searchFilter3").val("");
+		searchWithFilter3('');
+	}
+	function clearField4() {
+		$("#searchFilter4").val("");
+		searchWithFilter4('');
+	}
+	function clearField5() {
+		$("#searchFilter5").val("");
+		searchWithFilter5('');
+	}
+	
 	</script>    
 
 </head> 
 
 <body>
 
+<div id="topline" style="width: 1024px;">
 <table width=100% border=0>
 <td width="44">
 <% if (isCPAS && false) {%>
@@ -217,38 +350,55 @@ function callserver() {
 <% } %>
 </td>
 <td align=right nowrap>
-<b>Search</b> <input id="globalSearch" style="width: 200px;"/>
+<b>Global Search</b> <input id="globalSearch" style="width: 200px;"/>
 <!-- <a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
  -->
 <input type="button" value="Find" onClick="Javascript:globalSearch($('#globalSearch').val())"/>
 </td>
 </table>
+</div>
 
 
 <table border=0 cellspacing=0>
-<td valign=top width=250>
+<td valign=top width=280>
 
-<a class="mainBtn" href="Javascript:setMode('table')" id="selectTable">Table</a> | 
-<a class="mainBtn" href="Javascript:setMode('view')" id="selectView">View</a> | 
-<a class="mainBtn" href="Javascript:setMode('synonym')" id="selectSynonym">Synonym</a> | 
-<a class="mainBtn" href="Javascript:setMode('package')" title="Package, Type, Function & Procedure" id="selectPackage">Program</a> | 
-<a class="mainBtn" href="Javascript:setMode('tool')" id="selectTool">Tool</a>
-
-<!-- | <a href="Javascript:setMode('tool')" id="selectTool">Tool</a> -->
-<%-- <% if (cn.hasDbaRole()) { %> --%>
-<!-- | <a href="Javascript:setMode('dba')" id="selectDBA">DBA</a> -->
-<%-- <% }  else { %> --%>
-<!-- | not DBA -->
-<%-- <% } %> --%>
-
-
-<br/>
-<b>Filter</b> <input id="searchFilter" style="width: 180px;"/>
-<a href="Javascript:clearField()"><img border=0 src="image/clear.gif"></a>
-<div id="outer-table">
-<div id="inner-table">
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Table</a></li>
+		<li><a href="#tabs-2">View</a></li>
+		<li><a href="#tabs-3">Synonym</a></li>
+		<li><a href="#tabs-4">Program</a></li>
+		<li><a href="#tabs-5">Tool</a></li>
+	</ul>
+<div id="tabs2" style="overflow: auto;">
+	<div id="tabs-1">
+<b>Filter</b> <input id="searchFilter1" style="width: 180px;"/>
+<a href="Javascript:clearField1()"><img border=0 src="image/clear.gif"></a>
+<div id="list-table"></div>
+	</div>
+	<div id="tabs-2">
+<b>Filter</b> <input id="searchFilter2" style="width: 180px;"/>
+<a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
+<div id="list-view"></div>
+	</div>
+	<div id="tabs-3">
+<b>Filter</b> <input id="searchFilter3" style="width: 180px;"/>
+<a href="Javascript:clearField3()"><img border=0 src="image/clear.gif"></a>
+<div id="list-synonym"></div>
+	</div>
+	<div id="tabs-4">
+<b>Filter</b> <input id="searchFilter4" style="width: 180px;"/>
+<a href="Javascript:clearField4()"><img border=0 src="image/clear.gif"></a>
+<div id="list-package"></div>
+	</div>
+	<div id="tabs-5">
+<b>Filter</b> <input id="searchFilter5" style="width: 180px;"/>
+<a href="Javascript:clearField5()"><img border=0 src="image/clear.gif"></a>
+<div id="list-tool"></div>
+	</div>
 </div>
 </div>
+
 </td>
 <td valign=top>
 <div id="outer-result1">
@@ -257,7 +407,7 @@ function callserver() {
 		&nbsp;&nbsp;
 		<a href="Javascript:goFoward()"><img id="imgForward" src="image/blue_arrow_right.png" title="forward" border="0" style="display:none;"></a>
 	</div>
-	<div id="inner-result1"><img src="image/genie_bw.png"/></div>
+	<div id="inner-result1"><img src='image/loading.gif'/></div>
 </div>
 </td>
 <td valign=top>

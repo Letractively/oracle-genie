@@ -182,6 +182,18 @@
     	}
     }
 
+    function toggleLFK() {
+    	var img = $("#img-lfk").attr("src"); 
+    	//alert(img);
+    	if (img.indexOf("minus") > 0) {
+    		$("#img-lfk").attr("src","image/plus.gif");
+    		$('#div-lfk').slideUp();
+    	} else {
+    		$("#img-lfk").attr("src","image/minus.gif");
+    		$('#div-lfk').slideDown();
+    	}
+    }
+
     function toggleChild() {
     	var img = $("#img-child").attr("src"); 
     	//alert(img);
@@ -460,7 +472,7 @@
 		$("#sql").val(sql);
 		$("#id").val(id);
 		
-		$("#divSql"+id).html("<b>" + sql + "</b> <a href='Javascript:editText("+ id +")'>edit</a> <a href='Javascript:doTextQry("+ id +")'>rerun</a>");
+		$("#divSql"+id).html("<b>" + sql + "</b> <a href=\"javascript:openQuery('" + id + "')\"><img src=\"image/sql.png\" border=\"0\"></a> <a href='Javascript:editText("+ id +")'>edit</a> <a href='Javascript:doTextQry("+ id +")'>rerun</a>");
 		
 		$("#divText"+id).hide();
 		$("#divSql"+id).show();

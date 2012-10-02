@@ -4,6 +4,12 @@
 
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
+	String sdi = request.getParameter("sdi");
+	String treekey = request.getParameter("treekey");
+	String actionId = null;
+	if (sdi!=null && treekey !=null) {
+		actionId = cn.queryOne("SELECT actionid FROM TREEVIEW WHERE SDI = '"+sdi+"' AND TREEKEY='"+treekey+"'");
+	}
 %>
 
 <html>
@@ -51,7 +57,7 @@
 #outer-tv {
     background-color: #FFFFFF;
     border: 1px solid #999999;
-    width: 400px;
+    width: 300px;
     height: 600px;
     overflow: auto;
     float: left;
@@ -79,6 +85,10 @@ $(window).resize(function() {
 $(document).ready(function(){
 	checkResize();
 	loadSdi();
+<% if (sdi != null ) {%>
+	loadTV('<%=sdi%>');
+	loadSTMT('<%=sdi%>',<%=actionId%>,'<%=treekey%>');
+<% } %>	
 })
 
 	function checkResize() {
@@ -134,6 +144,7 @@ function loadTV(sdi) {
 			    //Add the selected class to the current link
 			    $(this).addClass('selected');
 			});
+			$("#sdi-"+sdi).addClass('selected');			
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -166,6 +177,9 @@ function loadSTMT(sdi, actionid, treekey) {
 		url: "ajax-cpas/load-STMT.jsp?sdi=" + sdi + "&actionid=" + actionid + "&t=" + (new Date().getTime()),
 		success: function(data){
 			$("#inner-tvstmt").html(data);
+			var id = treekey.replace(/_/g,"-");
+			$("#"+id).addClass('selected');		
+			//alert(treekey + " " + id);
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -246,12 +260,26 @@ function openSimulator() {
 	$("#formSimul").submit();
 }
 
+function tvSearch(keyword) {
+	keyword = keyword.trim();
+	$("#inner-tvstmt").html("<img src='image/loading.gif'/>");
+
+	$.ajax({
+		url: "ajax-cpas/tv-search.jsp?keyword=" + keyword + "&t=" + (new Date().getTime()),
+		success: function(data){
+			$("#inner-tvstmt").html(data);
+		},
+        error:function (jqXHR, textStatus, errorThrown){
+            alert(jqXHR.status + " " + errorThrown);
+        }  
+	});
+}
+
 </script>
 
 </head>
 
 <body>
-
 	<table width=100% border=0>
 		<td><img src="image/cpas.jpg"
 			title="Version <%=Util.getVersionDate()%>" /></td>
@@ -263,7 +291,12 @@ function openSimulator() {
 <a href="query.jsp" target="_blank">Query</a> |
 <a href="cpas-process.jsp" target="_blank">CPAS Process</a> 
 		</td>
-		<td align=right><h3><%=cn.getUrlString()%></h3></td>
+		<td><h3><%=cn.getUrlString()%></h3></td>
+		<td align=right nowrap>
+<b>TreeView Search</b> <input id="globalSearch" style="width: 200px;" onChange="tvSearch($('#globalSearch').val())"/>
+<!-- <a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
+ -->
+<input type="button" value="Find" onClick="Javascript:tvSearch($('#globalSearch').val())"/>
 	</table>
 
 	<table border=0 cellspacing=0>

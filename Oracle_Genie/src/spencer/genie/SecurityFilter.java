@@ -1,5 +1,6 @@
 package spencer.genie;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -70,6 +71,26 @@ public class SecurityFilter implements Filter {
 		}
 		
 		chain.doFilter(request, response);
+		if (servletPath.startsWith("/save-history.jsp")) return;
+		if (servletPath.startsWith("/ajax/auto-complete")) return;
+		
+		String qry = req.getQueryString();
+		if (qry==null || qry.equals("")) {
+			StringBuffer jb = new StringBuffer();
+			  String line = null;
+			  try {
+			    BufferedReader reader = request.getReader();
+			    while ((line = reader.readLine()) != null)
+			      jb.append(line);
+			  } catch (Exception e) { /*report an error*/ }
+			
+			qry = jb.toString();
+		}
+		
+		String ip = Util.getIpAddress(req);
+		if (ip==null) ip = "";	
+		
+		System.out.println(servletPath + " " + qry + " " + ip); // + " " + (new java.util.Date()));
 	}
 
 	@Override

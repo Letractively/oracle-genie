@@ -4,6 +4,12 @@
 
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
+	String sdi = request.getParameter("sdi");
+	String treekey = request.getParameter("treekey");
+	String actionId = null;
+	if (sdi!=null && treekey !=null) {
+		actionId = cn.queryOne("SELECT actionid FROM CUSTOMTREEVIEW WHERE SDI = '"+sdi+"' AND TREEKEY='"+treekey+"'");
+	}
 %>
 
 <html>
@@ -51,7 +57,7 @@
 #outer-tv {
     background-color: #FFFFFF;
     border: 1px solid #999999;
-    width: 400px;
+    width: 300px;
     height: 600px;
     overflow: auto;
     float: left;
@@ -79,6 +85,10 @@ $(window).resize(function() {
 $(document).ready(function(){
 	checkResize();
 	loadSdi();
+	<% if (sdi != null ) {%>
+	loadTV('<%=sdi%>');
+	loadSTMT('<%=sdi%>',<%=actionId%>,'<%=treekey%>');
+<% } %>	
 })
 
 	function checkResize() {
@@ -134,6 +144,7 @@ function loadTV(sdi) {
 			    //Add the selected class to the current link
 			    $(this).addClass('selected');
 			});
+			$("#sdi-"+sdi).addClass('selected');	
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -166,6 +177,9 @@ function loadSTMT(sdi, actionid, treekey) {
 		url: "ajax-cpas/load-CSTMT.jsp?sdi=" + sdi + "&actionid=" + actionid + "&t=" + (new Date().getTime()),
 		success: function(data){
 			$("#inner-tvstmt").html(data);
+			var id = treekey.replace(/_/g,"-");
+			$("#"+id).addClass('selected');		
+			//alert(treekey + " " + id);
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
