@@ -133,6 +133,7 @@
 			url: "ajax/detail-package.jsp?name=" + pName + "&t=" + (new Date().getTime()),
 			success: function(data){
 				$("#inner-result1").html(data);
+		        SyntaxHighlighter.all();
 			   	_gaq.push(['_trackEvent', 'Program', 'Program ' + pName]);
 			},
 	        error:function (jqXHR, textStatus, errorThrown){
@@ -660,3 +661,6 @@
     	
     }
     
+    function tDiv(id) {
+  	  $("#"+id).toggle();
+    }

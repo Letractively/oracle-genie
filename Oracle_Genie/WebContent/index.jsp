@@ -33,6 +33,11 @@
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
 	<link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.18.custom.css" type="text/css"/>
     <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'> 
+
+    <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
+    <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="script/shCore.js"></script>
+	<script type="text/javascript" src="script/shBrushSql.js"></script>
 	
 <script type="text/javascript">
 var CATALOG="";

@@ -539,6 +539,7 @@ public class Query {
 	}
 
 	public int getRecordCount() {
+		if (qData== null || qData.rows==null) return 0;
 		return qData.rows.size();
 	}
 

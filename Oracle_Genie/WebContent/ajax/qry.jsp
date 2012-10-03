@@ -411,6 +411,7 @@ if (fkLinkTab.size()>0 && dLink && false) {
 				boolean isLinked = false;
 				String linkUrl = "";
 				String linkImage = "image/view.png";
+				boolean isLogicalLink = false;
 				if (lTable != null  && dLink) {
 					isLinked = true;
 //					linkUrl = "ajax/fk-lookup.jsp?table=" + lTable + "&key=" + Util.encodeUrl(keyValue);
@@ -443,95 +444,29 @@ if (fkLinkTab.size()>0 && dLink && false) {
 					linkImage ="image/download.gif";
 				} else {
 					
-					if (colName.equals("MKEY")) {
-						isLinked = true;
-						lTable = "MEMBER";
-						keyValue = q.getValue("CLNT") + "^" + val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-					} else if (colName.equals("ERKEY")) {
-						isLinked = true;
-						lTable = "EMPLOYER";
-						keyValue = q.getValue("CLNT") + "^" + val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-					} else if (colName.equals("PLAN")) {
-						isLinked = true;
-						lTable = "SV_PLAN";
-						keyValue = q.getValue("CLNT") + "^" + val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-					} else if (colName.equals("PENID")) {
-						isLinked = true;
-						lTable = "PENSIONER";
-						keyValue = val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-					} else if (colName.equals("PROCESSID")) {
-						isLinked = true;
-						lTable = "BATCH";
-						keyValue = val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-					} else if (colName.equals("PENIDID")) {
-						isLinked = true;
-						lTable = "PENSIONER";
-						keyValue = val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-					} else if (colName.equals("PERSONID")) {
-						isLinked = true;
-						lTable = "PERSON";
-						keyValue = val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-					} else if (colName.equals("ACCOUNTID")) {
-						isLinked = true;
-						lTable = "ACCOUNT";
-						keyValue = val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-					} else if (colName.equals("CALCID")) {
-						isLinked = true;
-						lTable = "CALC";
-						keyValue = val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-					} else if (colName.equals("ERRORID")) {
-						isLinked = true;
-						lTable = "ERRORCAT";
-						keyValue = val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-					} else if (colName.equals("ERRORID")) {
-						isLinked = true;
-						lTable = "ERRORCAT";
-						keyValue = val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-					} else if (colName.equals("BATCHKEY")) {
-						isLinked = true;
-						lTable = "BATCHCAT";
-						keyValue = val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-					} else if (colName.equals("REPORTID")) {
-						isLinked = true;
-						lTable = "REPORTCAT";
-						keyValue = val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-					} else if (colName.equals("REQUESTKEY")) {
-						isLinked = true;
-						lTable = "REQUESTCAT";
-						keyValue = val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-					} else if (colName.equals("FUND")) {
-						isLinked = true;
-						lTable = "FUND";
-						keyValue = val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-					} else if (colName.equals("SESSIONID")) {
-						isLinked = true;
-						lTable = "CONNSESSION";
-						keyValue = val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-/*
-					} else if (colName.equals("PROCESSKEY")) {
-						isLinked = true;
-						lTable = "BATCH";
-						keyValue = val;
-						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-*/
+					for (int j=0; j < CpasUtil.logicalLink2.length; j++) {
+						if (colName.equals(CpasUtil.logicalLink2[j][0])) {
+							isLinked = true;
+							lTable = CpasUtil.logicalLink2[j][2];
+							keyValue = q.getValue(CpasUtil.logicalLink2[j][1]) + "^" + val;
+							linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
+						}
 					}
-					
+
+					for (int j=0; !isLinked && j < CpasUtil.logicalLink.length; j++) {
+						if (colName.equals(CpasUtil.logicalLink[j][0])) {
+							isLinked = true;
+							lTable = CpasUtil.logicalLink[j][1];
+							keyValue = val;
+							linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
+						}
+					}
+
+					if (val==null || val.equals("*")) isLinked = false;
+					if (isLinked) {
+						isLogicalLink = true;
+						linkImage = "image/view2.png";
+					}
 				}
 				
 				if (pkColIndex >0 && i == pkColIndex && false) {
@@ -543,7 +478,12 @@ if (fkLinkTab.size()>0 && dLink && false) {
 				if (pkColList != null && pkColList.contains(colName)) valDisp = "<span class='pk'>" + valDisp + "</span>";
 				if (cpas) {
 					String code = cn.getCpasCodeValue(tname, colName, val, q);
-					if (code!=null && !code.equals(""))	valDisp += "<br/> &gt; <span class='cpas'>" + code + "</span>";
+					if (code!=null && !code.equals(""))	{
+						if (!isLogicalLink) 
+							valDisp += "<br/> &gt; <span class='cpas'>" + code + "</span>";
+						else
+							valDisp += "<br/> &gt; <span class='cpas2'>" + code + "</span>";
+					}
 				}
 %>
 <td class="<%= rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
