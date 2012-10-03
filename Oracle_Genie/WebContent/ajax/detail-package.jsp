@@ -40,6 +40,42 @@
 
 %>
 
+<% 
+	if (typeName.equals("TRIGGER")) {
+		String q = "SELECT DISTINCT TYPE FROM USER_SOURCE WHERE NAME='" + name +"' ORDER BY TYPE";
+		if (owner != null) q = "SELECT DISTINCT TYPE FROM ALL_SOURCE WHERE OWNER='" + owner + "' AND NAME='" + name +"' ORDER BY TYPE";
+
+		List<String[]> types = cn.query(q);
+%>
+<%
+for (int k=0;k<types.size();k++) {
+	String type = types.get(k)[1];
+
+	String qry2 = "SELECT TYPE, LINE, TEXT FROM USER_SOURCE WHERE NAME='" + name +"' AND TYPE = '" + type + "' ORDER BY TYPE, LINE";
+	if (owner != null) qry2 = "SELECT TYPE, LINE, TEXT FROM ALL_SOURCE WHERE OWNER='" + owner + "' AND NAME='" + name +"' AND TYPE = '" + type + "' ORDER BY TYPE, LINE";
+
+	List<String[]> list2 = cn.query(qry2);
+	
+	String text = "";
+	for (int i=0;i<list2.size();i++) {
+		String ln = list2.get(i)[3];
+		if (!ln.endsWith("\n")) ln += "\n";
+		text += Util.escapeHtml(ln);
+	}
+
+%>
+<b><a href="javascript:tDiv('div-<%=k%>')"><%= type %></a></b><br/>
+<div id="div-<%=k%>" style="display: block;">
+<pre class='brush: sql'>
+<%= text %>
+</pre>
+</div>
+<%
+}
+%>
+<% 
+	} 
+%>
 
 <% 
 	if (list.size()>0) { 

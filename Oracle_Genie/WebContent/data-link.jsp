@@ -144,66 +144,37 @@
   int logicalFK = 0;
 	for (int i=0; i< q.getColumnCount(); i++) {
 		String label = q.getColumnLabel(i);
-		String ft, fsql, fc;
+		String ft=null, fsql="", fc="";
 		
 		if (hs.contains(label)) continue;
-		
-		if (label.equals("PROCESSID")) {
-			ft = "BATCH";
-			fsql = cn.getPKLinkSql(ft, q.getValue(label));
-		} else if (label.equals("PENID")) {
-			ft = "PENSIONER";
-			fsql = cn.getPKLinkSql(ft, q.getValue(label));
-		} else if (label.equals("PERSONID")) {
-			ft = "PERSON";
-			fsql = cn.getPKLinkSql(ft, q.getValue(label));
-		} else if (label.equals("MKEY")) {
-			if (hs.contains("CLNT, MKEY")) continue;
-			ft = "MEMBER";
-			fsql = cn.getPKLinkSql(ft, q.getValue("CLNT")+ "^" + q.getValue(label));
-		} else if (label.equals("ERKEY")) {
-			if (hs.contains("CLNT, ERKEY")) continue;
-			ft = "EMPLOYER";
-			fsql = cn.getPKLinkSql(ft, q.getValue("CLNT")+ "^" + q.getValue(label));
-		} else if (label.equals("PLAN")) {
-			if (hs.contains("CLNT, PLAN")) continue;
-			ft = "SV_PLAN";
-			fsql = cn.getPKLinkSql(ft, q.getValue("CLNT")+ "^" + q.getValue(label));
-		} else if (label.equals("ACCOUNTID")) {
-			ft = "ACCOUNT";
-			fsql = cn.getPKLinkSql(ft, q.getValue(label));
-		} else if (label.equals("CALCID")) {
-			ft = "CALC";
-			fsql = cn.getPKLinkSql(ft, q.getValue(label));
-		} else if (label.equals("ERRORID")) {
-			ft = "ERRORCAT";
-			fsql = cn.getPKLinkSql(ft, q.getValue(label));
-		} else if (label.equals("BATCHKEY")) {
-			ft = "BATCHCAT";
-			fsql = cn.getPKLinkSql(ft, q.getValue(label));
-		} else if (label.equals("REPORTID")) {
-			ft = "REPORTCAT";
-			fsql = cn.getPKLinkSql(ft, q.getValue(label));
-		} else if (label.equals("REQUESTKEY")) {
-			ft = "REQUESTCAT";
-			fsql = cn.getPKLinkSql(ft, q.getValue(label));
-		} else if (label.equals("FUND")) {
-			ft = "FUND";
-			fsql = cn.getPKLinkSql(ft, q.getValue(label));
-		} else if (label.equals("SESSIONID")) {
-			ft = "CONNSESSION";
-			fsql = cn.getPKLinkSql(ft, q.getValue(label));
-/*
-		} else if (label.equals("PROCESSKEY")) {
-			ft = "BATCH";
-			fsql = cn.getPKLinkSql(ft, q.getValue(label));
-*/
-		} else {
-			continue;
+		if (hs.contains("CLNT, " + label)) continue;
+		if (hs.contains("PENID, " + label)) continue;
+		if (q.getValue(label)==null) continue;
+		for (int j=0; j < CpasUtil.logicalLink2.length; j++) {
+			if (label.equals(CpasUtil.logicalLink2[j][0])) {
+				ft = CpasUtil.logicalLink2[j][2];
+				fsql = cn.getPKLinkSql(ft, q.getValue(CpasUtil.logicalLink2[j][1])+ "^" + q.getValue(label));
+				break;
+			}
 		}
+
+		for (int j=0; ft==null && j < CpasUtil.logicalLink.length; j++) {
+			if (label.equals(CpasUtil.logicalLink[j][0])) {
+				ft = CpasUtil.logicalLink[j][1];
+				fsql = cn.getPKLinkSql(ft, q.getValue(label));
+				break;
+			}
+		}
+		
+		if (ft == null) continue;
 		
 		if (ft.equals(table)) continue;
 		if (q.getValue(label)==null) continue;
+		
+		// check if there is matched record
+		Query qc = new Query(cn, fsql);
+		if (qc.getRecordCount()==0) continue;
+		
 		fc = label;
 		id = Util.getId();
 		autoLoadFK.add(id);
@@ -217,7 +188,7 @@
 
 
 <div id="div-fkk-<%=id%>"  style="margin-left: 70px;">
->>> <a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
+> <a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
 (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(ft) %>)
 <span class="cpas"><%= cn.getCpasComment(ft) %></span>
 &nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=fsql%>"/></a>

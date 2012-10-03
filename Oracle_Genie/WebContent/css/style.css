@@ -241,6 +241,10 @@ html.busy, html.busy * {
     color: green;
 }
 
+.cpas2 {
+    color: #996600;
+}
+
 .pk {
     color: #DF0101;
     font-weight: bold;

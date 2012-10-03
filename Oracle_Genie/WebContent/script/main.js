@@ -100,6 +100,7 @@ function loadPackage(pName) {
 		url: "ajax/detail-package.jsp?name=" + pName + "&t=" + (new Date().getTime()),
 		success: function(data){
 			$("#inner-result1").html(data);
+	        SyntaxHighlighter.all();
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
