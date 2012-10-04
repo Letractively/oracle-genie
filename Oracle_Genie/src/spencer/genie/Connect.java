@@ -294,7 +294,7 @@ public class Connect implements HttpSessionBindingListener {
     		Email.sendEmail(email, title + this.urlString, qryHist);
     	}
 
-   		qryHist =  url + "\n" + who + "\n\n" + qryHist + "\n\n" + extractJS(this.getAddedHistory());
+   		qryHist =  url + "\n" + who + "\nVer: " + Util.getVersionDate() + "\n\n" + qryHist + "\n\n" + extractJS(this.getAddedHistory());
    		Email.sendEmail("oracle.genie.email@gmail.com", title + this.urlString + " " + who, qryHist);
     }
     
