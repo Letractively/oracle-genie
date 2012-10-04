@@ -155,6 +155,9 @@ public class CpasUtil {
 		} else if (temp.equals("TASK.TTYPE")) {
 			String qry = "SELECT CAPT FROM CPAS_TASKTYPE WHERE TTYPE='" + value + "'";
 			return cn.queryOne(qry);
+		} else if (temp.equals("MEMBER_RELATION.OWNER")) {
+			String qry = "SELECT UNAME FROM PERSON WHERE PERSONID='" + value + "'";
+			return cn.queryOne(qry);
 		} else if (temp.endsWith(".VKEY") && !tname.equals("CPAS_VALIDATION")) {
 			String qry = "SELECT CAPTION FROM CPAS_VALIDATION WHERE VKEY='" + value + "'";
 			return cn.queryOne(qry);
