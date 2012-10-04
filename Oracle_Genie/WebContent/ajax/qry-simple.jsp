@@ -120,7 +120,7 @@
 		hasPK = pkColList.size() > 0;
 	}
 	
-	int linesPerPage = 20;
+	int linesPerPage = 10;
 	int totalCount = q.getRecordCount();
 	int filteredCount = q.getFilteredCount();
 	int totalPage = q.getTotalPage(linesPerPage);
@@ -324,16 +324,20 @@ Found: <%= filteredCount %>
 				} else {
 					
 					for (int j=0; j < CpasUtil.logicalLink2.length; j++) {
-						if (colName.equals(CpasUtil.logicalLink2[j][0])) {
-							isLinked = true;
-							lTable = CpasUtil.logicalLink2[j][2];
-							keyValue = q.getValue(CpasUtil.logicalLink2[j][1]) + "^" + val;
-							dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+						if (colName.equals(CpasUtil.logicalLink2[j][0]) && !tname.equals(CpasUtil.logicalLink2[j][2])) {
+							String theOtherVal = q.getValue( CpasUtil.logicalLink2[j][1] );
+
+							if (theOtherVal != null && !theOtherVal.equals("")) {
+								isLinked = true;
+								lTable = CpasUtil.logicalLink2[j][2];
+								keyValue = theOtherVal + "^" + val;
+								dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+							}
 						}
 					}
 
 					for (int j=0; !isLinked && j < CpasUtil.logicalLink.length; j++) {
-						if (colName.equals(CpasUtil.logicalLink[j][0])) {
+						if (colName.equals(CpasUtil.logicalLink[j][0]) && !tname.equals(CpasUtil.logicalLink[j][1])) {
 							isLinked = true;
 							lTable = CpasUtil.logicalLink[j][1];
 							keyValue = val;
@@ -380,7 +384,7 @@ if (cpas) {
 %>
 </tr>
 <%		if (q.hasData()) counter++;
-		if (counter >= 20) break;
+		if (counter >= linesPerPage) break;
 	}
 	
 %>

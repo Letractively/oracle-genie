@@ -66,7 +66,8 @@ var doMode = 'copy';
 		$("#table-detail").append("<div id='wait'><img src='image/loading.gif'/></div>");
 		$("#table-detail").hide();
 		$.ajax({
-			url: "ajax/table_col.jsp?table=" + tbl + "&t=" + (new Date().getTime()),
+//			url: "ajax/table_col.jsp?table=" + tbl + "&t=" + (new Date().getTime()),
+			url: "ajax/table_col.jsp?table=" + tbl,
 			success: function(data){
 				$("#wait").remove();
 				$("#table-detail").append(data);
@@ -581,7 +582,7 @@ function showDialog(table, key) {
 		success: function(data){
 			temp = temp + data + "</div>";
 			$("BODY").append(temp);
-			$("#"+id).dialog({ width: 700, height: 150 });
+			$("#"+id).dialog({ width: 700, height: 180 });
 			setHighlight();
 		},
         error:function (jqXHR, textStatus, errorThrown){

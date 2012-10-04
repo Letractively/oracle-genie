@@ -208,6 +208,20 @@
     	//$('#div-child').toggle();
     }
 
+    function toggleLChild() {
+    	var img = $("#img-lchild").attr("src"); 
+    	//alert(img);
+    	if (img.indexOf("minus") > 0) {
+    		$("#img-lchild").attr("src","image/plus.gif");
+    		$('#div-lchild').slideUp();
+    	} else {
+    		$("#img-lchild").attr("src","image/minus.gif");
+    		$('#div-lchild').slideDown();
+    	}
+
+    	//$('#div-child').toggle();
+    }
+
     function toggleText(arg1, arg2) {
     	$('#'+arg1).toggle();
     	$('#'+arg2).toggle();
@@ -395,7 +409,7 @@
 			success: function(data){
 				temp = temp + data + "</div>";
 				$("BODY").append(temp);
-				$("#"+id).dialog({ width: 700, height: 150 });
+				$("#"+id).dialog({ width: 700, height: 180 });
 				setHighlight();
 			},
             error:function (jqXHR, textStatus, errorThrown){

@@ -445,16 +445,20 @@ if (fkLinkTab.size()>0 && dLink && false) {
 				} else {
 					
 					for (int j=0; j < CpasUtil.logicalLink2.length; j++) {
-						if (colName.equals(CpasUtil.logicalLink2[j][0])) {
-							isLinked = true;
-							lTable = CpasUtil.logicalLink2[j][2];
-							keyValue = q.getValue(CpasUtil.logicalLink2[j][1]) + "^" + val;
-							linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
+						if (colName.equals(CpasUtil.logicalLink2[j][0]) && !tname.equals(CpasUtil.logicalLink2[j][2])) {
+							String theOtherVal = q.getValue( CpasUtil.logicalLink2[j][1] );
+
+							if (theOtherVal != null && !theOtherVal.equals("")) {
+								isLinked = true;
+								lTable = CpasUtil.logicalLink2[j][2];
+								keyValue = q.getValue(CpasUtil.logicalLink2[j][1]) + "^" + val;
+								linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
+							}
 						}
 					}
 
 					for (int j=0; !isLinked && j < CpasUtil.logicalLink.length; j++) {
-						if (colName.equals(CpasUtil.logicalLink[j][0])) {
+						if (colName.equals(CpasUtil.logicalLink[j][0]) && !tname.equals(CpasUtil.logicalLink[j][1])) {
 							isLinked = true;
 							lTable = CpasUtil.logicalLink[j][1];
 							keyValue = val;

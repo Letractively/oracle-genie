@@ -469,7 +469,7 @@
 			alert('Cache Cleared!');
 		});
 	}
-	
+
 	function showDialog(table, key) {
 		var id = "id"+(new Date().getTime());
 		var temp ="<div id='" + id + "' title='" + table + "' >"
@@ -478,7 +478,7 @@
 			success: function(data){
 				temp = temp + data + "</div>";
 				$("BODY").append(temp);
-				$("#"+id).dialog({ width: 700, height: 150 });
+				$("#"+id).dialog({ width: 700, height: 180 });
 				setHighlight();
 			},
             error:function (jqXHR, textStatus, errorThrown){
