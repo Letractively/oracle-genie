@@ -48,6 +48,7 @@ public class CpasUtil {
 			{"ACCOUNTID", "ACCOUNT"},
 			{"CALCID", "CALC"},
 			{"ERRORID", "ERRORCAT"},
+			{"REQUESTID", "REQUEST"},
 			{"BATCHKEY", "BATCHCAT"},
 			{"REPORTID", "REPORTCAT"},
 			{"REQUESTKEY", "REQUESTCAT"},
@@ -151,31 +152,34 @@ public class CpasUtil {
 		} else if (temp.equals("CALC_DATE.RDATE") /* && value.startsWith("1800")*/ ) {
 			String qry = "SELECT NAME FROM CPAS_DATE WHERE RDATE= TO_DATE('" + value + "','YYYY-MM-DD')";
 			return cn.queryOne(qry);
-		} else if (temp.endsWith(".VKEY") ) {
+		} else if (temp.equals("TASK.TTYPE")) {
+			String qry = "SELECT CAPT FROM CPAS_TASKTYPE WHERE TTYPE='" + value + "'";
+			return cn.queryOne(qry);
+		} else if (temp.endsWith(".VKEY") && !tname.equals("CPAS_VALIDATION")) {
 			String qry = "SELECT CAPTION FROM CPAS_VALIDATION WHERE VKEY='" + value + "'";
 			return cn.queryOne(qry);
-		} else if (temp.endsWith(".BATCHKEY") ) {
+		} else if (temp.endsWith(".BATCHKEY") && !tname.equals("BATCHCAT")) {
 			String qry = "SELECT BATCHNAME FROM BATCHCAT WHERE BATCHKEY='" + value + "'";
 			return cn.queryOne(qry);
-		} else if (temp.endsWith(".GLID") ) {
+		} else if (temp.endsWith(".GLID") && !tname.equals("GL_ACCOUNT")) {
 			String qry = "SELECT DESCR FROM GL_ACCOUNT WHERE GLID='" + value + "'";
 			return cn.queryOne(qry);
-		} else if (temp.endsWith(".ORGID") ) {
+		} else if (temp.endsWith(".ORGID") && !tname.equals("ORGANIZATION")) {
 			String qry = "SELECT SNAME FROM ORGANIZATION WHERE ORGID='" + value + "'";
 			return cn.queryOne(qry);
-		} else if (temp.endsWith(".COUNTRY") ) {
+		} else if (temp.endsWith(".COUNTRY") && !tname.equals("COUNTRY")) {
 			String qry = "SELECT NAME FROM COUNTRY WHERE COUNTRY='" + value + "'";
 			return cn.queryOne(qry);
-		} else if (temp.endsWith(".CURRENCY") ) {
+		} else if (temp.endsWith(".CURRENCY") && !tname.equals("CURRENCY")) {
 			String qry = "SELECT LNAME FROM CURRENCY WHERE CURRENCY='" + value + "'";
 			return cn.queryOne(qry);
-		} else if (temp.endsWith(".TAXTYPE") ) {
+		} else if (temp.endsWith(".TAXTYPE") && !tname.equals("TAXTYPE")) {
 			String qry = "SELECT NAME FROM TAXTYPE WHERE TAXTYPE='" + value + "'";
 			return cn.queryOne(qry);
-		} else if (temp.endsWith(".FUND") ) {
+		} else if (temp.endsWith(".FUND") && !tname.equals("FUND")) {
 			String qry = "SELECT SNAME FROM FUND WHERE FUND='" + value + "'";
 			return cn.queryOne(qry);
-		} else if (temp.endsWith(".PERSONID") ) {
+		} else if (temp.endsWith(".PERSONID") && !tname.equals("PERSON")) {
 			String qry = "SELECT UNAME FROM PERSON WHERE PERSONID='" + value + "'";
 			return cn.queryOne(qry);
 		}

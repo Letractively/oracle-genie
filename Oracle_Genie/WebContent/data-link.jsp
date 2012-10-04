@@ -7,6 +7,28 @@
 	pageEncoding="utf-8"
 %>
 
+<%!
+
+public synchronized List<String> getLogicalChildTables(Connect cn, String tname, Query q) {
+//System.out.println("tname="+tname);	
+	List<String> list = new ArrayList<String>();
+
+	if (!tname.equals("BATCH")) return list;
+	
+	String paramTable = cn.queryOne("SELECT PARAMTABLE FROM BATCHCAT WHERE BATCHKEY='" +q.getValue("BATCHKEY") +"'");
+//System.out.println("paramTable=" + paramTable);
+	if (!paramTable.equals("")) {
+		list.add(paramTable);
+	}
+	String qry = "SELECT BUFFERTABLE FROM BATCHCAT_BUFFER WHERE BATCHKEY='" + q.getValue("BATCHKEY") + "'";
+//System.out.println("qry="+qry);	
+	List<String> lst = cn.queryMulti(qry);
+	list.addAll(lst);
+	
+	return list;
+}
+
+%>
 <%
 	int counter = 0;
 	Connect cn = (Connect) session.getAttribute("CN");
@@ -16,7 +38,8 @@
 	List<String> refTabs = cn.getReferencedTables(table);
 
 	String sql = cn.getPKLinkSql(table, key);
-	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nDatalink " + sql);
+//	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nDatalink " + sql);
+	System.out.println("Datalink " + sql);
 /*
 	Query q = cn.queryCache.getQueryObject(sql);
 	if (q==null) {
@@ -25,7 +48,10 @@
 	}
 */
 	Query q = new Query(cn, sql);
-	
+
+	List<String> lcTabs = getLogicalChildTables(cn, table, q); // logical child tables
+
+
 	// Foreign keys - For FK lookup
 	List<ForeignKey> fks = cn.getForeignKeys(table);
 //System.out.println("fks.size()=" + fks.size());	
@@ -95,11 +121,8 @@
 
 
 
-<% if (fkLinkTab.size() > 0) {%>
-	<b><a style="margin-left: 50px;" href="Javascript:toggleFK()">Foreign Key <img id="img-fk" border=0 src="image/minus.gif"></a></b><br/>
-<div id="div-fk" style="margin-top:10px;">
-<% } %>
 <%
+	int cntFK = 0;
 	for (int i=0; i<fkLinkTab.size(); i++) {
 		String ft = fkLinkTab.get(i);
 		String fc = fkLinkCol.get(i);
@@ -119,10 +142,17 @@
 		}
 		
 		if (hasNull) continue;
+		
+		cntFK ++;
 		String fsql = cn.getPKLinkSql(ft, keyValue);
 		id = Util.getId();
 		autoLoadFK.add(id);
 %>
+<% if (cntFK == 1) {%>
+	<b><a style="margin-left: 50px;" href="Javascript:toggleFK()">Foreign Key <img id="img-fk" border=0 src="image/minus.gif"></a></b><br/>
+<div id="div-fk" style="margin-top:10px;">
+<% } %>
+
 <div id="div-fkk-<%=id%>"  style="margin-left: 70px;">
 <a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
 (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(ft) %>)
@@ -141,7 +171,7 @@
 
 <%
 // see if there is logial foreign key
-  int logicalFK = 0;
+  int cntLFK = 0;
 	for (int i=0; i< q.getColumnCount(); i++) {
 		String label = q.getColumnLabel(i);
 		String ft=null, fsql="", fc="";
@@ -178,10 +208,10 @@
 		fc = label;
 		id = Util.getId();
 		autoLoadFK.add(id);
-		logicalFK++;
+		cntLFK++;
 
 %>
-<% if (logicalFK == 1) {%>
+<% if (cntLFK == 1) {%>
 	<b><a style="margin-left: 50px;" href="Javascript:toggleLFK()">Logical Link <img id="img-lfk" border=0 src="image/minus.gif"></a></b><br/>
 <div id="div-lfk" style="margin-top:10px;">
 <% } %>
@@ -204,7 +234,7 @@
 	}
 %>
 
-<% if (fkLinkTab.size() > 0 || logicalFK > 0) {%>
+<% if (cntFK > 0 || cntLFK > 0) {%>
 </div>
 	<img style="margin-left: 70px;" src="image/arrow_up.jpg"><br/>
 <% } %>
@@ -310,8 +340,48 @@
 <%	
 	}	
 %>
-
 <% if (cntRef > 0) {%>
+	</div>
+<% } %>
+
+<%
+	for (int i=0; i<lcTabs.size(); i++) {
+		String refTab = lcTabs.get(i);
+		String fkColName = "PROCESSID";
+		int recCount = cn.getPKLinkCount(refTab, fkColName , key);
+		if (recCount==0) continue;
+		String refsql = cn.getRelatedLinkSql(refTab, fkColName, key);
+
+		id = Util.getId();
+		//autoLoadChild.add(id);
+		//cntRef++;
+%>
+
+<% if (i == 0) {%>
+	<b><a style="margin-left: 50px;" href="Javascript:toggleLChild()">Logical Child Table <img id="img-lchild" border=0 src="image/minus.gif"></a></b><br/>
+<div id="div-lchild">
+	<img style="margin-left: 70px;" src="image/arrow_up.jpg"><br/>
+<% } %>
+
+<div id="div-lchild-<%=id%>">
+<a style="margin-left: 70px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
+(<span class="rowcountstyle"><%= recCount %></span> / <%= cn.getTableRowCount(refTab) %>)
+<span class="cpas"><%= cn.getCpasComment(refTab) %></span>
+&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle border=0 title="<%=refsql%>"/></a>
+&nbsp;&nbsp;<a href="javascript:hideDiv('div-child-<%=id%>')"><img src="image/clear.gif" border=0/></a>
+<div style="display: none;" id="sql-<%=id%>"><%= refsql%></div>
+<div style="display: none;" id="hide-<%=id%>"></div>
+<div style="display: none;" id="sort-<%=id%>"></div>
+<div style="display: none;" id="sortdir-<%=id%>">0</div>
+<div style="display: none;" id="mode-<%=id%>">sort</div>
+<div id="div-<%=id%>" style="margin-left: 70px; display: none;"></div>
+<br/>
+</div>
+<%	
+	}	
+%>
+
+<% if (lcTabs.size() > 0) {%>
 </div>
 <% } %>
 
@@ -338,7 +408,14 @@ if (autoLoadChild.size() <= 5) {
 	}
 }
 %>
+<%
+	if (cntFK > 2 && cntLFK > 0) {
+%>
 
+toggleLFK();
+<%
+	}
+%>
 });	    
 </script>
 

@@ -87,24 +87,23 @@
     <h2>Welcome to Oracle Genie.</h2>
 <% } %>	
 
-
 	<form action="connect_new.jsp" method="POST">
-    <table border=0>
+    <table border=0 style="margin-left: 20px;">
     <tr>
-    	<td>JDBC URL</td>
-    	<td><input size=60 name="url" id="url" value="<%= initJdbcUrl %>"/></td>
+    	<td><span style="font-size:20px; color: blue;">JDBC URL</span></td>
+    	<td><input style="font-size:20px;" size=60 name="url" id="url" value="<%= initJdbcUrl %>"/></td>
     </tr>
     <tr>
-    	<td>User Name</td>
-    	<td><input name="username" id="username" value="<%= initUserName %>"/></td>
+    	<td><span style="font-size:20px; color: blue;">User Name</span></td>
+    	<td><input style="font-size:20px;" name="username" id="username" value="<%= initUserName %>"/></td>
     </tr>
     <tr>
-    	<td>Password</td>
-    	<td><input name="password" type="password"/></td>
+    	<td><span style="font-size:20px; color: blue;">Password</span></td>
+    	<td><input style="font-size:20px;" name="password" type="password"/></td>
     </tr>
     <tr>
-    	<td>Your Email</td>
-    	<td><input name="email" id="email" value="<%= email %>"/> Genie will send query logs by email.</td>
+    	<td><span style="font-size:20px; color: blue;">Your Email</span></td>
+    	<td><input style="font-size:20px;" name="email" id="email" value="<%= email %>"/> Genie will send query logs by email.</td>
     </tr>
     </table>
     <input type="submit" value="Connect"/>
@@ -273,6 +272,7 @@ KCERA<br/>
 MCERA<br/>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA', 'client_55mc')">client_55mc@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA</a>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA', 'client_55mct')">client_55mct@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA', 'client_55mcc')">client_55mcc@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA</a>
 <br/>
 
 MERCED<br/>
@@ -335,6 +335,7 @@ VANGUARD<br/>
 <div style="margin: 10px; padding:5px; width:450px; height:300px; overflow: scroll; border: 1px solid #666666;">
 <b>What's New.</b>
 <br/><br/>
+<li>Logical Child for BATCH - Parameters &amp; Buffer tables.</li>
 <li>Datalink support Logical Link for well-known column names like processid, mkey, calcid, etc.</li>
 <li>CAAT, PSAC and VANGUARD added to database list</li>
 <li>Search for TreeView and Process</li>

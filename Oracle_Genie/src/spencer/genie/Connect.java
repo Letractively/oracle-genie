@@ -1445,8 +1445,9 @@ public class Connect implements HttpSessionBindingListener {
 		
 		String condition = Util.buildCondition(cols,  keys);
 		String qry = "SELECT COUNT(*) FROM " + tname + " WHERE " + condition;
-
+//System.out.println("qry="+qry);
 		String res = this.queryOne(qry);
+		if (res==null || res.equals("")) return 0;
 		cnt = Integer.parseInt(res);
 		
 		return cnt;
