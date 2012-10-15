@@ -2,6 +2,7 @@ package spencer.genie;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -73,8 +74,8 @@ public class SecurityFilter implements Filter {
 		chain.doFilter(request, response);
 		if (servletPath.startsWith("/save-history.jsp")) return;
 		if (servletPath.startsWith("/ajax/auto-complete")) return;
-		if (servletPath.startsWith("/ajax/qry-simple.jsp")) return;
-		
+//		if (servletPath.startsWith("/ajax/qry-simple.jsp")) return;
+/*		
 		String qry = req.getQueryString();
 		if (qry==null || qry.equals("")) {
 			StringBuffer jb = new StringBuffer();
@@ -83,10 +84,28 @@ public class SecurityFilter implements Filter {
 			    BufferedReader reader = request.getReader();
 			    while ((line = reader.readLine()) != null)
 			      jb.append(line);
-			  } catch (Exception e) { /*report an error*/ }
+			  } catch (Exception e) { }
 			
 			qry = jb.toString();
 		}
+*/
+		String qry="";
+		Enumeration paramNames = request.getParameterNames();
+	    while(paramNames.hasMoreElements()) {
+	      String paramName = (String)paramNames.nextElement();
+	      qry += paramName + "=";
+	      String[] paramValues = request.getParameterValues(paramName);
+	      if (paramValues.length == 1) {
+	        String paramValue = paramValues[0];
+	        if (paramValue.length() > 0)
+	        	qry += paramValue + " ";
+	      } else {
+	        for(int i=0; i<paramValues.length; i++) {
+		        qry += paramValues[i] + ",";
+	        }
+	        qry += " ";
+	      }
+	    }		
 		
 		String ip = Util.getIpAddress(req);
 		if (ip==null) ip = "";	

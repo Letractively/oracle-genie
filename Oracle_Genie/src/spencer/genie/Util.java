@@ -202,12 +202,16 @@ public class Util {
 		return tables;
 	}
 	
+	public static String getBuildNo() {
+		return "1011";
+	}
+
 	public static String getVersionDate() {
-		return "October 4, 2012";
+		return "October 15, 2012";
 	}
 
 	public static String getScriptionVersion() {
-		return "20121004";
+		return getBuildNo();
 	}
 
 	public static String getIpAddress(HttpServletRequest request) {

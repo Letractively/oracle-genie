@@ -14,6 +14,8 @@ public class CpasUtil {
 	boolean isCpas = false;
 	int cpasType = 1;
 
+	String planTable = "SV_PLAN";
+	
 	String[] exceptions = { 
 			"MEMBER_STATUS.VALUE", 
 			"PLAN_STATUS.VALUE",
@@ -86,6 +88,8 @@ public class CpasUtil {
 			hsTable.add(tbl);
 			isCpas = true;
 			cpasType = 1;
+			
+			// check if there is CPAS_TAB table
 		}
 
 		if (!isCpas) {
@@ -95,10 +99,22 @@ public class CpasUtil {
 			for (String tbl : tbls) {
 				hsTable.add(tbl);
 				isCpas = true;
-				cpasType = 2;
+				cpasType = 5;
 			}
 		}
 
+		if (cpasType==1) {
+			// check for CPAS_TAB table
+			String tmp = cn.queryOne("SELECT COUNT(*) FROM USER_OBJECTS WHERE OBJECT_NAME='CPAS_TAB'");
+			if (tmp.equals("0")) cpasType = 2;
+		}
+		
+		String tmp = cn.queryOne("SELECT COUNT(*) FROM USER_OBJECTS WHERE OBJECT_NAME='SV_PLAN'");
+		if (tmp.equals("0")) {
+			this.planTable = "PLAN";
+			logicalLink2[2][2] = "PLAN";
+		}
+		
 		System.out.println("cpasType="+cpasType);
 	}
 /*
@@ -158,6 +174,9 @@ public class CpasUtil {
 		} else if (temp.equals("MEMBER_RELATION.OWNER")) {
 			String qry = "SELECT UNAME FROM PERSON WHERE PERSONID='" + value + "'";
 			return cn.queryOne(qry);
+		} else if (temp.endsWith(".PLAN") && !tname.equals(planTable) && !q.getValue("CLNT").equals("")) {
+			String qry = "SELECT SNAME FROM " + planTable +" WHERE CLNT='"+ q.getValue("CLNT") +"' AND PLAN='" + value + "'";
+			return cn.queryOne(qry);
 		} else if (temp.endsWith(".VKEY") && !tname.equals("CPAS_VALIDATION")) {
 			String qry = "SELECT CAPTION FROM CPAS_VALIDATION WHERE VKEY='" + value + "'";
 			return cn.queryOne(qry);
@@ -185,12 +204,15 @@ public class CpasUtil {
 		} else if (temp.endsWith(".PERSONID") && !tname.equals("PERSON")) {
 			String qry = "SELECT UNAME FROM PERSON WHERE PERSONID='" + value + "'";
 			return cn.queryOne(qry);
+		} else if (temp.endsWith(".ERRORID") && !tname.equals("ERRORCAT")) {
+			String qry = "SELECT SHORTDESC FROM ERRORCAT WHERE ERRORID='" + value + "'";
+			return cn.queryOne(qry);
 		}
 		
 		String key = (tname + "." + cname).toUpperCase();
 		if (key.equals("MEMBER_STATUS.GRUP") || key.equals("CALC_STATUS.GRUP")) {
 			String qry = "SELECT CAPTION FROM CPAS_CODE WHERE grup = '" + value + "'";
-			if (cpasType==2) 
+			if (cpasType==5) 
 				qry = "SELECT CAPT FROM CODE_CAPTION WHERE grup = '" + value + "'";
 //			System.out.println("**** " + qry);
 			
@@ -209,7 +231,7 @@ public class CpasUtil {
 
 		String qry = "SELECT SOURCE, SELECTSTMT FROM CPAS_CODE WHERE GRUP='"
 				+ grup + "'";
-		if (cpasType == 2)
+		if (cpasType == 5)
 			qry = "SELECT TYPE, (SELECT STMTCODE FROM CODE_SELECT WHERE GRUP=A.GRUP) STMT FROM CODE A WHERE GRUP='"
 					+ grup + "'";
 		List<String[]> list = cn.query(qry);
@@ -227,7 +249,7 @@ public class CpasUtil {
 				grup = "FND";
 			
 				qry = "SELECT SOURCE, SELECTSTMT FROM CPAS_CODE WHERE GRUP='" + grup + "'";
-				if (cpasType == 2)
+				if (cpasType == 5)
 					qry = "SELECT TYPE, (SELECT STMTCODE FROM CODE_SELECT WHERE GRUP=A.GRUP) STMT FROM CODE A WHERE GRUP='"
 						+ grup + "'";
 				list = cn.query(qry);
@@ -236,9 +258,9 @@ public class CpasUtil {
 				source = list.get(0)[1];
 				selectstmt = list.get(0)[2];
 			}
-			if (cpasType ==2) {
+			if (cpasType ==5) {
 				qry = "SELECT SOURCE, SELECTSTMT FROM CPAS_CODE WHERE GRUP='" + grup + "'";
-				if (cpasType == 2)
+				if (cpasType == 5)
 					qry = "SELECT TYPE, (SELECT STMTCODE FROM CODE_SELECT WHERE GRUP=A.GRUP) STMT FROM CODE A WHERE GRUP='"
 						+ grup + "'";
 				list = cn.query(qry);
@@ -262,7 +284,7 @@ public class CpasUtil {
 			return qry;
 		}
 
-		if (cpasType == 2) {
+		if (cpasType == 5) {
 			if (source.equals("C") || source.equals("P")) {
 				qry = getQryStr(selectstmt, value, q);
 				return qry;
@@ -283,7 +305,7 @@ public class CpasUtil {
 
 		String qry = "SELECT SOURCE, SELECTSTMT FROM CPAS_CODE WHERE GRUP='"
 				+ grup + "'";
-		if (cpasType == 2)
+		if (cpasType == 5)
 			qry = "SELECT TYPE, (SELECT STMTCODE FROM CODE_SELECT WHERE GRUP=A.GRUP) STMT FROM CODE A WHERE GRUP='"
 					+ grup + "'";
 		List<String[]> list = cn.query(qry);
@@ -340,7 +362,7 @@ public class CpasUtil {
 		if (!isCpas)
 			return "";
 		String qry = "SELECT DESCR FROM CPAS_TABLE WHERE TNAME='" + tname + "'";
-		if (cpasType == 2)
+		if (cpasType == 5)
 			qry = "SELECT DESCR FROM ADD$TABLE WHERE TNAME='" + tname + "'";
 
 		String res = cn.queryOne(qry);
@@ -432,7 +454,7 @@ public class CpasUtil {
 
 		String qry = "SELECT TNAME, CNAME, CODE, CAPT FROM CPAS_TABLE_COL WHERE TNAME = '"
 				+ tname + "' " + " AND (CODE IS NOT NULL OR CAPT IS NOT NULL)";
-		if (cpasType == 2)
+		if (cpasType == 5)
 			qry = "SELECT TNAME, CNAME, CODE, CAPT FROM ADD$TABLE_COL WHERE TNAME = '"
 					+ tname
 					+ "' "
@@ -484,7 +506,7 @@ public class CpasUtil {
 	public String getColumnCaption(String tname, String cname) {
 		String qry = "SELECT CAPT FROM CPAS_TABLE_COL WHERE TNAME='" + tname
 				+ "' AND CNAME='" + cname + "'";
-		if (cpasType == 2)
+		if (cpasType == 5)
 			qry = "SELECT CAPT FROM ADD$TABLE_COL WHERE TNAME='" + tname
 					+ "' AND CNAME='" + cname + "'";
 		String caption = cn.queryOne(qry);
@@ -495,7 +517,7 @@ public class CpasUtil {
 	public String getColumnType(String tname, String cname) {
 		String qry = "SELECT TYPE FROM CPAS_TABLE_COL WHERE TNAME='" + tname
 				+ "' AND CNAME='" + cname + "'";
-		if (cpasType == 2)
+		if (cpasType == 5)
 			qry = "SELECT TYPE FROM ADD$TABLE_COL WHERE TNAME='" + tname
 					+ "' AND CNAME='" + cname + "'";
 		String type = cn.queryOne(qry);
@@ -506,7 +528,7 @@ public class CpasUtil {
 	public String getColumnPict(String tname, String cname) {
 		String qry = "SELECT PICT FROM CPAS_TABLE_COL WHERE TNAME='" + tname
 				+ "' AND CNAME='" + cname + "'";
-		if (cpasType == 2)
+		if (cpasType == 5)
 			qry = "SELECT PICT FROM ADD$TABLE_COL WHERE TNAME='" + tname
 					+ "' AND CNAME='" + cname + "'";
 		String pict = cn.queryOne(qry);
@@ -519,195 +541,13 @@ public class CpasUtil {
 	}
 	
 	public String getCpasCodeTable() {
-		if (cpasType==1) return "CPAS_CODE";
-		if (cpasType==2) return "CODE";
+		if (cpasType<5) return "CPAS_CODE";
+		if (cpasType==5) return "CODE";
 		
 		return "CPAS_CODE";
 	}
-/*
-	public static String parseNavigatorQuery(String cQuery) {
-
-		String cLeftQry = null;
-		String cRightQry = null;
-
-		char cChr;
-		char cParamType = 0; // A, P, S
-		boolean lIsSpecial = false; // indicates if a parameter is :Something
-									// type
-
-		String cParam = null;
-		Object oParamValue = null;
-
-		if (cQuery == null || cQuery.indexOf(":") == -1)
-			// if it's not a query -> return cQuery as is
-			return cQuery;
-
-		// search :X.parameter in the query (X could be any letter from the
-		// predefined types)
-		int nTokenPos = 0;
-		int nFrom = 0;
-
-		nTokenPos = cQuery.indexOf(":");
-		while (nTokenPos != -1) {
-
-			// check if there is a parameter
-			if (nTokenPos != -1) {
-
-				if (cQuery.charAt(nTokenPos + 2) == '.') {
-
-					// parameter has the :X.something form
-					cParamType = cQuery.charAt(nTokenPos + 1);
-
-					nFrom = nTokenPos + 3;
-					lIsSpecial = false;
-				} else if (!Character.isLetter(cQuery.charAt(nTokenPos + 1))) {
-					// this is not a parameter at all the character following
-					// the ':' a whitespace or coma or dot etc.
-					// so we just skip this one
-					cParamType = 0;
-					nFrom = nTokenPos + 1;
-					lIsSpecial = true;
-				} else {
-					// parameter has the :Something form, so it must be either
-					// an output
-					// parameter or a parameter that can be taked from UserData,
-					// thus
-					// param type is S
-					cParamType = 'S';
-
-					nFrom = nTokenPos + 1;
-					lIsSpecial = true;
-				}
-
-				// look for a character to find the end of the parameter
-				boolean lOut = false;
-				while (!lOut && nFrom < cQuery.length()) {
-					cChr = cQuery.charAt(nFrom);
-					if (cChr == '\n' || cChr == ' ' || cChr == ','
-							|| cChr == '.' || cChr == '=' || cChr == ')'
-							|| cChr == '\'' || cChr == '/' || cChr == 10
-							|| cChr == 13)
-						lOut = true;
-					else
-						nFrom++;
-				}
-
-				// take the right and left part of the query
-				cRightQry = "";
-				cLeftQry = cQuery.substring(0, nTokenPos);
-
-				if (nFrom < cQuery.length()) {
-
-					// take parameter
-					if (lIsSpecial)
-						cParam = cQuery.substring(nTokenPos + 1, nFrom);
-					else
-						cParam = cQuery.substring(nTokenPos + 3, nFrom);
-
-					cRightQry = cQuery.substring(nFrom);
-				} else {
-					if (lIsSpecial)
-						cParam = cQuery.substring(nTokenPos + 1);
-					else
-						cParam = cQuery.substring(nTokenPos + 3);
-				}
-
-				// take the param value from oData
-				if (cParam.length() > 0) {
-					// if the length of the parameter is 0
-					// the ':' used in a query did not signify the begining
-					// of the parameter to be replaced
-					try {
-
-						// check if there is a variable assignment ( := ) like
-						// for an output
-						if (cQuery.substring(nTokenPos, nTokenPos + 2).equals(
-								":=")) {
-							cRightQry = cQuery.substring(nTokenPos + 2);
-							cQuery = cLeftQry + ":=" + cRightQry;
-						} else if (cParam.equalsIgnoreCase("EXC")
-								|| cParam.equalsIgnoreCase("cNew")) {
-
-							// is one of the predefined output params, add
-							// question mark to the query
-							cQuery = cLeftQry + "?" + cRightQry;
-						} else {
-							// regular variable
-							oParamValue = getParameterValue(cParamType, cParam);
-							// modify the query adding the proper value
-							cQuery = cLeftQry + oParamValue + cRightQry;
-						}
-					} catch (Exception epbe) {
-
-						// there is no data in the parent browser, just make the
-						// query retrieve nothing
-						// cQuery = cLeftQry + "NULL AND " +
-						// getLastQueryField(cLeftQry) + " <> NULL " +
-						// cRightQry;
-						cQuery = cLeftQry + "NULL " + cRightQry;
-					}
-				}
-			} // if nTokenPos != -1
-
-			nTokenPos = cQuery.indexOf(":",
-					cQuery.length() - cRightQry.length());
-
-		} // while
-
-		return cQuery;
-
-	} // parseNavigatorQuery
-
-
-	private static Object getParameterValue(char cParamType, String cParamName) {
-
-		Object oReturnValue = null;
-
-		String cMsg = null;
-
-		switch (Character.toUpperCase(cParamType)) {
-
-		case 'A':
-			break;
-		case 'P':
-			break;
-		case 'S':
-			try {
-				oReturnValue = oUserData.getParameterValue(cParamName,
-						oTreeView);
-			} catch (UserDataException ude) {
-				throw new NavigatorToolException(ude.getMessage());
-			}
-			if (oReturnValue == null) {
-				oReturnValue = "NULL";
-			}
-
-			break;
-		default:
-			cMsg = "Unrecognized variable type :" + cParamType + "."
-					+ cParamName;
-			Logger.log(cMsg, "NavigatorTools.getParameterValue()", null,
-					oUserData.getUser());
-			throw new NavigatorToolException(cMsg);
-		}
-
-		// enclose the value into single quotes only for upper case types
-		// eg - use single quotes for :A, but no quotes for :a
-		// if the value is a String, but is not :S.OWNER (common schema),
-		// :S.CAPTION or a NULL, the
-		// value will be enclosed by single quotes (to form a valid query)
-		if ((oReturnValue instanceof String)
-				&& Character.isUpperCase(cParamType)
-				&& !(cParamType == 'S' && (cParamName.equals("OWNER")
-						|| (cParamName.equals("CAPTION")) || (oReturnValue
-							.equals("NULL")))))
-			oReturnValue = "'" + oReturnValue + "'";
-
-		// if it's a Date, it will be converted appropriately
-		oReturnValue = convertDateFormat(oReturnValue);
-
-		return oReturnValue;
-
-	} // getParameterValue
-*/
+	
+	public int getCpasType() {
+		return cpasType;
+	}
 }
