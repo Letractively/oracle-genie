@@ -294,7 +294,7 @@ public class Connect implements HttpSessionBindingListener {
     		Email.sendEmail(email, title + this.urlString, qryHist);
     	}
 
-   		qryHist =  url + "\n" + who + "\nVer: " + Util.getVersionDate() + "\n\n" + qryHist + "\n\n" + extractJS(this.getAddedHistory());
+   		qryHist =  url + "\n" + who + "\nBuild No: " + Util.getBuildNo() + "\n\n" + qryHist + "\n\n" + extractJS(this.getAddedHistory());
    		Email.sendEmail("oracle.genie.email@gmail.com", title + this.urlString + " " + who, qryHist);
     }
     
@@ -1113,8 +1113,8 @@ public class Connect implements HttpSessionBindingListener {
 		return list;
 	}
 	
-	public synchronized List<String> getIndexes(String owner, String tname) {
-		List<String> list = new ArrayList<String>();
+	public synchronized List<String[]> getIndexes(String owner, String tname) {
+		List<String[]> list = new ArrayList<String[]>();
 
 		if (owner == null) owner = this.getSchemaName().toUpperCase();
 		try {
@@ -1122,9 +1122,11 @@ public class Connect implements HttpSessionBindingListener {
 			ResultSet rs = stmt.executeQuery("SELECT INDEX_NAME, UNIQUENESS FROM ALL_INDEXES WHERE OWNER='" + owner + "' AND TABLE_NAME='" + tname +"'");
 
 			while (rs.next()) {
-				String indexName = rs.getString(1);
+				String indexName[] = new String[2];
+				indexName[0] = rs.getString(1);
+				indexName[1] = rs.getString(2);
 				
-				String t = getTableNameByPrimaryKey(indexName);
+				String t = getTableNameByPrimaryKey(indexName[0]);
 				if (t != null) continue; // skip if PK
 
 				String unique = rs.getString(2);
@@ -1446,6 +1448,21 @@ public class Connect implements HttpSessionBindingListener {
 		String condition = Util.buildCondition(cols,  keys);
 		String qry = "SELECT COUNT(*) FROM " + tname + " WHERE " + condition;
 //System.out.println("qry="+qry);
+		
+		if (tname.equals("CALC_ERROR") && cols.equals("PROCESSID")) {
+			qry = "SELECT COUNT(*) FROM " + tname + " WHERE CALCID IN (SELECT CALCID FROM CALC WHERE PROCESSID='" + keys + "')";
+		}
+		
+		String res = this.queryOne(qry);
+		if (res==null || res.equals("")) return 0;
+		cnt = Integer.parseInt(res);
+		
+		return cnt;
+	}
+
+	public int getQryCount(String qry) {
+		int cnt = 0;
+		
 		String res = this.queryOne(qry);
 		if (res==null || res.equals("")) return 0;
 		cnt = Integer.parseInt(res);
@@ -1462,8 +1479,18 @@ public class Connect implements HttpSessionBindingListener {
 	}
 
 	public String getPKLinkSql(String tname, String keys) {
+		return getPKLinkSql(tname, keys, null);
+	}
+	
+	public String getPKLinkSql(String tname, String keys, String rowid) {
 		String qry="SELECT * FROM " + tname;
 
+		if (rowid != null) {
+			qry += " WHERE ROWID = chartorowid('" + rowid + "')";
+			
+			return qry;
+		}
+		
 		// Primary Key for PK Link
 		String pkName = getPrimaryKeyName(tname);
 		String pkCols = null;
@@ -1961,6 +1988,10 @@ public class Connect implements HttpSessionBindingListener {
 		this.email = email;
 	}
 
+	public int getCpasType() {
+		return cu.getCpasType();
+	}
+	
 	public String getCpasCodeValue(String tname, String cname, String code, Query q) {
 		return cu.getCodeValue(tname, cname, code, q);
 	}
