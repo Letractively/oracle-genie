@@ -250,7 +250,29 @@ Rows/Page
 <a id="preFormatText" href="Javascript:togglePreFormat()"><%= txt %></a>
 <% } %>
 
-<% if (totalCount>0 && cn.hasCpas(tname)) { %> 
+<%
+	boolean hasCpas = cn.hasCpas(tname);
+	// check for known columns
+	if (!hasCpas) {
+		boolean hasData = q.hasMetaData();
+		int colIdx = 0;
+		for  (int i = 0; i<= q.getColumnCount()-1; i++){
+			String colName = q.getColumnLabel(i);
+			
+			for (String[] ll: CpasUtil.logicalLink) {
+				if (colName.equals(ll[0])) {
+					hasCpas = true;
+					break;
+				}
+			}
+			
+			if (hasCpas) break;
+		}
+	}
+
+%>
+
+<% if (totalCount>0 && hasCpas) { %> 
 &nbsp;<a id="cpas" href="Javascript:toggleCpas()"><img src="image/cpas.jpg" title="Toggle CPAS Code Value"></a>
 <% } %>
 

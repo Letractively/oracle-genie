@@ -328,9 +328,9 @@ function callserver() {
 <table width=100% border=0>
 <td width="44">
 <% if (isCPAS && false) {%>
-<img align=middle src="image/cpas.jpg" title="Ver. <%= Util.getVersionDate() %>"/>
+<img align=middle src="image/cpas.jpg" alt="Ver. <%= Util.getVersionDate() %>"/>
 <% } else { %>
-<img align=top src="image/lamp.png" title="Ver. <%= Util.getVersionDate() %>"/>
+<img align=top src="image/lamp.png" alt="Ver. <%= Util.getVersionDate() %>"/>
 <% } %>
 </td>
 <td>
@@ -349,7 +349,8 @@ function callserver() {
 
 <% if (cn.isCpas() && isCPAS) { %>
 <br/>
-<a href="javascript:showCPAS()">CPAS Catalogs</a> | 
+<a href="javascript:showCPAS()"><img src="image/cpas.jpg" width=12 height=12>
+CPAS Catalogs</a> | 
 <a href="cpas-treeview.jsp" target=_blank>Treeview</a> |
 <a href="cpas-process.jsp" target=_blank>Process</a>
 <% } %>
@@ -447,6 +448,7 @@ Please download the latest community version here:<br/>
 --%>
 
 <%= Util.getVersionDate() %><br/>
+Build: <%= Util.getBuildNo() %><br/>
 Spencer Hwang - the creator of Genie<br/>
 <!-- <a href="mailto:spencer.hwang@gmail.com">spencer.hwang@gmail.com</a>
  --><a href="mailto:spencerh@cpas.com">spencerh@cpas.com</a>
@@ -465,6 +467,7 @@ Please download the latest community version here:<br/>
 <br/><br/>
 
 <%= Util.getVersionDate() %><br/>
+Build: <%= Util.getBuildNo() %><br/>
 Spencer Hwang - the creator of Genie<br/>
 <a href="mailto:spencer.hwang@gmail.com">spencer.hwang@gmail.com</a>
 

@@ -81,7 +81,7 @@ public String extractJS(String str) {
     	String savedHistory = cn.getAddedHistory();
 %>
 <tr>
-	<td nowrap valign=top>
+	<td nowrap>
 		<%= cn.getUrlString() %><br/>
 		IP: <%= cn.getIPAddress() %><br/>
 		Agent: <%= cn.getUserAgent() %><br/>

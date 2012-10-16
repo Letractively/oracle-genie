@@ -42,8 +42,11 @@
 		String rowClass = "oddRow";
 		if (rowCnt%2 == 0) rowClass = "evenRow";	
 		
-		String typeName = cn.queryOne("SELECT name FROM CPAS_PROCESSTYPE WHERE TYPE='" + type + "'");
-				
+//		String typeName = cn.queryOne("SELECT name FROM CPAS_PROCESSTYPE WHERE TYPE='" + type + "'");
+
+		String qry2 = "SELECT NAME FROM CPAS_TAB WHERE TAB='" + type+"'";
+		if (cn.getCpasType()==2) qry2 = "SELECT name FROM CPAS_PROCESSTYPE WHERE TYPE='" + type + "'";
+		String typeName= cn.queryOne(qry2);
 %>
 <tr class="simplehighlight">
 	<td class="<%= rowClass%>" nowrap><%= type %><br/><span class='cpas'><%= typeName %></span></td>
@@ -91,7 +94,12 @@
 		String rowClass = "oddRow";
 		if (rowCnt%2 == 0) rowClass = "evenRow";		
 
-		String typeName = cn.queryOne("SELECT name FROM CPAS_PROCESSTYPE WHERE TYPE='" + type + "'");
+		//String typeName = cn.queryOne("SELECT name FROM CPAS_PROCESSTYPE WHERE TYPE='" + type + "'");
+		qry2 = "SELECT NAME FROM CPAS_TAB WHERE TAB='" + type+"'";
+		if (cn.getCpasType()==2) qry2 = "SELECT name FROM CPAS_PROCESSTYPE WHERE TYPE='" + type + "'";
+		
+		String typeName = cn.queryOne(qry2);
+		
 		String processName = cn.queryOne("SELECT name FROM CPAS_PROCESS WHERE TYPE='" + type + "' AND PROCESS='"+process+"'");
 		String actionName = cn.queryOne("SELECT name FROM CPAS_ACTION WHERE ACTION='" + action + "'");
 %>

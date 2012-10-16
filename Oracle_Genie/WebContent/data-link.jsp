@@ -20,11 +20,15 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 	if (!paramTable.equals("")) {
 		list.add(paramTable);
 	}
-	String qry = "SELECT BUFFERTABLE FROM BATCHCAT_BUFFER WHERE BATCHKEY='" + q.getValue("BATCHKEY") + "'";
+	String qry = "SELECT BUFFERTABLE FROM BATCHCAT_BUFFER WHERE BATCHKEY='" + q.getValue("BATCHKEY") + "' " +
+		"AND EXISTS (SELECT 1 FROM USER_OBJECTS WHERE OBJECT_NAME=BUFFERTABLE)";
 //System.out.println("qry="+qry);	
 	List<String> lst = cn.queryMulti(qry);
 	list.addAll(lst);
-	
+
+	list.add("BATCH_ERROR");
+	list.add("CALC_ERROR");
+
 	return list;
 }
 
@@ -35,9 +39,10 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 
 	String table = request.getParameter("table");
 	String key = request.getParameter("key");
+	String rowid = request.getParameter("rowid");
 	List<String> refTabs = cn.getReferencedTables(table);
 
-	String sql = cn.getPKLinkSql(table, key);
+	String sql = cn.getPKLinkSql(table, key, rowid);
 //	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nDatalink " + sql);
 	System.out.println("Datalink " + sql);
 /*
@@ -77,6 +82,9 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 	List<String> autoLoadChild = new ArrayList<String>();
 	
 	String title = table + " " + key;
+	if (rowid!=null) {
+		title = table + " " + rowid;
+	}
 %>
 
 
@@ -122,6 +130,55 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 
 
 <%
+	id = Util.getId();
+%>
+
+<b><%= table %></b> (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(table) %>)
+&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 title="<%=sql%>"/></a>
+<span class="cpas"><%= cn.getCpasComment(table) %></span>
+<%-- <%= sql %> --%>
+<div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
+<div style="display: none;" id="mode-<%=id%>">hide</div>
+<div style="display: none;" id="hide-<%=id%>"></div>
+<br/>
+<div id="div-<%=id %>" style1="padding: 5px; background-color: gray;">
+<jsp:include page="ajax/qry-simple.jsp">
+	<jsp:param value="<%= sql %>" name="sql"/>
+	<jsp:param value="0" name="dataLink"/>
+	<jsp:param value="<%= id %>" name="id"/>
+	<jsp:param value="1" name="main" />
+</jsp:include>
+</div>
+<br/>
+
+
+
+
+
+
+
+
+
+
+
+<div style="display: none;">
+<form name="form0" id="form0" action="query.jsp">
+<input id="sql" name="sql" type="hidden" value=""/>
+<input id="dataLink" name="dataLink" type="hidden" value="1"/>
+<input id="id" name="id" type="hidden" value=""/>
+<input id="showFK" name="showFK" type="hidden" value="0"/>
+<input type="hidden" id="sortColumn" name="sortColumn" value="">
+<input type="hidden" id="sortDirection" name="sortDirection" value="0">
+<input type="hidden" id="hideColumn" name="hideColumn" value="">
+<input type="hidden" id="filterColumn" name="filterColumn" value="">
+<input type="hidden" id="filterValue" name="filterValue" value="">
+<input type="hidden" id="searchValue" name="searchValue" value="">
+<input type="hidden" id="pageNo" name="pageNo" value="1">
+<input type="hidden" id="rowsPerPage" name="rowsPerPage" value="20">
+</form>
+</div>
+
+<%
 	int cntFK = 0;
 	for (int i=0; i<fkLinkTab.size(); i++) {
 		String ft = fkLinkTab.get(i);
@@ -151,6 +208,7 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 <% if (cntFK == 1) {%>
 	<b><a style="margin-left: 50px;" href="Javascript:toggleFK()">Foreign Key <img id="img-fk" border=0 src="image/minus.gif"></a></b><br/>
 <div id="div-fk" style="margin-top:10px;">
+		<img style="margin-left: 70px;" src="image/arrow_down.jpg"><br/>
 <% } %>
 
 <div id="div-fkk-<%=id%>"  style="margin-left: 70px;">
@@ -212,8 +270,9 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 
 %>
 <% if (cntLFK == 1) {%>
-	<b><a style="margin-left: 50px;" href="Javascript:toggleLFK()">Logical Link <img id="img-lfk" border=0 src="image/minus.gif"></a></b><br/>
+	<b><a style="margin-left: 50px;" href="Javascript:toggleLFK()">CPAS Logical Link <img id="img-lfk" border=0 src="image/minus.gif"></a></b><br/>
 <div id="div-lfk" style="margin-top:10px;">
+		<img style="margin-left: 70px;" src="image/arrow_down.jpg"><br/>
 <% } %>
 
 
@@ -236,58 +295,9 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 
 <% if (cntFK > 0 || cntLFK > 0) {%>
 </div>
-	<img style="margin-left: 70px;" src="image/arrow_up.jpg"><br/>
 <% } %>
 
 <br/>
-<%
-	id = Util.getId();
-%>
-
-<b><%= table %></b> (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(table) %>)
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 title="<%=sql%>"/></a>
-<span class="cpas"><%= cn.getCpasComment(table) %></span>
-<%-- <%= sql %> --%>
-<div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
-<div style="display: none;" id="mode-<%=id%>">hide</div>
-<div style="display: none;" id="hide-<%=id%>"></div>
-<br/>
-<div id="div-<%=id %>" style1="padding: 5px; background-color: gray;">
-<jsp:include page="ajax/qry-simple.jsp">
-	<jsp:param value="<%= sql %>" name="sql"/>
-	<jsp:param value="0" name="dataLink"/>
-	<jsp:param value="<%= id %>" name="id"/>
-	<jsp:param value="1" name="main" />
-</jsp:include>
-</div>
-<br/>
-
-
-
-
-
-
-
-
-
-
-
-<div style="display: none;">
-<form name="form0" id="form0" action="query.jsp">
-<input id="sql" name="sql" type="hidden" value=""/>
-<input id="dataLink" name="dataLink" type="hidden" value="1"/>
-<input id="id" name="id" type="hidden" value=""/>
-<input id="showFK" name="showFK" type="hidden" value="0"/>
-<input type="hidden" id="sortColumn" name="sortColumn" value="">
-<input type="hidden" id="sortDirection" name="sortDirection" value="0">
-<input type="hidden" id="hideColumn" name="hideColumn" value="">
-<input type="hidden" id="filterColumn" name="filterColumn" value="">
-<input type="hidden" id="filterValue" name="filterValue" value="">
-<input type="hidden" id="searchValue" name="searchValue" value="">
-<input type="hidden" id="pageNo" name="pageNo" value="1">
-<input type="hidden" id="rowsPerPage" name="rowsPerPage" value="20">
-</form>
-</div>
 
 
 <%
@@ -303,7 +313,7 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 	}
 
 	int cntRef = 0;
-	for (int i=0; i<refTabs.size(); i++) {
+	for (int i=0; rowid==null && i<refTabs.size(); i++) {
 		String refTab = refTabs.get(i);
 //System.out.println("refTab="+refTab);		
 		String fkColName = cn.getRefConstraintCols(table, refTab);
@@ -318,13 +328,13 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 %>
 
 <% if (cntRef == 1) {%>
-	<b><a style="margin-left: 50px;" href="Javascript:toggleChild()">Child Table <img id="img-child" border=0 src="image/minus.gif"></a></b><br/>
+	<b><a style="margin-left: 20px;" href="Javascript:toggleChild()">Child Table <img id="img-child" border=0 src="image/minus.gif"></a></b><br/>
 <div id="div-child">
-	<img style="margin-left: 70px;" src="image/arrow_up.jpg"><br/>
+	<img style="margin-left: 40px;" src="image/arrow_up.jpg"><br/>
 <% } %>
 
 <div id="div-child-<%=id%>">
-<a style="margin-left: 70px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
+<a style="margin-left: 40px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
 (<span class="rowcountstyle"><%= recCount %></span> / <%= cn.getTableRowCount(refTab) %>)
 <span class="cpas"><%= cn.getCpasComment(refTab) %></span>
 &nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle border=0 title="<%=refsql%>"/></a>
@@ -334,7 +344,7 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 <div style="display: none;" id="sort-<%=id%>"></div>
 <div style="display: none;" id="sortdir-<%=id%>">0</div>
 <div style="display: none;" id="mode-<%=id%>">sort</div>
-<div id="div-<%=id%>" style="margin-left: 70px; display: none;"></div>
+<div id="div-<%=id%>" style="margin-left: 40px; display: none;"></div>
 <br/>
 </div>
 <%	
@@ -345,26 +355,37 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 <% } %>
 
 <%
+	int lc = 0;
 	for (int i=0; i<lcTabs.size(); i++) {
 		String refTab = lcTabs.get(i);
 		String fkColName = "PROCESSID";
+		fkColName = cn.queryOne("SELECT COLUMN_NAME from user_tab_columns where table_name='" + refTab + "' " + 
+				"and COLUMN_NAME in ('PROCESSID', 'PROCESSKEY')");
+		if (fkColName== null) fkColName = "PROCESSID";
+			
 		int recCount = cn.getPKLinkCount(refTab, fkColName , key);
 		if (recCount==0) continue;
 		String refsql = cn.getRelatedLinkSql(refTab, fkColName, key);
 
+		if (refTab.equals("CALC_ERROR")) {
+//			recCount = cn.getQryCount("SELECT * FROM CALC_ERROR WHERE CALC_ID IN (SELECT CALCID FROM CALC WHERE PROCESSID='"+key+"')");
+//			if (recCount == 0) continue;
+			refsql = "SELECT * FROM CALC_ERROR WHERE CALCID IN (SELECT CALCID FROM CALC WHERE PROCESSID='"+key+"')";
+		}
+		
 		id = Util.getId();
+		lc++;
 		//autoLoadChild.add(id);
 		//cntRef++;
 %>
-
-<% if (i == 0) {%>
-	<b><a style="margin-left: 50px;" href="Javascript:toggleLChild()">Logical Child Table <img id="img-lchild" border=0 src="image/minus.gif"></a></b><br/>
+<% if (lc == 1) {%>
+	<b><a style="margin-left: 20px;" href="Javascript:toggleLChild()">CPAS Logical Child Table <img id="img-lchild" border=0 src="image/minus.gif"></a></b><br/>
 <div id="div-lchild">
-	<img style="margin-left: 70px;" src="image/arrow_up.jpg"><br/>
+	<img style="margin-left: 40px;" src="image/arrow_up.jpg"><br/>
 <% } %>
 
 <div id="div-lchild-<%=id%>">
-<a style="margin-left: 70px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
+<a style="margin-left: 40px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
 (<span class="rowcountstyle"><%= recCount %></span> / <%= cn.getTableRowCount(refTab) %>)
 <span class="cpas"><%= cn.getCpasComment(refTab) %></span>
 &nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle border=0 title="<%=refsql%>"/></a>
