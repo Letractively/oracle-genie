@@ -106,7 +106,7 @@ public class Connect implements HttpSessionBindingListener {
             
             urlString = userName + "@" + url;  
             System.out.println ("Database connection established for " + urlString + " @" + (new Date()) + " " + ipAddress);
-           
+            
             if (!loadData) return; 
             	
             tables = new Vector<String>();
@@ -294,7 +294,7 @@ public class Connect implements HttpSessionBindingListener {
     		Email.sendEmail(email, title + this.urlString, qryHist);
     	}
 
-   		qryHist =  url + "\n" + who + "\nBuild No: " + Util.getBuildNo() + "\n\n" + qryHist + "\n\n" + extractJS(this.getAddedHistory());
+   		qryHist =  url + "\nWho: " + who + "\nAgent: " + getUserAgent() + "\nBuild No: " + Util.getBuildNo() + "\n\n" + qryHist + "\n\n" + extractJS(this.getAddedHistory());
    		Email.sendEmail("oracle.genie.email@gmail.com", title + this.urlString + " " + who, qryHist);
     }
     
