@@ -116,6 +116,7 @@ public class CpasUtil {
 		}
 		
 		System.out.println("cpasType="+cpasType);
+		System.out.println("plan table=" + planTable);
 	}
 /*
 	public String getCodeValueCustom(String tname, String cname, String value, Query q) {
