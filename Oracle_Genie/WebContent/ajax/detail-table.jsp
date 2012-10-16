@@ -128,7 +128,7 @@ Please select a Table to see the detail.
 	List<String> refPkgs = cn.getReferencedPackages(tname);
 	List<String> refViews = cn.getReferencedViews(tname);
 	List<String> refTrgs = cn.getReferencedTriggers(tname);
-	List<String> refIdx = cn.getIndexes(owner, tname);
+	List<String[]> refIdx = cn.getIndexes(owner, tname);
 	List<String> refConst = cn.getConstraints(owner, tname);
 %>
 <hr>
@@ -178,6 +178,8 @@ Please select a Table to see the detail.
 	}
 %>
 	(<%= cn.getConstraintCols(rec.rOwner, rec.rConstraintName).toLowerCase() %>)
+	
+	On delete <%= rec.deleteRule %>
 	<br/>
 <%
  }
@@ -213,10 +215,13 @@ Please select a Table to see the detail.
 <%
 
 	for (int i=0; i<refIdx.size(); i++) {
-		String indexName = refIdx.get(i);
+		String indexName = refIdx.get(i)[0];
+		String indexType = refIdx.get(i)[1];
+		if (indexType.equals("NONUNIQUE")) indexType= "";
 %>
 	&nbsp;&nbsp;&nbsp;&nbsp;<%= indexName %> 
 	<%= cn.getIndexColumns(owner, indexName).toLowerCase() %>
+	<%= indexType %> 
 	<br/>
 <%
 	}

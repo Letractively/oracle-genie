@@ -8,13 +8,11 @@
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
 	
-	String qry = "SELECT TYPE, NAME FROM CPAS_PROCESSTYPE ORDER BY ORDERBY"; 	
+	String qry = "SELECT TAB, NAME FROM CPAS_TAB ORDER BY ORDERBY";
+	if (cn.getCpasType()==2) qry = "SELECT TYPE, NAME FROM CPAS_PROCESSTYPE ORDER BY ORDERBY";
 	//String qry = "SELECT TAB, NAME FROM CPAS_TAB ORDER BY ORDERBY"; 	
 	List<String[]> list = cn.query(qry);
-	if (list.size()==0) {
-		qry = "SELECT TAB, NAME FROM CPAS_TAB ORDER BY ORDERBY"; 	
-		list = cn.query(qry);
-	}
+
 	if (list.size()==0) {
 		qry = "SELECT DISTINCT TYPE, (SELECT NAME FROM CPAS_CODE_VALUE WHERE GRUP='CCV' AND VALU=A.TYPE) FROM CPAS_PROCESS A ORDER BY 1"; 	
 		list = cn.query(qry);

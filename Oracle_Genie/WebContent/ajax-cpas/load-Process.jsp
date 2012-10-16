@@ -12,11 +12,10 @@
 	String qry = "SELECT * FROM CPAS_PROCESS WHERE TYPE = '" + ptype + "' ORDER BY POSITION";
 	Query q = new Query(cn, qry, false);
 	
-	
-	String pname = cn.queryOne("SELECT NAME FROM CPAS_PROCESSTYPE WHERE TYPE='" + ptype+"'");
-	if (pname==null || pname.equals("null")) {
-		pname= cn.queryOne("SELECT NAME FROM CPAS_TAB WHERE TAB='" + ptype+"'");
-	}
+	String qry2 = "SELECT NAME FROM CPAS_TAB WHERE TAB='" + ptype+"'";
+	if (cn.getCpasType()==2) qry2 = "SELECT NAME FROM CPAS_PROCESSTYPE WHERE TYPE='" + ptype+"'";
+	String pname= cn.queryOne(qry2);
+
 	if (pname==null || pname.equals("null")) {
 		pname= cn.queryOne("SELECT NAME FROM CPAS_PROCESS WHERE PROCESS='" + ptype+"'");
 	}

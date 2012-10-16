@@ -38,6 +38,13 @@
 	list.add("Preferenceses");
 
 %>
+
+<% if (cn.isCpas()) { %>
+<a href="javascript:showCPAS()"><img src="image/cpas.jpg" width=12 height=12>
+CPAS Catalogs</a> <br/><br/>
+ 
+<% } %>
+
 <% 
 	if (filter !=null) filter = filter.toUpperCase();
 	for (int i=0; i<list.size();i++) {

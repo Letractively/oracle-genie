@@ -80,7 +80,7 @@
 <% if (isCPAS) { %>
 	<img src="http://www.cpas.com/images/layout_01.jpg">
 <% } %>	
-  <img src="image/genie2.jpg" title="Version <%= Util.getVersionDate() %>"/>
+  <img src="image/genie2.jpg" alt="Version <%= Util.getVersionDate() %>"/>
 <% if (isCPAS) { %>
     <h2>Welcome to CPAS Genie.</h2>
 <% } else {%>	
@@ -166,9 +166,9 @@
 <option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/KCERA">S-ORA-004.KCERA</option>
 <option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/KEYSTONE">S-ORA-004.KEYSTONE</option>
 <option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/OEFROZEN">S-ORA-004.OEFROZEN</option>
-<option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/PMRS">S-ORA-004.PMRS</option>
 <option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/PPL">S-ORA-004.PPL</option>
 <option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/SAXON55">S-ORA-004.SAXON55</option>
+<option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/SMUCKERS">S-ORA-004.SMUCKERS</option>
 <option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/SVB">S-ORA-004.SVB</option>
 <option></option>
 
@@ -196,6 +196,12 @@
 <option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1521/SEARSDC">S-ORA-006.SEARSDC</option>
 <option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1526/TTC">S-ORA-006.TTC</option>
 <option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1521/UNILEASE">S-ORA-006.UNILEASE</option>
+<option></option>
+
+<option value="jdbc:oracle:thin:@s-dev-012.cpas.com:1521/DEV102">S-DEV-012.DEV102</option>
+<option value="jdbc:oracle:thin:@VS-ORATEST-001.CPAS.COM:1521/WEBDEMO">VS-ORATEST-001.WEBDEMO</option>
+<option value="jdbc:oracle:thin:@w-onlinecpascom:1521/ONLINE">W-ONLINECPASCOM.ONLINE</option>
+<option value="jdbc:oracle:thin:@VW-TWG-805:1521/ORCL">VW-TWG-805.ORCL</option>
 
 </select>
 
@@ -318,6 +324,10 @@ SAXON<br/>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.cpas.com:1521/SAXON55', 'client_55_qa')">client_55_qa@jdbc:oracle:thin:@s-ora-004.cpas.com:1521/SAXON55</a>
 <br/>
 
+SIGMA<br/>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/SIGMA', 'client_55sg')">client_55sg@jdbc:oracle:thin:@s-ora-003.cpas.com:1521/SIGMA</a>
+<br/>
+
 TCERA<br/>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/TCERADEV', 'client_55tc')">client_55tc@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/TCERADEV</a>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/TCERADEV', 'client_55tcm')">client_55tcm@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/TCERADEV</a>
@@ -335,9 +345,10 @@ VANGUARD<br/>
 <div style="margin: 10px; padding:5px; width:450px; height:300px; overflow: scroll; border: 1px solid #666666;">
 <b>What's New.</b>
 <br/><br/>
+<li>CPAS Role Privileges added.</li>
 <li>Logical Child for BATCH - Parameters &amp; Buffer tables.</li>
-<li>Datalink support Logical Link for well-known column names like processid, mkey, calcid, etc.</li>
-<li>CAAT, PSAC and VANGUARD added to database list</li>
+<li>Datalink now supports CPAS Logical Link for well-known column names like processid, mkey, calcid, etc.</li>
+<li>SIGMA, CAAT, PSAC and VANGUARD added to database list</li>
 <li>Search for TreeView and Process</li>
 <li>Link between Treeview and Process</li>
 <li>

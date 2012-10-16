@@ -14,6 +14,29 @@
 	String sql = request.getParameter("sql");
 	String upto = request.getParameter("upto");
 	if (upto == null || upto.equals("")) upto = "1000";
+
+	String key = request.getParameter("key");
+	String value = request.getParameter("value");
+	if (key != null && value != null && sql == null) {
+		value = value.trim();
+		if (key.equals("processid"))
+			sql = "SELECT * FROM BATCH WHERE processid='" + value + "'";
+		else if (key.equals("mkey"))
+			sql = "SELECT * FROM MEMBER WHERE mkey='" + value + "'";
+		else if (key.equals("accountid"))
+			sql = "SELECT * FROM ACCOUNT WHERE accountid='" + value + "'";
+		else if (key.equals("penid"))
+			sql = "SELECT * FROM PENSIONER WHERE penid='" + value + "'";
+		else if (key.equals("personid"))
+			sql = "SELECT * FROM PERSON WHERE personid='" + value + "'";
+		else if (key.equals("calcid"))
+			sql = "SELECT * FROM CALC WHERE calcid='" + value + "'";
+		else if (key.equals("errorid"))
+			sql = "SELECT * FROM ERRORCAT WHERE errorid='" + value + "'";
+		else if (key.equals("requestid"))
+			sql = "SELECT * FROM REQUEST WHERE requestid='" + value + "'";
+	}
+	
 	
 	int maxRow = Integer.parseInt(upto);
 	
@@ -158,7 +181,7 @@
 
 <div class="ui-widget">
 	<label for="tablesearch">Table: </label>
-	<input id="tablesearch" style="width: 300px;"/>
+	<input id="tablesearch" style="width: 200px;"/>
 </div>
 
 	<div id="table-detail"></div>
