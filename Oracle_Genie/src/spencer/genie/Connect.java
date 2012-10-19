@@ -134,7 +134,7 @@ public class Connect implements HttpSessionBindingListener {
         }
         catch (Exception e)
         {
-            System.err.println ("3 Cannot connect to database server " + url + " ," + ipAddress);
+            System.err.println ("3 Cannot connect to database server " + url + " ," + ipAddress + " " + userName);
             e.printStackTrace();
             message = e.getMessage();
         }

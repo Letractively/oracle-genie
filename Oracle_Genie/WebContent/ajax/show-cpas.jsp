@@ -36,6 +36,7 @@
 <a href="cpas-customtreeview.jsp" target="_blank">CPAS Custom Tree View</a> |
 <% } %> 
 <a href="cpas-process.jsp" target="_blank">CPAS Process</a> |
+<a href="cpas-online.jsp" target="_blank">CPAS Online</a> |
 <a href="cpas-rolesec.jsp" target="_blank">Role Privileges</a>
 <br/><br/>
 <table width=400>

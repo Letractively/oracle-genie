@@ -4,17 +4,14 @@
 
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
-	String sdi = request.getParameter("sdi");
-	String treekey = request.getParameter("treekey");
-	String actionId = null;
-	if (sdi!=null && treekey !=null) {
-		actionId = cn.queryOne("SELECT actionid FROM TREEVIEW WHERE SDI = '"+sdi+"' AND TREEKEY='"+treekey+"'");
-	}
+	String qry = "SELECT LEVEL, ITEMID, CAPTION, SWITCH, ACTIONID, TREEKEY, UDATA, TRANSLATE, RATIO FROM TREEVIEW START WITH ITEMID = 0 AND SDI = 'WP' AND SCHEMA = 'TREEVIEW' CONNECT BY PARENTID = PRIOR ITEMID AND SDI = 'WP' AND SCHEMA = 'TREEVIEW' ORDER BY SORTORDER";	
+
+	Query q = new Query(cn, qry);
 %>
 
 <html>
 <head>
-<title>CPAS Tree View</title>
+<title>CPAS Online</title>
 
 <meta name="description"
 	content="Genie is an open-source, web based oracle database schema navigator." />
@@ -26,11 +23,7 @@
 	type="text/javascript"></script>
 <script src="script/genie.js?<%=Util.getScriptionVersion()%>"
 	type="text/javascript"></script>
-<%--
-    <script src="script/data-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
-	<script src="script/main.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
-    <script src="script/query-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
---%>
+
 <link rel="icon" type="image/png" href="image/Genie-icon.png">
 <link rel="stylesheet"
 	href="css/ui-lightness/jquery-ui-1.8.18.custom.css" type="text/css" />
@@ -44,27 +37,37 @@
 //    border:  1px solid #2F557B;
 }
  
-#outer-sdi {
+#outer-tab {
     background-color: #FFFFFF;
     border: 1px solid #999999;
-    width: 250px;
+    width: 200px;
     height: 600px;
     overflow: auto;
     float: left;
     padding: 4px;
 }
 
-#outer-tv {
+#outer-process {
     background-color: #FFFFFF;
     border: 1px solid #999999;
-    width: 300px;
+    width: 600px;
+    height: 60px;
+    overflow: auto;
+    float: left;
+    padding: 4px;
+}
+
+#outer-event {
+    background-color: #FFFFFF;
+    border: 1px solid #999999;
+    width: 200px;
     height: 600px;
     overflow: auto;
     float: left;
     padding: 4px;
 }
 
-#outer-tvstmt {
+#outer-eventview {
     background-color: #FFFFFF;
     border: 1px solid #999999;
     width: 600px;
@@ -84,20 +87,12 @@ $(window).resize(function() {
 
 $(document).ready(function(){
 	checkResize();
-	loadSdi();
-
-<% if (sdi != null ) {%>
-	window.setTimeout(function() {
-		loadTV('<%=sdi%>');
-	}, 250);
-<% } %>
-
-<% if (treekey != null ) {%>
-	window.setTimeout(function() {
-		loadSTMT('<%=sdi%>',<%=actionId%>,'<%=treekey%>');
-	}, 500);
-<% } %>
-
+	
+	$('#inner-tab a').click( function(e) {
+	    $('#inner-tab a.selected').removeClass('selected');
+	    $(this).addClass('selected');
+	});
+	
 })
 
 	function checkResize() {
@@ -106,30 +101,32 @@ $(document).ready(function(){
 	
 		if (h > 500) {
 			var newH = h - 80;
-			var diff = $('#outer-sdi').position().top - $('#outer-sdi').position().top;
+			var diff = $('#outer-tab').position().top - $('#outer-tab').position().top;
 
-			$('#outer-sdi').height(newH);
-			$('#outer-tv').height(newH);
-			$('#outer-tvstmt').height(newH);
+			$('#outer-tab').height(newH);
+//			$('#outer-process').height(newH);
+			$('#outer-event').height(newH - 73);
+			$('#outer-eventview').height(newH - 73);
 			
-			var tmp = w - $('#outer-sdi').width() - $('#outer-tv').width() - 50; 
+//			var tmp = w - $('#outer-tab').width() - $('#outer-process').width() - 50; 
+			var tmp = w - $('#outer-tab').width() - 50; 
 
 			if (tmp < 600) tmp = 600;
-			$('#outer-tvstmt').width(tmp);			
+			$('#outer-process').width(tmp);			
+			$('#outer-eventview').width(tmp- 213);			
 		}
 	}
 
-function loadSdi() {
-	$("#inner-tv").html('');
-	$("#inner-tvstmt").html('');
+function loadProcess(tabName) {
+	$("#inner-process").html('');
+	$("#inner-event").html('');
+	$("#inner-eventview").html('');
 	$.ajax({
-		url: "ajax-cpas/load-sdi.jsp?t=" + (new Date().getTime()),
+		url: "ajax-cpas/load-online-process.jsp?ptype=" + tabName + "&t=" + (new Date().getTime()),
 		success: function(data){
-			$("#inner-sdi").html(data);
-			$('#inner-sdi a').click( function(e) {
-			    //Remove the selected class from all of the links
-			    $('#inner-sdi a.selected').removeClass('selected');
-			    //Add the selected class to the current link
+			$("#inner-process").html(data);
+			$('#inner-process a').click( function(e) {
+			    $('#inner-process a.selected').removeClass('selected');
 			    $(this).addClass('selected');
 			});
 		},
@@ -139,21 +136,21 @@ function loadSdi() {
 	});	
 }
 
-function loadTV(sdi) {
-	selectedSdi = sdi;
-	$("#inner-tvstmt").html('');
+
+function loadEvent(process) {
+	$("#inner-eventview").html('');
 	$.ajax({
-		url: "ajax-cpas/load-TV.jsp?sdi=" + sdi + "&t=" + (new Date().getTime()),
+		url: "ajax-cpas/load-online-event.jsp?process=" + process + "&t=" + (new Date().getTime()),
 		success: function(data){
-			$("#inner-tv").html(data);
-			openAll();
-			$('#inner-tv a').click( function(e) {
+			$("#inner-event").html(data);
+			setHighlight();
+			$('#inner-event a').click( function(e) {
 			    //Remove the selected class from all of the links
-			    $('#inner-tv a.selected').removeClass('selected');
+			    $('#inner-event a.selected').removeClass('selected');
 			    //Add the selected class to the current link
 			    $(this).addClass('selected');
 			});
-			$("#sdi-"+sdi).addClass('selected');			
+			$("#pr-"+process).addClass('selected');	
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -161,19 +158,19 @@ function loadTV(sdi) {
 	});	
 }	
 
-function loadChildTV(sdi, parentid, divName) {
+function loadEventView(process, event) {
 	$.ajax({
-		url: "ajax-cpas/load-TV.jsp?sdi=" + sdi + "&parentid=" + parentid,
+		url: "ajax-cpas/load-EventView.jsp?process=" + process + "&event="+event +"&t=" + (new Date().getTime()),
 		success: function(data){
-			$("#"+divName).html(data);
-			$('#inner-tv a').click( function(e) {
+			$("#inner-eventview").html(data);
+			setHighlight();
+			$('#inner-eventview a').click( function(e) {
 			    //Remove the selected class from all of the links
-			    $('#inner-tv a.selected').removeClass('selected');
+			    $('#inner-eventview a.selected').removeClass('selected');
 			    //Add the selected class to the current link
 			    $(this).addClass('selected');
 			});
-
-
+			$("#ev-"+event).addClass('selected');	
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -181,20 +178,12 @@ function loadChildTV(sdi, parentid, divName) {
 	});	
 }	
 
-function loadSTMT(sdi, actionid, treekey) {
-	$.ajax({
-		url: "ajax-cpas/load-STMT.jsp?sdi=" + sdi + "&actionid=" + actionid + "&t=" + (new Date().getTime()),
-		success: function(data){
-			$("#inner-tvstmt").html(data);
-			var id = treekey.replace(/_/g,"-");
-			$("#"+id).addClass('selected');		
-			//alert(treekey + " " + id);
-		},
-        error:function (jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status + " " + errorThrown);
-        }  
-	});	
-}	
+function openSimul(sdi, tkey) {
+	$("#formSimulSdi").val(sdi);
+	$("#formSimulTkey").val(tkey);
+	$("#formSimul").submit();
+}
+
 
 function toggleChild(sdi, parentid){
 	var imgsrc = $("#img-"+parentid).attr("src");
@@ -269,15 +258,14 @@ function openSimulator() {
 	$("#formSimul").submit();
 }
 
-function tvSearch(keyword) {
-	//keyword = keyword.trim();
+function onSearch(keyword) {
 	keyword = $.trim(keyword);
-	$("#inner-tvstmt").html("<img src='image/loading.gif'/>");
+	$("#inner-eventview").html("<img src='image/loading.gif'/>");
 
 	$.ajax({
 		url: "ajax-cpas/tv-search.jsp?keyword=" + keyword + "&t=" + (new Date().getTime()),
 		success: function(data){
-			$("#inner-tvstmt").html(data);
+			$("#inner-eventview").html(data);
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -285,15 +273,60 @@ function tvSearch(keyword) {
 	});
 }
 
+function processSearch(keyword) {
+	keyword = $.trim(keyword);
+
+	$("#inner-eventview").html("<img src='image/loading.gif'/>");
+	$("#inner-event").html('');
+	$("#inner-eventview").html('');
+
+	$.ajax({
+		url: "ajax-cpas/online-process-search.jsp?keyword=" + keyword + "&t=" + (new Date().getTime()),
+		success: function(data){
+			$("#inner-eventview").html(data);
+		},
+        error:function (jqXHR, textStatus, errorThrown){
+            alert(jqXHR.status + " " + errorThrown);
+        }  
+	});
+}
+
+function setProcess(sdi, process) {
+	$('#inner-tab a.selected').removeClass('selected');
+	window.setTimeout(function() {
+		loadProcess(sdi);
+	}, 200);
+	
+	window.setTimeout(function() {
+		loadEvent(process);
+	}, 400);
+}
+
+function setEvent(sdi, process, event) {
+	$('#inner-tab a.selected').removeClass('selected');
+	window.setTimeout(function() {
+		loadProcess(sdi);
+	}, 200);
+	
+	window.setTimeout(function() {
+		loadEvent(process);
+	}, 400);
+
+	window.setTimeout(function() {
+		loadEventView(process, event);
+	}, 600);
+}
+
 </script>
 
 </head>
+
 
 <body>
 	<table width=100% border=0>
 		<td><img src="image/cpas.jpg"
 			title="Version <%=Util.getVersionDate()%>" /></td>
-		<td><h2 style="color: blue;">CPAS Tree View</h2></td>
+		<td><h2 style="color: blue;">CPAS Online</h2></td>
 		<td>&nbsp;</td>
 
 		<td>
@@ -302,34 +335,79 @@ function tvSearch(keyword) {
 <a href="cpas-process.jsp" target="_blank">CPAS Process</a> 
 		</td>
 		<td><h3><%=cn.getUrlString()%></h3></td>
-		<td align=right nowrap>
-<b>TreeView Search</b> <input id="globalSearch" style="width: 200px;" onChange="tvSearch($('#globalSearch').val())"/>
-<!-- <a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
- -->
-<input type="button" value="Find" onClick="Javascript:tvSearch($('#globalSearch').val())"/>
-	</table>
+
+<td align=right nowrap>
+<b>Search</b> <input id="globalSearch" style="width: 200px;"/>
+<input type="button" value="Find" onClick="Javascript:processSearch($('#globalSearch').val())"/>
+</td>
+
+ 	</table>
 
 	<table border=0 cellspacing=0>
 		<td valign=top>
-			<div id="outer-sdi">
-				<div id="inner-sdi">
+			<div id="outer-tab">
+				<div id="inner-tab">
+<%
+	String id = Util.getId();
+%>
+<b>CPAS Online Tab</b>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
+<div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
+<br/>
+			
+<%
+	q.rewind(1000, 1);
+	int rowCnt = 0;
+	while (q.next()) {
+		//LEVEL, ITEMID, CAPTION, SWITCH, ACTIONID, TREEKEY, UDATA, TRANSLATE, RATIO
+		String caption = q.getValue("CAPTION");
+		String level = q.getValue("LEVEL");
+		String actionid = q.getValue("ACTIONID");
+		if (level.equals("1") || level.equals("2")) continue;
+		
+		rowCnt ++;
+		if (level.equals("3")) {
+%>
+<br/>
+<b><%= caption %></b><br/>
+<%
+		} else {
+			
+			qry = "SELECT actionstmt FROM TREEACTION_STMT WHERE SDI = 'WP' AND ACTIONID=" + actionid + " AND ACTIONTYPE='AS'"; 	
+			String actionName = cn.queryOne(qry);
+			
+			qry = "SELECT CAPTION, TREEKEY FROM TREEVIEW where sdi='WP' and actionid=" + actionid; 				
+%>
+	<span style="margin-left:20px;"></span><a href="Javascript:loadProcess('<%= actionName %>')" title="<%= actionName %>"><%= caption %></a><br/>
+<%
+		}
+	}
+%>
 				</div>
 			</div>
 		</td>
 		<td valign=top>
-			<div id="outer-tv">
-				<div id="inner-tv"></div>
+			<div id="outer-process">
+				<div id="inner-process"></div>
 			</div>
-		</td>
-		<td valign=top>
-			<div id="outer-tvstmt">
-				<div id="inner-tvstmt"></div>
+			<br/>
+			<div id="outer-event" style="margin-top: 3px;">
+				<div id="inner-event"></div>
+			</div>
+
+			<div id="outer-eventview" style="margin-top: 3px; margin-left: 3px;">
+				<div id="inner-eventview"></div>
 			</div>
 		</td>
 	</table>
 
 <form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
 <input id="sql" name="sql" type="hidden"/>
+</form>
+
+<form id="formSimul" target="_blank" action="cpas-simul.jsp">
+<input id="formSimulSdi" name="sdi" type="hidden"/>
+<input id="formSimulTkey" name="treekey" type="hidden"/>
 </form>
 
 <script type="text/javascript">
