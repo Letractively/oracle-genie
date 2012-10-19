@@ -44,7 +44,7 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 
 	String sql = cn.getPKLinkSql(table, key, rowid);
 //	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nDatalink " + sql);
-	System.out.println("Datalink " + sql);
+	System.out.println("*** Datalink " + sql);
 /*
 	Query q = cn.queryCache.getQueryObject(sql);
 	if (q==null) {

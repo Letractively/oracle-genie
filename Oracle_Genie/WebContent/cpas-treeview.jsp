@@ -85,10 +85,19 @@ $(window).resize(function() {
 $(document).ready(function(){
 	checkResize();
 	loadSdi();
+
 <% if (sdi != null ) {%>
-	loadTV('<%=sdi%>');
-	loadSTMT('<%=sdi%>',<%=actionId%>,'<%=treekey%>');
-<% } %>	
+	window.setTimeout(function() {
+		loadTV('<%=sdi%>');
+	}, 250);
+<% } %>
+
+<% if (treekey != null ) {%>
+	window.setTimeout(function() {
+		loadSTMT('<%=sdi%>',<%=actionId%>,'<%=treekey%>');
+	}, 500);
+<% } %>
+
 })
 
 	function checkResize() {

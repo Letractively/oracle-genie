@@ -75,12 +75,19 @@ $(document).ready(function(){
 <% if (id != null ) {%>
 	loadProcess('<%=id%>');
 <% } %>
+
+
+window.setTimeout(function() {
 <% if (process != null ) {%>
-loadEvent('<%=process%>');
+	loadEvent('<%=process%>');
 <% } %>
-<% if (event != null ) {%>
-loadEventView('<%=process%>','<%=event%>');
-<% } %>
+}, 250);
+
+window.setTimeout(function() {
+	<% if (event != null ) {%>
+		loadEventView('<%=process%>','<%=event%>');
+	<% } %>
+	}, 500);
 })
 
 	function checkResize() {
@@ -186,7 +193,15 @@ function loadEventView(process, event) {
 	});	
 }	
 
+/*
 function openSimulator() {
+	$("#formSimul").submit();
+}
+*/
+
+function openSimul(sdi, tkey) {
+	$("#formSimulSdi").val(sdi);
+	$("#formSimulTkey").val(tkey);
 	$("#formSimul").submit();
 }
 
@@ -255,6 +270,11 @@ function processSearch(keyword) {
 
 <form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
 <input id="sql" name="sql" type="hidden"/>
+</form>
+
+<form id="formSimul" target="_blank" action="cpas-simul.jsp">
+<input id="formSimulSdi" name="sdi" type="hidden"/>
+<input id="formSimulTkey" name="treekey" type="hidden"/>
 </form>
 
 <script type="text/javascript">
