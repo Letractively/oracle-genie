@@ -9,7 +9,7 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	String ptype = request.getParameter("ptype");
 	
-	String qry = "SELECT * FROM CPAS_PROCESS WHERE TYPE = '" + ptype + "' ORDER BY POSITION";
+	String qry = "SELECT * FROM CPAS_PROCESS WHERE TYPE = '" + ptype + "' AND SECLABEL != 'SC_NEVER' ORDER BY POSITION";
 	Query q = new Query(cn, qry, false);
 	
 	String qry2 = "SELECT NAME FROM CPAS_TAB WHERE TAB='" + ptype+"'";

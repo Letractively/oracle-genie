@@ -449,7 +449,7 @@ Please download the latest community version here:<br/>
 
 <%= Util.getVersionDate() %><br/>
 Build: <%= Util.getBuildNo() %><br/>
-Spencer Hwang - the creator of Genie<br/>
+Spencer Hwang<br/>
 <!-- <a href="mailto:spencer.hwang@gmail.com">spencer.hwang@gmail.com</a>
  --><a href="mailto:spencerh@cpas.com">spencerh@cpas.com</a>
 

@@ -7,15 +7,51 @@
 %>
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
-	String keyword = request.getParameter("keyword");
-	String key = keyword.toUpperCase().trim();
+	String key = request.getParameter("key");
 
-	String qry = "SELECT * FROM CPAS_PROCESS WHERE UPPER(NAME) LIKE '%" + key + "%' OR SECLABEL = '"+key +"' ORDER BY type, position"; 
+	String qry = "SELECT * FROM CPAS_PROCESS WHERE SECLABEL = '"+key +"' ORDER BY type, position"; 
 	
 	Query q = new Query(cn, qry, false);
 	
 %>
-<b>CPAS Process search for "<%= keyword %>"</b>
+
+<html>
+<head>
+<title>CPAS Security Label - <%= key %></title>
+
+<meta name="description"
+	content="Genie is an open-source, web based oracle database schema navigator." />
+<meta name="keywords" content="Oracle Web Database OpenSource JDBC" />
+<meta name="author" content="Spencer Hwang" />
+
+<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script src="script/jquery-ui-1.8.18.custom.min.js"
+	type="text/javascript"></script>
+<script src="script/genie.js?<%=Util.getScriptionVersion()%>"
+	type="text/javascript"></script>
+
+<link rel="icon" type="image/png" href="image/Genie-icon.png">
+<link rel="stylesheet"
+	href="css/ui-lightness/jquery-ui-1.8.18.custom.css" type="text/css" />
+<link rel='stylesheet' type='text/css'
+	href='css/style.css?<%=Util.getScriptionVersion()%>'>
+
+<style>
+</style>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	setHighlight();
+})
+</script>
+
+</head>
+
+<body>
+
+
+<b><%= key %></b>
 <br/><br/>
 
 <b>Process</b>
@@ -51,7 +87,7 @@
 <tr class="simplehighlight">
 	<td class="<%= rowClass%>" nowrap><%= type %><br/><span class='cpas'><%= typeName %></span></td>
 	<td class="<%= rowClass%>" nowrap><%= process %></td>
-	<td class="<%= rowClass%>" nowrap><a href="cpas-process.jsp?id=<%=type%>&process=<%=process%>"><%= name %></a></td>
+	<td class="<%= rowClass%>" nowrap><a target="_blank" href="cpas-process.jsp?id=<%=type%>&process=<%=process%>"><%= name %></a></td>
 	<td class="<%= rowClass%>" nowrap><%= seclabel %></td>
 </tr>
 <%
@@ -61,7 +97,7 @@
 <br/>
 
 <%
-	String qry2 = "SELECT A.*, (SELECT TYPE FROM CPAS_PROCESS WHERE process=A.process) TYPE FROM CPAS_PROCESS_EVENT A WHERE UPPER(NAME) LIKE '%" + key + "%' OR SECLABEL = '"+key +"' ORDER BY process, position"; 
+	String qry2 = "SELECT A.*, (SELECT TYPE FROM CPAS_PROCESS WHERE process=A.process) TYPE FROM CPAS_PROCESS_EVENT A WHERE SECLABEL = '"+key +"' ORDER BY process, position"; 
 	
 	Query q2 = new Query(cn, qry2, false);
 	
@@ -107,7 +143,7 @@
 	<td class="<%= rowClass%>" nowrap><%= type %><br/><span class='cpas'><%= typeName %></span></td>
 	<td class="<%= rowClass%>" nowrap><%= process %><br/><span class='cpas'><%= processName %></span></td>
 	<td class="<%= rowClass%>" nowrap><%= event %></td>
-	<td class="<%= rowClass%>" nowrap><a href="cpas-process.jsp?id=<%=type%>&process=<%=process%>&event=<%=event%>"><%= name %></a></td>
+	<td class="<%= rowClass%>" nowrap><a target="_blank" href="cpas-process.jsp?id=<%=type%>&process=<%=process%>&event=<%=event%>"><%= name %></a></td>
 	<td class="<%= rowClass%>" nowrap><%= seclabel %></td>
 	<td class="<%= rowClass%>" nowrap><%= action %><br/><span class='cpas'><%= actionName %></span></td>
 </tr>
@@ -115,3 +151,51 @@
 	} 
 %>
 </table>
+
+<br/>
+
+<%
+	qry = "SELECT * FROM TREEVIEW WHERE (SDI, SCHEMA, ACTIONID) IN (SELECT SDI, SCHEMA, ACTIONID FROM " +
+		" TREEACTION_STMT WHERE ACTIONTYPE IN ('AW') AND ACTIONSTMT = '" + key + "') ORDER BY sdi, caption"; 
+//System.out.println(qry);	
+	Query q3 = new Query(cn, qry, false);
+	
+%>
+<b>Tree View</b>
+<br/>
+
+<table id="dataTable" border=1 class="gridBody">
+<tr>
+	<th class="headerRow">SDI</th>
+	<th class="headerRow">Caption</th>
+	<th class="headerRow">Treekey</th>
+ </tr>
+
+<%
+	rowCnt = 0;
+	q3.rewind(1000, 1);
+	while (q3.next() && rowCnt < 1000) {
+		String sdi = q3.getValue("sdi");
+		String caption = q3.getValue("caption");
+		String treekey = q3.getValue("treekey");
+
+		rowCnt ++;
+		String rowClass = "oddRow";
+		if (rowCnt%2 == 0) rowClass = "evenRow";	
+		
+		String sdiName = cn.queryOne("SELECT NAME FROM CPAS_SDI WHERE SDI='" + sdi + "'");
+%>
+<tr class="simplehighlight">
+	<td class="<%= rowClass%>" nowrap><%= sdi %></a><br/><span class='cpas'><%= sdiName %></span></td>
+	<td class="<%= rowClass%>" nowrap><a target="_blank" href="cpas-treeview.jsp?sdi=<%=sdi%>&treekey=<%=treekey%>"><%= caption %></a></td>
+	<td class="<%= rowClass%>" nowrap><%= treekey %></td>
+</tr>
+<%
+	} 
+%>
+</table>
+<br/>
+
+
+</body>
+</html>
