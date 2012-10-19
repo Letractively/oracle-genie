@@ -206,7 +206,8 @@ function openSimul(sdi, tkey) {
 }
 
 function processSearch(keyword) {
-	keyword = keyword.trim();
+	//keyword = keyword.trim();
+	keyword = $.trim(keyword);
 	$("#inner-process").html("<img src='image/loading.gif'/>");
 	$("#inner-event").html('');
 	$("#inner-eventview").html('');

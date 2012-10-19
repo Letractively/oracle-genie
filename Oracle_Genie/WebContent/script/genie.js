@@ -628,7 +628,8 @@
 	}	
 	
 	function globalSearch(keyword) {
-		keyword = keyword.trim();
+		//keyword = keyword.trim();
+		keyword = $.trim(keyword);
 		saveForNavigation();
 		$("#inner-result1").html("<img src='image/loading.gif'/>");
 

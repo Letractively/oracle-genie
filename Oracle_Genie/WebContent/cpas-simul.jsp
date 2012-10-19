@@ -339,14 +339,19 @@ function submitSub() {
 
 <body>
 
-<img src="image/icon_query.png" align="middle"/> <b>CPAS Simulator</b>
-&nbsp;&nbsp;
-<%= cn.getUrlString() %>
+	<table border=0>
+		<td><img src="image/cpas.jpg"
+			title="Version <%=Util.getVersionDate()%>" /></td>
+		<td><h2 style="color: blue;">CPAS Simulator</h2></td>
+		<td>&nbsp;</td>
 
-&nbsp;&nbsp;&nbsp;
-<a href="query.jsp" target="_blank">Query</a> |
-<a href="worksheet.jsp" target="_blank">Work Sheet</a>
-
+		<td align=left><h3><%=cn.getUrlString()%></h3></td>
+		<td>
+		<a href="index.jsp">Home</a> |
+		<a href="query.jsp" target="_blank">Query</a>
+		</td>
+	</table>
+	
 <br/><br/>
 
 

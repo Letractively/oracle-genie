@@ -345,6 +345,7 @@ VANGUARD<br/>
 <div style="margin: 10px; padding:5px; width:450px; height:300px; overflow: scroll; border: 1px solid #666666;">
 <b>What's New.</b>
 <br/><br/>
+<li>CPAS Online added.</li>
 <li>CPAS Role Privileges added.</li>
 <li>Logical Child for BATCH - Parameters &amp; Buffer tables.</li>
 <li>Datalink now supports CPAS Logical Link for well-known column names like processid, mkey, calcid, etc.</li>

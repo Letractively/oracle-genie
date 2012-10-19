@@ -87,6 +87,7 @@ if (tv!=null && sdi!=null) {
 	lupd = cn.queryOne("SELECT actionstmt FROM TREEACTION_STMT WHERE (sdi, actionid) in (SELECT sdi, actionid FROM TREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv +"') AND actiontype='DE'");
 	ldel = cn.queryOne("SELECT actionstmt FROM TREEACTION_STMT WHERE (sdi, actionid) in (SELECT sdi, actionid FROM TREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv +"') AND actiontype='DR'");
 	
+	read = read==null?"":read;
 	uadd = uadd==null?"":uadd;
 	uupd = uupd==null?"":uupd;
 	udel = udel==null?"":udel;

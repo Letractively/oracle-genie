@@ -352,7 +352,8 @@ function callserver() {
 <a href="javascript:showCPAS()"><img src="image/cpas.jpg" width=12 height=12>
 CPAS Catalogs</a> | 
 <a href="cpas-treeview.jsp" target=_blank>Treeview</a> |
-<a href="cpas-process.jsp" target=_blank>Process</a>
+<a href="cpas-process.jsp" target=_blank>Process</a> |
+<a href="cpas-online.jsp" target=_blank>Online</a>
 <% } %>
 </td>
 <td align=right nowrap>
