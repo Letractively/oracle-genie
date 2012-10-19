@@ -9,7 +9,7 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	String process = request.getParameter("process");
 
-	String qry = "SELECT * FROM CPAS_PROCESS_EVENT WHERE PROCESS = '" + process + "' ORDER BY POSITION"; 
+	String qry = "SELECT * FROM CPAS_PROCESS_EVENT WHERE PROCESS = '" + process + "' AND SECLABEL != 'SC_NEVER' ORDER BY POSITION"; 
 	
 	Query q = new Query(cn, qry, false);
 	
@@ -26,6 +26,7 @@
 <tr>
 	<th class="headerRow">Event Name</th>
 	<th class="headerRow">Event</th>
+	<th class="headerRow">PEvent</th>
 	<th class="headerRow">Position</th>
 	<th class="headerRow">Action</th>
 	<th class="headerRow">Privilege</th>
@@ -41,6 +42,7 @@
 	q.rewind(1000, 1);
 	while (q.next() && rowCnt < 1000) {
 		String event = q.getValue("event");
+		String pevent = q.getValue("pevent");
 		String name = q.getValue("name");
 		String position = q.getValue("position");
 		String action = q.getValue("action");
@@ -56,8 +58,9 @@
 		String secName = cn.queryOne("SELECT CAPTION FROM SECSWITCH WHERE LABEL ='" + seclabel + "'");
 %>
 <tr class="simplehighlight">
-	<td class="<%= rowClass%>" nowrap><a id="ev-<%= event %>" href="javascript:loadEventView('<%= process %>','<%= event %>');"><%= name %></a></td>
+	<td class="<%= rowClass%>" nowrap><%= pevent==null?"":"&nbsp;&nbsp;&nbsp;&nbsp;" %><a id="ev-<%= event %>" href="javascript:loadEventView('<%= process %>','<%= event %>');"><%= name %></a></td>
 	<td class="<%= rowClass%>" nowrap><%= event==null?"":event %></td>
+	<td class="<%= rowClass%>" nowrap><%= pevent==null?"":pevent %></td>
 	<td class="<%= rowClass%>" nowrap><%= position==null?"":position %></td>
 	<td class="<%= rowClass%>" nowrap><%= action==null?"":action + " <span class='cpas'>" + actionName + "</span>"%></td>
 	<td class="<%= rowClass%>" nowrap><%= seclabel==null?"":seclabel + " <span class='cpas'>" + secName + "</span>"%></td>
