@@ -68,6 +68,8 @@ public class Connect implements HttpSessionBindingListener {
 	public StringCache stringCache;
 	public TableDetailCache tableDetailCache;
 	public ContentSearch contentSearch;
+	public ContentSearchView contentSearchView;
+	public ContentSearchTrigger contentSearchTrigger;
 	
 	private boolean workSheetTableCreated = false;
 	private String savedHistory = "";
@@ -129,6 +131,8 @@ public class Connect implements HttpSessionBindingListener {
             stringCache = StringCache.getInstance();
             tableDetailCache = TableDetailCache.getInstance();
             contentSearch = ContentSearch.getInstance();
+            contentSearchView = ContentSearchView.getInstance();
+            contentSearchTrigger = ContentSearchTrigger.getInstance();
 
             loadData();
         }
