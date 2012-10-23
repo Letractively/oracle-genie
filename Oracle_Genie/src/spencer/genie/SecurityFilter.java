@@ -74,6 +74,8 @@ public class SecurityFilter implements Filter {
 		chain.doFilter(request, response);
 		if (servletPath.startsWith("/save-history.jsp")) return;
 		if (servletPath.startsWith("/ajax/auto-complete")) return;
+		if (servletPath.startsWith("/ajax/search-progress.jsp")) return;
+
 //		if (servletPath.startsWith("/ajax/qry-simple.jsp")) return;
 /*		
 		String qry = req.getQueryString();
