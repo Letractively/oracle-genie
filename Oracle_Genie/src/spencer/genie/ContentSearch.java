@@ -38,6 +38,13 @@ public class ContentSearch {
 	
 	public List<String> search(Connect cn, String searchKeyword, String inclTable, String exclTable, String owner, String matchType, String caseType) {
 
+		System.out.println("ContentSearch searchKeyword=" + searchKeyword + ",inclTable=" + inclTable +
+				",exclTable=" + exclTable +
+				",owner=" + owner +
+				",matchType=" + matchType +
+				",caseType=" + caseType 
+				);
+		
 		this.cn = cn;
 		
 		this.searchKeyword = searchKeyword;
@@ -186,7 +193,11 @@ public class ContentSearch {
 					}
 				}
 				
-				if (foundColumn != null) break;
+				if (foundColumn != null) {
+					String temp = q.getValue(1);
+					System.out.println("found:" + temp);
+					break;
+				}
 			}
 			skipTable = false;
 			q.close();
