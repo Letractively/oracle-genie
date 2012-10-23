@@ -4,7 +4,9 @@
 
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
-	String qry = "SELECT LEVEL, ITEMID, CAPTION, SWITCH, ACTIONID, TREEKEY, UDATA, TRANSLATE, RATIO FROM TREEVIEW START WITH ITEMID = 0 AND SDI = 'WP' AND SCHEMA = 'TREEVIEW' CONNECT BY PARENTID = PRIOR ITEMID AND SDI = 'WP' AND SCHEMA = 'TREEVIEW' ORDER BY SORTORDER";	
+	String qry = "SELECT LEVEL, ITEMID, CAPTION, SWITCH, ACTIONID, TREEKEY, UDATA, TRANSLATE, RATIO FROM TREEVIEW A START WITH ITEMID = 0 AND SDI = 'WP' AND SCHEMA = 'TREEVIEW' CONNECT BY PARENTID = PRIOR ITEMID AND SDI = 'WP' AND SCHEMA = 'TREEVIEW' " +
+		" AND EXISTS (SELECT 1 FROM TREEACTION_STMT WHERE SDI=A.SDI AND ACTIONID=A.ACTIONID AND ACTIONTYPE='AW' AND ACTIONSTMT!='SC_NEVER') " +
+		" ORDER BY SORTORDER";	
 
 	Query q = new Query(cn, qry);
 %>
@@ -160,7 +162,7 @@ function loadEvent(process) {
 
 function loadEventView(process, event) {
 	$.ajax({
-		url: "ajax-cpas/load-EventView.jsp?process=" + process + "&event="+event +"&t=" + (new Date().getTime()),
+		url: "ajax-cpas/load-online-eventview.jsp?process=" + process + "&event="+event +"&t=" + (new Date().getTime()),
 		success: function(data){
 			$("#inner-eventview").html(data);
 			setHighlight();
@@ -293,6 +295,8 @@ function processSearch(keyword) {
 
 function setProcess(sdi, process) {
 	$('#inner-tab a.selected').removeClass('selected');
+	$('#inner-tab [title="' + sdi + '"]').addClass('selected');
+//	$('#inner-tab a').addClass('selected');
 	window.setTimeout(function() {
 		loadProcess(sdi);
 	}, 200);
@@ -304,6 +308,7 @@ function setProcess(sdi, process) {
 
 function setEvent(sdi, process, event) {
 	$('#inner-tab a.selected').removeClass('selected');
+	$('#inner-tab [title="' + sdi + '"]').addClass('selected');
 	window.setTimeout(function() {
 		loadProcess(sdi);
 	}, 200);

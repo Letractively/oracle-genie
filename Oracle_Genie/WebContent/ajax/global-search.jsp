@@ -6,7 +6,7 @@
 	pageEncoding="utf-8"
 %>
 <%
-	String keyword = request.getParameter("keyword").toUpperCase().trim();
+	String keyword = request.getParameter("keyword").toUpperCase().trim().replaceAll("'", "''");
 	Connect cn = (Connect) session.getAttribute("CN");
 		
 	String catalog = cn.getSchemaName();

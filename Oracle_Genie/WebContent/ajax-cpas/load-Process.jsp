@@ -41,7 +41,8 @@
 <!-- 	
 	<th class="headerRow">Logflag</th>
 	<th class="headerRow">Condition</th>
- --></tr>
+ -->
+ </tr>
 
 <%
 	int rowCnt = 0;

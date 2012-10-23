@@ -43,10 +43,13 @@
 		if (rowCnt%2 == 0) rowClass = "evenRow";		
 		String actionName = cn.queryOne("SELECT NAME FROM CPAS_ACTION WHERE ACTION ='" + action + "'");
 		String secName = cn.queryOne("SELECT CAPTION FROM SECSWITCH WHERE LABEL ='" + seclabel + "'");
+		
+		if (action.equals("NN")) actionName = "";
 %>
 
 <%= pevent==null?"":"&nbsp;&nbsp;&nbsp;&nbsp;" %>
-<a id="ev-<%= event %>" href="javascript:loadEventView('<%= process %>','<%= event %>');" title="<%= process + "," + event %>"><%= name %></a>
+<a id="ev-<%= event %>" href="javascript:loadEventView('<%= process %>','<%= event %>');" title="<%= process + "," + event %>  <%= actionName %>"><%= name %></a>
+
 <br/>
 <%
 	} 
