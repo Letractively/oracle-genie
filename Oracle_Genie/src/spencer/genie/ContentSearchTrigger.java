@@ -9,6 +9,8 @@ import java.util.StringTokenizer;
 public class ContentSearchTrigger {
 
 	private Connect cn;
+	private static boolean running = false;
+	private static String progressStr;
 	
 	private String searchKeyword;
 	private int totalTableCount;
@@ -16,7 +18,11 @@ public class ContentSearchTrigger {
 	private String currentTable;
 	private int currentRow;
 
-	public ContentSearchTrigger() {
+	private ContentSearchTrigger() {
+	}
+	
+	public static ContentSearchTrigger getInstance() {
+		return new ContentSearchTrigger(); 
 	}
 	
 	public List<String> search(Connect cn, String searchKeyword) {
@@ -30,22 +36,29 @@ public class ContentSearchTrigger {
 		
 		String qry = "SELECT TRIGGER_NAME, TABLE_NAME FROM USER_TRIGGERS ORDER BY 1";
 		
+		running = true;
+		this.progressStr = "";
+
 		List<String[]> tlist = cn.query(qry);
 		totalTableCount = tlist.size();
 		currentTableIndex = 0;
 		for (String[] row : tlist) {
-			String tname = row[2];
+			//String tname = row[2];
 			String trgname = row[1];
 			currentTableIndex ++;
-			currentTable = tname;
+			currentTable = trgname;
 
+			progressStr = trgname + "<br/>" + progressStr;
 			String foundColumn = searchTable(trgname);
 			if (foundColumn!=null) {
 				//System.out.println(tname + "." + foundColumn);
 				tables.add(trgname);
+				progressStr = "&nbsp;&nbsp;&nbsp;<b>" + trgname + "." + foundColumn.toLowerCase() + "</b><br/>" + progressStr;
 			}
+			if (!running) break;
 		}
 
+		running = false;
 		return tables;
 	}
 	
@@ -60,6 +73,7 @@ public class ContentSearchTrigger {
 		try {
 			int cnt=0;
 			while (rs !=null && rs.next() && cnt <= Def.MAX_SEARCH_ROWS) {
+				if (!running) break; 
 				cnt++;
 				currentRow = cnt;
 				for  (int i = 1; i<= rs.getMetaData().getColumnCount(); i++){
@@ -84,4 +98,34 @@ public class ContentSearchTrigger {
 		
 		return foundColumn;
 	}
+	
+	public void cancel() {
+		running = false; 
+	}
+	
+	public String getProgress() {
+		int percent = 0;
+		
+		if (totalTableCount >0)
+			percent = (100 * currentTableIndex) / totalTableCount;
+		
+		String status = "Processing " + currentTableIndex + " of " + totalTableCount + "<br/>" +
+				currentTable + " " + currentRow + "<br/>";
+
+		if (!running)
+			status = "Finished " + currentTableIndex + " of " + totalTableCount +
+				"<br/>";
+		
+		status += 
+				"<div class='meter-wrap' id='meter-ex1' style='cursor: pointer'>"+
+				"<div class='meter-value' style='background-color: rgb(77, 164, 243); width: " + percent + "%; '>"+
+				"<div class='meter-text'>" + percent + "%</div>" +
+				"</div>" +
+				"</div><br/>";	
+
+		
+		return status + progressStr;
+		
+	}
+	
 }
