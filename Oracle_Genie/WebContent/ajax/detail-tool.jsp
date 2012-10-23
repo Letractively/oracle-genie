@@ -58,8 +58,16 @@
 
 <% } %>
 
-<% if (tool.equalsIgnoreCase("search db content")) { %>
+<% if (tool.equalsIgnoreCase("search table")) { %>
 <jsp:include page="content-search.jsp"/>
+<% } %>
+
+<% if (tool.equalsIgnoreCase("search view")) { %>
+<jsp:include page="content-search-view.jsp"/>
+<% } %>
+
+<% if (tool.equalsIgnoreCase("search trigger")) { %>
+<jsp:include page="content-search-trigger.jsp"/>
 <% } %>
 
 <% if (tool.equalsIgnoreCase("user defined page")) { %>

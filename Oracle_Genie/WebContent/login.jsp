@@ -231,6 +231,7 @@ BALTIMOR<br/>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR', 'client_55bld')">client_55bld@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR</a>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR', 'client_55blt')">client_55blt@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR</a>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR', 'client_55blm')">client_55blm@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR', 'client_55BLC4')">client_55BLC4@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR</a>
 <br/>
 
 BMO<br/>
@@ -345,6 +346,7 @@ VANGUARD<br/>
 <div style="margin: 10px; padding:5px; width:450px; height:300px; overflow: scroll; border: 1px solid #666666;">
 <b>What's New.</b>
 <br/><br/>
+<li>Search view, trigger added.</li>
 <li>CPAS Online added.</li>
 <li>CPAS Role Privileges added.</li>
 <li>Logical Child for BATCH - Parameters &amp; Buffer tables.</li>
