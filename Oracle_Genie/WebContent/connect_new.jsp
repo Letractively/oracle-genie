@@ -6,6 +6,14 @@
 %>
 
 <%
+String imgList[] = {
+		"http://attachments.techguy.org/attachments/151479d1243586439/fall-scene-mn-9-07.jpg",
+		"http://www.johnnyjet.com/wp-content/uploads/2011/12/Lindsay-Taub-Spokane-Fall-2011-23.jpg",
+		"http://4.bp.blogspot.com/_LANuzRARDf4/TKKPO3TwA9I/AAAAAAAAAT8/mF4Dblgbqjw/s1600/Autumn_Forest_in_the_Sun.jpg",
+		"http://goodtaste.tv/wp-content/uploads/2012/10/breckenridge-autumn-ale_preview-640x480.jpg",
+		"http://cache.virtualtourist.com/6/4578346-Autumn_Foliage_at_Guinsa_Temple_South_Korea.jpg",
+	};
+
 	Connect cn = (Connect) session.getAttribute("CN");
 	// if connected, redirect to home
 	if (cn!=null && cn.isConnected()) {
@@ -69,7 +77,7 @@ function slideSwitch() {
 }
 
 $(function() {
-    setInterval( "slideSwitch()", 2000 );
+    setInterval( "slideSwitch()", 2500 );
 });
 
 function stopShow() {
@@ -100,12 +108,20 @@ function stopShow() {
 	- Tables, Comments, Constraints, Primary &amp; Foreign keys.
 	
 <div id="slideshow">
-    <img src="image/nature1.jpg" alt="" class="active" />
+<!--     <img src="image/nature1.jpg" alt="" class="active" />
     <img src="image/nature2.jpg" alt=""/>
     <img src="image/nature3.jpg" alt=""/>
     <img src="image/nature4.jpg" alt=""/>
     <img src="image/nature5.jpg" alt=""/>
+
+ -->
+    <img src="<%= imgList[0] %>" alt="" class="active" />
+    <img src="<%= imgList[1] %>" />
+    <img src="<%= imgList[2] %>" />
+    <img src="<%= imgList[3] %>" />
+    <img src="<%= imgList[4] %>" />
 </div>
+
 <img id="waiting" src="image/waiting_big.gif" class="waitontop">  
 	
   </body>

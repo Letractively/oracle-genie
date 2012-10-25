@@ -17,6 +17,10 @@
 	
 	Query q0 = new Query(cn, qry0, false);
 	
+	String defaultSdi = null;
+	String defaultActionId = null;
+	String defaultTv = null;;	
+	
 	String pname = cn.queryOne("SELECT NAME FROM CPAS_PROCESS WHERE PROCESS='" + process+"'");
 	String id = Util.getId();
 %>
@@ -170,11 +174,24 @@
 		String rowClass = "oddRow";
 		if (rowCnt%2 == 0) rowClass = "evenRow";	
 		
+		String actionId = cn.queryOne("SELECT actionid FROM TREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv +"'");
 		String secName = cn.queryOne("SELECT CAPTION FROM SECSWITCH WHERE LABEL ='" + seclabel + "'");
 		String sdiName = cn.queryOne("SELECT NAME FROM CPAS_SDI WHERE SDI ='" + sdi + "'");
+
+		if (defaultActionId==null && actionId != null /*position.equals("0")*/) {
+			defaultSdi = sdi;
+			defaultActionId = actionId;
+			defaultTv = tv;;	
+		}
 %>
 <tr class="simplehighlight">
-	<td class="<%= rowClass%>" nowrap><%= descr==null?"":descr %></td>
+	<td class="<%= rowClass%>" nowrap>
+	<% if (actionId==null) { %>
+		<%= descr==null?"":descr %>
+	<% } else { %>
+		<a href="javascript:loadSTMT('<%= sdi %>', <%= actionId %>, '<%= tv %>')"><%= descr==null?"":descr %></a>
+	<% } %>
+	</td>
 	<td class="<%= rowClass%>" nowrap><%= position %></td>
 <%-- 	<td class="<%= rowClass%>" nowrap><%= sdi==null?"":sdi /* + " <span class='cpas'>" + sdiName + "</span>" */%></td>
  --%>
@@ -189,17 +206,19 @@ String lupd = "";
 String ldel = "";
 
 //cn.queryOne("SELECT actionstmt")
-if (tv!=null && sdi!=null) {
+if (tv!=null && sdi!=null && actionId != null) {
+	
 	qry = "SELECT * FROM TREEACTION_STMT WHERE (sdi, actionid) in (SELECT sdi, actionid FROM TREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv +"')";
 	id = Util.getId();
 
-	read = cn.queryOne("SELECT actionstmt FROM TREEACTION_STMT WHERE (sdi, actionid) in (SELECT sdi, actionid FROM TREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv +"') AND actiontype='AW'");
-	uadd = cn.queryOne("SELECT actionstmt FROM TREEACTION_STMT WHERE (sdi, actionid) in (SELECT sdi, actionid FROM TREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv +"') AND actiontype='MN'");
-	uupd = cn.queryOne("SELECT actionstmt FROM TREEACTION_STMT WHERE (sdi, actionid) in (SELECT sdi, actionid FROM TREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv +"') AND actiontype='ME'");
-	udel = cn.queryOne("SELECT actionstmt FROM TREEACTION_STMT WHERE (sdi, actionid) in (SELECT sdi, actionid FROM TREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv +"') AND actiontype='MR'");
-	ladd = cn.queryOne("SELECT actionstmt FROM TREEACTION_STMT WHERE (sdi, actionid) in (SELECT sdi, actionid FROM TREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv +"') AND actiontype='DN'");
-	lupd = cn.queryOne("SELECT actionstmt FROM TREEACTION_STMT WHERE (sdi, actionid) in (SELECT sdi, actionid FROM TREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv +"') AND actiontype='DE'");
-	ldel = cn.queryOne("SELECT actionstmt FROM TREEACTION_STMT WHERE (sdi, actionid) in (SELECT sdi, actionid FROM TREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv +"') AND actiontype='DR'");
+	read = cn.queryOne("SELECT actionstmt FROM TREEACTION_STMT WHERE sdi='"+sdi+"' AND actionid="+actionId+" AND actiontype='AW'");
+	uadd = cn.queryOne("SELECT actionstmt FROM TREEACTION_STMT WHERE sdi='"+sdi+"' AND actionid="+actionId+" AND actiontype='MN'");
+	uupd = cn.queryOne("SELECT actionstmt FROM TREEACTION_STMT WHERE sdi='"+sdi+"' AND actionid="+actionId+" AND actiontype='ME'");
+	udel = cn.queryOne("SELECT actionstmt FROM TREEACTION_STMT WHERE sdi='"+sdi+"' AND actionid="+actionId+" AND actiontype='MR'");
+
+	ladd = cn.queryOne("SELECT actionstmt FROM TREEACTION_STMT WHERE sdi='"+sdi+"' AND actionid="+actionId+" AND actiontype='DN'");
+	lupd = cn.queryOne("SELECT actionstmt FROM TREEACTION_STMT WHERE sdi='"+sdi+"' AND actionid="+actionId+" AND actiontype='DE'");
+	ldel = cn.queryOne("SELECT actionstmt FROM TREEACTION_STMT WHERE sdi='"+sdi+"' AND actionid="+actionId+" AND actiontype='DR'");
 	
 	read = read==null?"":read;
 	uadd = uadd==null?"":uadd;
@@ -210,9 +229,11 @@ if (tv!=null && sdi!=null) {
 	ldel = ldel==null?"":ldel;
 %>
 <a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
+<%-- 
 <br/>
 <a href="javascript:openSimul('<%=sdi%>','<%=tv%>')">Simulator</a>
 <a href="cpas-treeview.jsp?sdi=<%= sdi %>&treekey=<%= tv %>" target="_blank">Treeview</a>
+ --%>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 	
 <% } %>
@@ -231,3 +252,11 @@ if (tv!=null && sdi!=null) {
 %>
 </table>
 
+<br/>
+<div id="inner-tvstmt"></div>
+
+<script type="text/javascript">
+<% if (defaultActionId != null) { %>
+	loadSTMT('<%= defaultSdi %>', <%= defaultActionId %>, '<%= defaultTv %>');
+<% } %>
+</script>

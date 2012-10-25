@@ -29,35 +29,35 @@
 			{"","<hr>"},
 
 			{"MS", "Primary Browser Select Statement"},
-			{"MC", " Caption"},
-			{"MT", " Layout name"},
-			{"MI", " Insert statement"},
-			{"MU", " Update statement"},
-			{"MD", " Delete statement"},
-			{"MA", " Action statement"},
-			{"MV", " Save statement"},
+			{"MC", "Primary Caption"},
+			{"MT", "Primary Layout name"},
+			{"MI", "Primary Insert statement"},
+			{"MU", "Primary Update statement"},
+			{"MD", "Primary Delete statement"},
+			{"MA", "Primary Action statement"},
+			{"MV", "Primary Save statement"},
 
-			{"MF", " Screen form"},
-			{"MN", " Add privilege"},
-			{"ME", " Edit privilege"},
-			{"MR", " Delete privilege"},
-			{"MY", " Display rows"},
+			{"MF", "Primary Screen form"},
+			{"MN", "Primary Add privilege"},
+			{"ME", "Primary Edit privilege"},
+			{"MR", "Primary Delete privilege"},
+			{"MY", "Primary Display rows"},
 			{"","<hr>"},
 
 			{"DS", "Secondary Browser Select Statement"},
-			{"DC", " Caption"},
-			{"DT", " Layout name"},
-			{"DI", " Insert statement"},
-			{"DU", " Update statement"},
-			{"DD", " Delete statement"},
-			{"DA", " Action statement"},
-			{"DV", " Save statement"},
+			{"DC", "Secondary Caption"},
+			{"DT", "Secondary Layout name"},
+			{"DI", "Secondary Insert statement"},
+			{"DU", "Secondary Update statement"},
+			{"DD", "Secondary Delete statement"},
+			{"DA", "Secondary Action statement"},
+			{"DV", "Secondary Save statement"},
 
-			{"DF", " Screen form"},
-			{"DN", " Add privilege"},
-			{"DE", " Edit privilege"},
-			{"DR", " Delete privilege"},
-			{"DY", " Display rows"},
+			{"DF", "Secondary Screen form"},
+			{"DN", "Secondary Add privilege"},
+			{"DE", "Secondary Edit privilege"},
+			{"DR", "Secondary Delete privilege"},
+			{"DY", "Secondary Display rows"},
 			{"","<hr>"},
 			{"AR", "Remarks"}
 	};
@@ -84,7 +84,7 @@
 	} 
 %>
 
-<table id="dataTable" border=1 class="gridBody" width=100%>
+<table id="dataTable" border=1 class="gridBody">
 <tr>
 	<th class="headerRow">Action Description</th>
 	<th class="headerRow">Type</th>
@@ -94,9 +94,11 @@
 	int rowCnt = 0;
 
 	for (int i=0;i<label.length;i++) {
+		if (values[i].equals("")) continue;
 		rowCnt ++;
 		String rowClass = "oddRow";
 		if (rowCnt%2 == 0) rowClass = "evenRow";
+		
 %>
 <tr class="simplehighlight">
 	<td class="<%= rowClass%>" nowrap><%= label[i][1] %></td>

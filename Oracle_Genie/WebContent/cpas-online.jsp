@@ -322,6 +322,21 @@ function setEvent(sdi, process, event) {
 	}, 600);
 }
 
+function loadSTMT(sdi, actionid, treekey) {
+	$.ajax({
+		url: "ajax-cpas/load-online-STMT.jsp?sdi=" + sdi + "&actionid=" + actionid + "&t=" + (new Date().getTime()),
+		success: function(data){
+			$("#inner-tvstmt").html(data);
+			var id = treekey.replace(/_/g,"-");
+			$("#"+id).addClass('selected');		
+			//alert(treekey + " " + id);
+			setHighlight();
+		},
+        error:function (jqXHR, textStatus, errorThrown){
+            alert(jqXHR.status + " " + errorThrown);
+        }  
+	});	
+}	
 </script>
 
 </head>
