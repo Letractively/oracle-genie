@@ -203,11 +203,11 @@ public class Util {
 	}
 	
 	public static String getBuildNo() {
-		return "1021";
+		return "1023";
 	}
 
 	public static String getVersionDate() {
-		return "October 23, 2012";
+		return "October 25, 2012";
 	}
 
 	public static String getScriptionVersion() {
