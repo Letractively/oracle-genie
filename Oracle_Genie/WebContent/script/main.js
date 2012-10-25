@@ -364,7 +364,7 @@ function runQuery(catalog,tab) {
 	
     function startSearch() {
     	var key = $("#searchKey").val();
-    	if (key.trim() == "") {
+    	if ($.trim(key) == "") {
     		alert("Please enter search keyword");
     		return;
     	}
