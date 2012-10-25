@@ -12,10 +12,9 @@
 	String searchKey = request.getParameter("searchKey");
 	if (searchKey != null) searchKey = searchKey.trim();
 %>
-
 <%
 
-	ContentSearchView csv = new ContentSearchView();
+	ContentSearchView csv = cn.contentSearchView;
 	List<String> tables = csv.search(cn, searchKey);
 %>
 <% 

@@ -15,7 +15,7 @@
 
 <%
 
-	ContentSearchTrigger cst = new ContentSearchTrigger();
+	ContentSearchTrigger cst = cn.contentSearchTrigger;
 	List<String> tables = cst.search(cn, searchKey);
 %>
 <% 
