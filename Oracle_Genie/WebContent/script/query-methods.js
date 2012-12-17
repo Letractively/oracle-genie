@@ -1,9 +1,15 @@
 var doMode = 'copy';
+var qryPage = 'ajax/qry.jsp';
 
 	function download() {
 		$("#form1").attr("action", "download.jsp");
 		$("#form1").submit();
 		$("#form1").attr("action", "query.jsp");
+	}
+
+	function submitQuery() {
+		$("#form1").attr("action", "query.jsp");
+		$("#form1").submit();
 	}
 	
 	function endsWith(str, suffix) {
@@ -111,6 +117,14 @@ var doMode = 'copy';
 		});	
 	}
 
+	function setTranspose() {
+		if (qryPage == "ajax/qry.jsp") {
+			qryPage = "ajax/qry-v.jsp";
+		} else {
+			qryPage = "ajax/qry.jsp";
+		}
+		reloadData();
+	}
 	function setDoMode(mode) {
 		var select = "";
 
@@ -281,7 +295,7 @@ var doMode = 'copy';
 		//$('body').css('cursor', 'wait'); 
 		$.ajax({
 			type: 'POST',
-			url: "ajax/qry.jsp",
+			url: qryPage,
 			data: $("#form0").serialize(),
 			success: function(data){
 				$("#data-div").append(data);
@@ -548,14 +562,6 @@ function togglePreFormat() {
 	var v = $("#preFormat").val();
 	v = (v=="1"?"0":"1");
 	$("#preFormat").val(v);
-//	alert(v);
-	reloadData();
-}
-
-function toggleCpas() {
-	var v = $("#cpas").val();
-	v = (v=="1"?"0":"1");
-	$("#cpas").val(v);
 //	alert(v);
 	reloadData();
 }

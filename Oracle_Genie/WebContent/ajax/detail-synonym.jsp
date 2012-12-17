@@ -1,7 +1,7 @@
 <%@ page language="java" 
 	import="java.util.*" 
 	import="java.sql.*" 
-	import="spencer.genie.*" 
+	import="chingoo.oracle.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -40,6 +40,7 @@
 	}
 	
 %>
+<div id="objectTitle" style="display:none"><%= syn %></div>
 <h2>SYNONYM: <%= syn %> &nbsp;&nbsp;</h2>
 
 &nbsp;&nbsp;&nbsp;<%= owner %>.<%= oname %>  (<%= otype %>)

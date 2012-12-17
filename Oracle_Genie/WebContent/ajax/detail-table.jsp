@@ -1,7 +1,7 @@
 <%@ page language="java" 
 	import="java.util.*" 
 	import="java.sql.*" 
-	import="spencer.genie.*" 
+	import="chingoo.oracle.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -20,7 +20,6 @@
 	}
 	
 	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nTable: " + table);
-	//System.out.println("owner=" + owner);
 	
 	String catalog = null;
 	String tname = table;
@@ -41,18 +40,18 @@ Please select a Table to see the detail.
 <%
 		return;
 	}
-	
-	boolean hasCpas = cn.hasCpas(tname);
-	String cpasComment = cn.getCpasComment(table);
 %>
+
+<div id="objectTitle" style="display:none"><%= table %></div>
 
 <h2>TABLE: <%= table %> &nbsp;&nbsp;<span class="rowcountstyle"><%= cn.getTableRowCount(owner, table) %></span>
 <a href="Javascript:runQuery('','<%=tname%>')"><img border=0 src="image/icon_query.png" title="query"></a>
 <a href="erd.jsp?tname=<%=tname%>" target="_blank"><img title="ERD" border=0 src="image/erd.gif"></a>
 <a href="erd_svg.jsp?tname=<%=tname%>" target="_blank"><img title="Simple ERD" border=0 src="image/simple-erd.png"></a>
+<a href="pop.jsp?type=TABLE&key=<%=tname%>" target="_blank"><img title="Pop Out" border=0 src="image/popout.png"></a>
 </h2>
 
-<%= owner==null?cn.getComment(tname):cn.getSynTableComment(owner, tname) %> <span class="cpas"><%= cpasComment %></span><br/>
+<%= owner==null?cn.getComment(tname):cn.getSynTableComment(owner, tname) %><br/>
 
 <div id="<%= divName %>">
 <form id="<%= formName %>">
@@ -65,9 +64,6 @@ Please select a Table to see the detail.
 	<th class="headerRow">Null</th>
 	<th class="headerRow">Default</th>
 	<th class="headerRow">Comments</th>
-<% if (hasCpas) { %>	
-	<th class="headerRow">CPAS</th>
-<% } %>	
 </tr>
 
 <%	
@@ -80,17 +76,6 @@ Please select a Table to see the detail.
 		String col_disp = rec.getName();
 		if (rec.isPrimaryKey()) col_disp = "<span class='primary-key'>" + col_disp + "</span>";
 		
-		String capt = cn.getCpasCodeCapt(tname, rec.getName());
-		if (capt == null) capt = "";
-		
-		String grup = cn.getCpasCodeGrup(tname, rec.getName());
-		if (grup == null || grup.equals("_")) grup = "";
-		
-		if (grup != null && !grup.equals("")) {
-			String codeTable = cn.getCpasUtil().getCpasCodeTable();
-			grup = " -&gt; <a href=\"javascript:showDialog('" + codeTable + "','"+grup+"')\">" + grup + "</a>";
-		}
-		
 		rowCnt++;
 		String rowClass = "oddRow";
 		if (rowCnt%2 == 0) rowClass = "evenRow";		
@@ -101,10 +86,6 @@ Please select a Table to see the detail.
 	<td class="<%= rowClass%>"><%= rec.getNullable()==0?"N":"" %></td>
 	<td class="<%= rowClass%>"><%= rec.getDefaults() %></td>
 	<td class="<%= rowClass%>"><%= owner==null?cn.getComment(tname, rec.getName()):cn.getSynColumnComment(owner, tname, rec.getName()) %></td>
-<% if (hasCpas) { %>	
-	<td class="<%= rowClass%>"><span class="cpas"><%= capt %></span> <%= grup %></td>
-<% } %>	
-
 </tr>
 
 <%
@@ -239,7 +220,7 @@ Please select a Table to see the detail.
 <b>Related Table</b>
 <a href="Javascript:toggleDiv('imgTable','divTable')"><img id="imgTable" border=0 src="image/minus.gif"></a>
 <div id="divTable">
-<table border=0 width=100%>
+<table border=0 width=800>
 <td width=4%>&nbsp;</td>
 <td valign=top width=32%>
 <%
@@ -281,7 +262,7 @@ Please select a Table to see the detail.
 <b>Related View</b>
 <a href="Javascript:toggleDiv('imgView','divView')"><img id="imgView" border=0 src="image/minus.gif"></a>
 <div id="divView">
-<table border=0 width=100%>
+<table border=0 width=800>
 <td width=4%>&nbsp;</td>
 <td valign=top width=32%>
 <%
@@ -323,7 +304,7 @@ Please select a Table to see the detail.
 <b>Related Trigger</b>
 <a href="Javascript:toggleDiv('imgTrg','divTrg')"><img id="imgTrg" border=0 src="image/minus.gif"></a>
 <div id="divTrg">
-<table border=0 width=100%>
+<table border=0 width=800>
 <td width=4%>&nbsp;</td>
 <td valign=top width=32%>
 <%
@@ -364,7 +345,7 @@ Please select a Table to see the detail.
 <b>Related Program</b>
 <a href="Javascript:toggleDiv('imgPgm','divPgm')"><img id="imgPgm" border=0 src="image/minus.gif"></a>
 <div id="divPgm">
-<table border=0 width=100%>
+<table border=0 width=800>
 <td width=4%>&nbsp;</td>
 <td valign=top width=32%>
 <%
