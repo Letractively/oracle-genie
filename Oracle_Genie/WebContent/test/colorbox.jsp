@@ -24,7 +24,7 @@
         <a class='gallery' href='../image/small-genie.gif'>Photo_3</a>
         
         
-        <a class='iframe' href="http://www.cpas.com/" title="Ajax">Outside HTML (Ajax)</a>
+        <a class='iframe' href="http://www.cnn.com/" title="Ajax">Outside HTML (Ajax)</a>
         
         <p><a class='ajax' href="../ajax/fk-lookup.jsp?table=PERSON&key=8538" title="Data">Outside HTML (Ajax)</a></p>
         

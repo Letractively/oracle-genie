@@ -1,7 +1,7 @@
 <%@ page language="java" 
 	import="java.util.*" 
 	import="java.sql.*" 
-	import="spencer.genie.*" 
+	import="chingoo.oracle.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -26,12 +26,13 @@
 	if (owner != null) 
 		qry = "SELECT TEXT FROM ALL_VIEWS WHERE OWNER='" + owner + "' AND VIEW_NAME='" + view +"'"; 
 	
-	boolean hasCpas = cn.hasCpas(view);
-	String cpasComment = cn.getCpasComment(view);
 %>
-<h2>VIEW: <%= view %> &nbsp;&nbsp;<a href="Javascript:runQuery('<%=catalog%>','<%=view%>')"><img border=0 src="image/icon_query.png" title="query"></a></h2>
+<div id="objectTitle" style="display:none"><%= view %></div>
+<h2>VIEW: <%= view %> &nbsp;&nbsp;<a href="Javascript:runQuery('<%=catalog%>','<%=view%>')"><img border=0 src="image/icon_query.png" title="query"></a>
+<a href="pop.jsp?type=VIEW&key=<%=view%>" target="_blank"><img title="Pop Out" border=0 src="image/popout.png"></a>
+</h2>
 
-<%= owner==null?cn.getComment(view):cn.getSynTableComment(owner, view) %> <span class="cpas"><%= cpasComment %></span><br/>
+<%= owner==null?cn.getComment(view):cn.getSynTableComment(owner, view) %><br/>
 
 <table id="dataTable" border=1 class="gridBody" style="margin-left: 10px;">
 <tr>
@@ -40,9 +41,6 @@
 	<th class="headerRow">Null</th>
 	<th class="headerRow">Default</th>
  	<th class="headerRow">Comments</th>
- <% if (hasCpas) { %>	
-	<th class="headerRow">CPAS</th>
-<% } %>	
  </tr>
 
 <%	
@@ -55,17 +53,6 @@
 		String col_disp = rec.getName().toLowerCase();
 		if (rec.isPrimaryKey()) col_disp = "<span class='primary-key'>" + col_disp + "</span>";
 		
-		String capt = cn.getCpasCodeCapt(view, rec.getName());
-		if (capt == null) capt = "";
-		
-		String grup = cn.getCpasCodeGrup(view, rec.getName());
-		if (grup == null || grup.equals("_")) grup = "";
-		
-		if (grup != null && !grup.equals("")) {
-			String codeTable = cn.getCpasUtil().getCpasCodeTable();
-			grup = " -&gt; <a href=\"javascript:showDialog('" + codeTable + "','"+grup+"')\">" + grup + "</a>";
-		}
-
 		rowCnt++;
 		String rowClass = "oddRow";
 		if (rowCnt%2 == 0) rowClass = "evenRow";		
@@ -76,9 +63,6 @@
 	<td class="<%= rowClass%>"><%= rec.getNullable()==0?"N":"" %></td>
 	<td class="<%= rowClass%>"><%= rec.getDefaults() %></td>
  	<td class="<%= rowClass%>"><%= owner==null?cn.getComment(view, rec.getName()):cn.getSynColumnComment(owner, view, rec.getName()) %></td>
-<% if (hasCpas) { %>	
-	<td class="<%= rowClass%>"><span class="cpas"><%= capt %></span> <%= grup %></td>
-<% } %>	
 </tr>
 
 <%

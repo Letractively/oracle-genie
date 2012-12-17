@@ -1,7 +1,7 @@
 <%@ page language="java" 
 	import="java.util.*" 
 	import="java.sql.*" 
-	import="spencer.genie.*" 
+	import="chingoo.oracle.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -29,8 +29,10 @@
 	
 	String typeName = cn.getObjectType(owner, name);
 %>
-
-<h2><%= typeName %>: <%= name %> &nbsp;&nbsp;<a href="<%=sourceUrl%>" target="_blank"><img border=0 src="image/icon_query.png" title="Source code"></a></h2>
+<div id="objectTitle" style="display:none"><%= name %></div>
+<h2><%= typeName %>: <%= name %> &nbsp;&nbsp;<a href="<%=sourceUrl%>" target="_blank"><img border=0 src="image/icon_query.png" title="Source code"></a>
+<a href="pop.jsp?type=PACKAGE&key=<%=name%>" target="_blank"><img title="Pop Out" border=0 src="image/popout.png"></a>
+</h2>
 
 
 <%
@@ -81,7 +83,7 @@ for (int k=0;k<types.size();k++) {
 	if (list.size()>0) { 
 %>
 <b>Procedures</b>
-<table border=0 width=100%>
+<table border=0 width=800>
 <td width=8%>&nbsp;</td>
 <td valign=top width=23%>
 <%
@@ -109,7 +111,7 @@ for (int k=0;k<types.size();k++) {
 
 <b>Dependencies</b>
 
-<table border=0 width=100%>
+<table border=0 width=800>
 <tr>
 	<td width=8%>&nbsp;</td>
 	<td width=23% bgcolor=#ccccff>Program</td>

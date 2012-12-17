@@ -1,7 +1,7 @@
 <%@ page language="java" 
 	import="java.util.*" 
 	import="java.sql.*" 
-	import="spencer.genie.Connect" 
+	import="chingoo.oracle.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
@@ -41,12 +41,6 @@
 	list.add("Preferenceses");
 
 %>
-
-<% if (cn.isCpas()) { %>
-<a href="javascript:showCPAS()"><img src="image/cpas.jpg" width=12 height=12>
-CPAS Catalogs</a> <br/><br/>
- 
-<% } %>
 
 <% 
 	if (filter !=null) filter = filter.toUpperCase();

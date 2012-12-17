@@ -2,13 +2,12 @@
 	import="java.util.*" 
 	import="java.util.Date" 
 	import="java.sql.*" 
-	import="spencer.genie.*" 
+	import="chingoo.oracle.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
 
 <%
-	boolean cpas = true;
 	int counter = 0;
 	String sql = request.getParameter("sql");
 	String id = request.getParameter("id");
@@ -220,17 +219,10 @@ Found: <%= filteredCount %>
 			
 			if (pkColList != null && pkColList.contains(colName)) colDisp = "<b>" + colDisp + "</b>";
 			
-			String cpasDisp = "";
-			if (cpas) {
-				String capt = cn.getCpasCodeCapt(tname, colName);
-				if (capt != null) 
-					cpasDisp += "<br/> &gt;  <span class='cpas'>" + capt + "</span>";
-			}			
-			
 %>
 <th class="headerRow"><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
 	href="Javascript:setColumn(<%= id %>, '<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colDisp%></a>
-	<%= extraImage %><%= cpasDisp %>
+	<%= extraImage %>
 </th>
 <%
 	} 
@@ -264,7 +256,7 @@ Found: <%= filteredCount %>
 		String linkUrlTree = "data-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
 %>
 	<td class="<%= rowClass%>">
-		<a href='<%= linkUrlTree %>'><img src="image/follow.gif" border=0 title="Data link"></a>
+		<a href='<%= linkUrlTree %>'><img src="image/chingoo-icon.png" width=16 height=16 border=0 title="Data link"></a>
 	</td>
 <%
 	}
@@ -323,28 +315,6 @@ Found: <%= filteredCount %>
 					linkImage ="image/download.gif";
 				} else {
 					
-					for (int j=0; j < CpasUtil.logicalLink2.length; j++) {
-						if (colName.equals(CpasUtil.logicalLink2[j][0]) && !tname.equals(CpasUtil.logicalLink2[j][2])) {
-							String theOtherVal = q.getValue( CpasUtil.logicalLink2[j][1] );
-
-							if (theOtherVal != null && !theOtherVal.equals("")) {
-								isLinked = true;
-								lTable = CpasUtil.logicalLink2[j][2];
-								keyValue = theOtherVal + "^" + val;
-								dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
-							}
-						}
-					}
-
-					for (int j=0; !isLinked && j < CpasUtil.logicalLink.length; j++) {
-						if (colName.equals(CpasUtil.logicalLink[j][0]) && !tname.equals(CpasUtil.logicalLink[j][1])) {
-							isLinked = true;
-							lTable = CpasUtil.logicalLink[j][1];
-							keyValue = val;
-							dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
-						}
-					}
-
 					if (val==null || val.equals("*")) isLinked = false;
 					if (isLinked) {
 						isLogicalLink = true;
@@ -360,17 +330,6 @@ Found: <%= filteredCount %>
 */
 
 if (pkColList != null && pkColList.contains(colName)) valDisp = "<span class='pk'>" + valDisp + "</span>";
-if (cpas) {
-
-	
-	String code = cn.getCpasCodeValue(tname, colName, val, q);
-	if (code!=null && !code.equals(""))	{
-		if (!isLogicalLink) 
-			valDisp += "<br/> &gt; <span class='cpas'>" + code + "</span>";
-		else
-			valDisp += "<br/> &gt; <span class='cpas2'>" + code + "</span>";
-	}
-}
 
 %>
 <td class="<%= rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
@@ -427,7 +386,6 @@ for (int i=0; i<fkLinkTab.size(); i++) {
 <div id="div-fkk-<%=id %>">
 <br/>
 <a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
-<span class="cpas"><%= cn.getCpasComment(ft) %></span>
 &nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle border=0 title="<%=fsql%>"/></a>
 (<%= tname %>.<%=fc.toLowerCase() %>)
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')"><img src="image/clear.gif" border=0/></a>

@@ -545,7 +545,7 @@ function runQuery(catalog,tab) {
 		});	
     }
     
-    function createGenieTable() {
+    function createChingooTable() {
 		$.ajax({
 			type: 'POST',
 			url: "ajax/create-table.jsp",
@@ -559,7 +559,7 @@ function runQuery(catalog,tab) {
 		});	
     }
     
-    function createGenieTable2() {
+    function createChingooTable2() {
 		$.ajax({
 			type: 'POST',
 			url: "ajax/create-table2.jsp",
